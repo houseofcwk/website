@@ -52,6 +52,52 @@ If you're ready to move from scattered systems to operational sovereignty, this 
 
 ---
 
+## Waitlist
+
+**Eyebrow:** EARLY ACCESS
+
+**Headline:**
+We're building something for founders who are done patching leaks.
+
+**Subtext:**
+CWK. Agent+ is the operating system that manages your growth across Mind, Body, Soul, and Pocket. Join the waitlist to get early access when we launch.
+
+**Form:**
+- Email input (placeholder: "your@email.com")
+- Submit button: "Join the Waitlist →"
+
+**Social proof line:**
+Join 50+ founders already on the list.
+
+**Post-submit confirmation:**
+You're in. We'll reach out when it's your turn.
+
+**Implementation Notes:**
+- React Island component (`WaitlistForm.tsx`) with `client:visible`
+- Submits to Cloudflare Workers endpoint or Cloudflare Pages Function (`/api/waitlist`)
+- Stores email + timestamp to Cloudflare KV (namespace: `WAITLIST`)
+- Client-side validation: valid email format, not empty
+- Honeypot field for spam prevention (hidden input, reject if filled)
+- Success/error states with animation (fadeUp)
+- Glassmorphic card container matching brand system
+
+---
+
+## Product Preview
+
+**Eyebrow:** THE PLATFORM
+
+**Headline:**
+See what's inside CWK. Agent+
+
+**Subtext:**
+Your personal command center for managing relationships, tracking momentum, and executing with clarity.
+
+**CTA:**
+Explore the Product → `/product`
+
+---
+
 ## CTAs
 
 - Learn More About Kris → `/about`

@@ -51,18 +51,31 @@ cwk-plos-site/
 │   │   ├── Header.astro       # Global navigation
 │   │   ├── Footer.astro       # Global footer
 │   │   ├── Hero.astro         # Homepage hero section
+│   │   ├── ProductHero.astro  # Product page hero
+│   │   ├── FeatureShowcase.astro # Alternating text + mockup layout
 │   │   ├── PillarCard.astro   # Mind/Body/Soul/Pocket card
 │   │   ├── CaseStudyCard.astro
 │   │   ├── SEO.astro          # Meta tags component
-│   │   └── BrandMirror.tsx    # Interactive quiz (React island)
+│   │   ├── BrandMirror.tsx    # Interactive quiz (React island)
+│   │   ├── WaitlistForm.tsx   # Email capture form (React island)
+│   │   └── mocks/             # Static product mockup components
+│   │       ├── MockDashboard.astro
+│   │       ├── MockRelationships.astro
+│   │       ├── MockPipeline.astro
+│   │       ├── MockActions.astro
+│   │       ├── MockKaia.astro
+│   │       └── MockDestination.astro
 │   ├── pages/                 # File-based routing
-│   │   ├── index.astro        # Homepage
+│   │   ├── index.astro        # Homepage (with waitlist + product preview)
 │   │   ├── about.astro        # About Kris
 │   │   ├── work.astro         # Portfolio grid
 │   │   ├── work/[slug].astro  # Individual case study pages
+│   │   ├── product.astro      # Agent+ prototype mockup intro page
 │   │   ├── brand-mirror.astro # Brand Mirror quiz page
 │   │   ├── side-quests.astro  # Side quests page
 │   │   └── 404.astro          # Custom 404
+│   ├── functions/             # Cloudflare Pages Functions
+│   │   └── api/waitlist.ts    # Waitlist email capture endpoint (KV storage)
 │   ├── content/               # Content Collections
 │   │   ├── config.ts          # Collection schemas
 │   │   └── work/              # Case study markdown files

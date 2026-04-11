@@ -45,9 +45,11 @@ npm run preview     # Preview production build locally
 |----------|---------|
 | [AGENTS.md](AGENTS.md) | AI coding context — conventions, patterns, and rules |
 | [CONTEXT.md](CONTEXT.md) | Product context — what we're building and why |
+| [docs/DESIGN.md](docs/DESIGN.md) | Full design system from brand PDFs (colors, typography, components) |
 | [docs/SITE_STRUCTURE.md](docs/SITE_STRUCTURE.md) | Full sitemap, page specs, and component inventory |
 | [docs/WEBSITE_CONTENT.md](docs/WEBSITE_CONTENT.md) | All page copy ready for implementation |
 | [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) | Cloudflare Pages deployment setup |
+| [contents/](contents/) | Page content files mirroring every cwkexperience.com page |
 
 ## Related Projects
 

@@ -27,14 +27,26 @@ The new Astro site solves all of these: ships zero JS by default, gives full con
 ### Conversion Flow
 ```
 Visitor lands → Reads positioning → Sees proof (portfolio)
-                                  → Takes Brand Mirror quiz (free, 2 min)
-                                  → Gets reflection/results
-                                  → Next step: contact or explore further
+             → Explores product mockup (/product)
+             → Takes Brand Mirror quiz (free, 2 min)
+             → Gets reflection/results
+             → Joins waitlist for Agent+ (email capture)
+             → Next step: contact or early access
 ```
 
 ### Key Audiences
 - **Primary:** Entrepreneurs earning $150K–$5M with infrastructure problems
 - **Secondary:** Creative founders, fractional execs, non-profits needing brand infrastructure
+
+## New Features (In Progress)
+
+### Waitlist (Homepage)
+Email capture form on the homepage for Agent+ early access. Submits to a Cloudflare Pages Function that stores emails in Cloudflare KV. Implemented as a React Island (`WaitlistForm.tsx`) with client-side validation and honeypot spam prevention. Shared between the homepage and the product page.
+
+### Product Mockup Page (`/product`)
+A dedicated page showcasing the Agent+ dashboard through static prototype mockups built in HTML/CSS (not screenshots). Each feature (Dashboard, Relationships, Pipeline, Daily Actions, kaia AI Chat, Brand Destination) gets a glassmorphic card that visually represents the interface. Alternating left/right layout. Ends with a waitlist CTA. Purpose: let prospects see the product before it launches.
+
+---
 
 ## What Exists Today (Current Site Pages)
 

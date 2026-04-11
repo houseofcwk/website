@@ -7,12 +7,14 @@
 ## Sitemap
 
 ```
-/                           → Homepage
+/                           → Homepage (with waitlist + product preview)
 /about                      → About Kris (founder story)
 /work                       → Portfolio grid (all case studies)
 /work/[slug]                → Individual case study pages (8 articles)
+/product                    → Agent+ prototype mockup intro page
 /brand-mirror               → Brand Mirror diagnostic quiz
 /side-quests                → Side quests / experiments
+/api/waitlist               → Cloudflare Pages Function (email capture)
 /404                        → Custom 404 page
 ```
 
@@ -77,7 +79,9 @@ Old URLs should 301-redirect to new ones. Define in `public/_redirects`:
 | 6 | **Social Proof** | Key metrics from portfolio: "Revenue $1M→$5M", "Content 10x", etc. | `ProofBar.astro` |
 | 7 | **Featured Work** | 3–4 featured case study cards with thumbnail, title, type, key results | `CaseStudyCard.astro` |
 | 8 | **CTA Section** | "Find Your Bottleneck" → Brand Mirror | `CTABanner.astro` |
-| 9 | **Footer** | Links, copyright, privacy, CWK branding | `Footer.astro` |
+| 9 | **Waitlist** | Email capture: "Join the waitlist for Agent+" | `WaitlistForm.tsx` (React Island) |
+| 10 | **Product Preview** | "See what's inside Agent+" → `/product` | `CTABanner.astro` |
+| 11 | **Footer** | Links, copyright, privacy, CWK branding | `Footer.astro` |
 
 **SEO:**
 - Title: `CWK. Experience — The Sports Agent for Entrepreneurs`
@@ -210,7 +214,33 @@ const workCollection = defineCollection({
 
 ---
 
-### 7. 404 Page
+### 7. Product — Agent+ Mockup (`/product`)
+
+**Purpose:** Showcase the CWK. Agent+ dashboard features through static prototype mockups. Drives waitlist signups.
+
+**Sections:**
+
+| # | Section | Content | Component |
+|---|---------|---------|-----------|
+| 1 | **Hero** | "Your Personal Operating System for Growth." + subtext + waitlist CTA | `ProductHero.astro` |
+| 2 | **How It Works** | 3-step process: Diagnose → Install → Operate | `Section` |
+| 3 | **Feature: Dashboard** | Mockup + description of daily command center | `FeatureShowcase.astro` + `MockDashboard.astro` |
+| 4 | **Feature: Relationships** | Mockup + description of contact directory | `FeatureShowcase.astro` + `MockRelationships.astro` |
+| 5 | **Feature: Pipeline** | Mockup + description of Kanban board | `FeatureShowcase.astro` + `MockPipeline.astro` |
+| 6 | **Feature: Daily Actions** | Mockup + description of task system | `FeatureShowcase.astro` + `MockActions.astro` |
+| 7 | **Feature: kaia AI Chat** | Mockup + description of AI assistant | `FeatureShowcase.astro` + `MockKaia.astro` |
+| 8 | **Feature: Brand Destination** | Mockup + description of goal sprints | `FeatureShowcase.astro` + `MockDestination.astro` |
+| 9 | **Bottom CTA** | Waitlist form (shared component) | `WaitlistForm.tsx` |
+
+**Mockup Approach:** Static HTML/CSS glassmorphic cards (not screenshots). Built as Astro components with the brand design system. Responsive, fast-loading, on-brand.
+
+**SEO:**
+- Title: `CWK. Agent+ — The Operating System for Entrepreneurs`
+- Description: `See inside the Agent+ dashboard: daily actions, relationship tracking, AI strategy, pipeline management, and goal sprints. Built for founders earning $150K–$5M.`
+
+---
+
+### 8. 404 Page
 
 **Purpose:** Friendly error page that redirects users.
 
@@ -246,11 +276,25 @@ const workCollection = defineCollection({
 | `CTABanner` | `components/CTABanner.astro` | Full-width CTA section with gradient button |
 | `TimelineItem` | `components/TimelineItem.astro` | Journey timeline entry for About page |
 
+### Product Page Components
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| `ProductHero` | `components/ProductHero.astro` | Product page hero with headline and waitlist CTA |
+| `FeatureShowcase` | `components/FeatureShowcase.astro` | Alternating text + mockup layout (reusable per feature) |
+| `MockDashboard` | `components/mocks/MockDashboard.astro` | Static Player Dashboard preview |
+| `MockRelationships` | `components/mocks/MockRelationships.astro` | Static Relationships Directory preview |
+| `MockPipeline` | `components/mocks/MockPipeline.astro` | Static Pipeline Kanban preview |
+| `MockActions` | `components/mocks/MockActions.astro` | Static Daily Actions preview |
+| `MockKaia` | `components/mocks/MockKaia.astro` | Static kaia AI Chat preview |
+| `MockDestination` | `components/mocks/MockDestination.astro` | Static Brand Destination preview |
+
 ### Interactive Components (React Islands)
 
 | Component | File | Purpose |
 |-----------|------|---------|
 | `BrandMirror` | `components/BrandMirror.tsx` | Multi-step quiz with state management, results display |
+| `WaitlistForm` | `components/WaitlistForm.tsx` | Email capture form with validation, honeypot, success/error states |
 
 ---
 
@@ -259,7 +303,7 @@ const workCollection = defineCollection({
 ### Desktop Header
 
 ```
-[CWK. Logo]          Work    About    [Brand Mirror →]
+[CWK. Logo]          Product    Work    About    [Brand Mirror →]
 ```
 
 ### Mobile Header
@@ -268,15 +312,15 @@ const workCollection = defineCollection({
 [CWK. Logo]                          [☰ Menu]
 ```
 
-Mobile menu slides in with: Work, About, Brand Mirror, Side Quests
+Mobile menu slides in with: Product, Work, About, Brand Mirror, Side Quests
 
 ### Footer
 
 ```
 [CWK. Logo]
 
-Work          About          Brand Mirror
-Side Quests   Privacy        Terms
+Product       Work          About          Brand Mirror
+Side Quests   Privacy       Terms
 
 © 2026 CWK. LLC — Build. Learn. Earn. Play.
 ```
