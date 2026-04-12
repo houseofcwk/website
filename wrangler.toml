@@ -1,0 +1,43 @@
+name = "houseofcwk"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ─── Preview / Local Environment ─────────────────────────────────────────────
+# These vars apply to local `wrangler pages dev` and all preview deployments.
+# Secrets (RESEND_API) are set via:  wrangler pages secret put RESEND_API
+# For local dev, put secrets in .dev.vars (git-ignored).
+
+[vars]
+ENVIRONMENT = "preview"
+PUBLIC_SITE_URL = "https://houseofcwk.pages.dev"
+FROM_EMAIL = "hello@cwkexperience.com"
+FROM_NAME = "CWK. Experience"
+REPLY_TO_EMAIL = "hello@cwkexperience.com"
+REPLY_TO_NAME = "Kris San — CWK."
+
+# ─── KV Namespaces ───────────────────────────────────────────────────────────
+# id        = used by production deployments
+# preview_id = used by preview deployments and local wrangler pages dev
+
+[[kv_namespaces]]
+binding = "WAITLIST"
+id = "c025d8eee2234c7abeab8cfdabfb7a9d"
+preview_id = "1ed95845bab948dd8e276272f98fa74f"
+
+[[kv_namespaces]]
+binding = "SESSION"
+id = "5d2d5155b6574a22b3ae7c7ad716d8bb"
+preview_id = "db599f73549a4618ad888315963321b5"
+
+# ─── Production Environment ───────────────────────────────────────────────────
+# Overrides applied only to the production deployment (main branch).
+# Secrets for production: wrangler pages secret put RESEND_API --env production
+
+[env.production.vars]
+ENVIRONMENT = "production"
+PUBLIC_SITE_URL = "https://cwkexperience.com"
+FROM_EMAIL = "hello@cwkexperience.com"
+FROM_NAME = "CWK. Experience"
+REPLY_TO_EMAIL = "hello@cwkexperience.com"
+REPLY_TO_NAME = "Kris San — CWK."
