@@ -11,4 +11,14 @@ export default defineConfig({
     react(),
     sitemap(),
   ],
+  vite: {
+    resolve: {
+      // Use the edge variant of react-dom/server — designed for Cloudflare Workers,
+      // Deno Deploy, and other edge runtimes. Avoids the MessageChannel dependency
+      // that the browser variant calls at module initialization time.
+      alias: {
+        'react-dom/server': 'react-dom/server.edge',
+      },
+    },
+  },
 });

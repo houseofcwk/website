@@ -33,6 +33,7 @@ preview_id = "db599f73549a4618ad888315963321b5"
 # ─── Production Environment ───────────────────────────────────────────────────
 # Overrides applied only to the production deployment (main branch).
 # Secrets for production: wrangler pages secret put RESEND_API --env production
+# KV namespaces must be explicitly repeated here — they are not inherited.
 
 [env.production.vars]
 ENVIRONMENT = "production"
@@ -41,3 +42,11 @@ FROM_EMAIL = "hello@cwkexperience.com"
 FROM_NAME = "CWK. Experience"
 REPLY_TO_EMAIL = "hello@cwkexperience.com"
 REPLY_TO_NAME = "Kris San — CWK."
+
+[[env.production.kv_namespaces]]
+binding = "WAITLIST"
+id = "c025d8eee2234c7abeab8cfdabfb7a9d"
+
+[[env.production.kv_namespaces]]
+binding = "SESSION"
+id = "5d2d5155b6574a22b3ae7c7ad716d8bb"
