@@ -1,6 +1,10 @@
-# Local development secrets for wrangler pages dev
-# Copy to .dev.vars (git-ignored) and fill in values.
-# These mirror the secrets set on Cloudflare Pages via:
-#   wrangler pages secret put RESEND_API --project-name=houseofcwk
+# Local Wrangler dev secrets — copy to .dev.vars and fill in values.
+# .dev.vars is git-ignored. Never commit real keys.
+#
+# Start local dev with: npx wrangler pages dev dist --kv WAITLIST
 
-RESEND_API=re_your_resend_api_key_here
+RESEND_API=re_...
+FROM_EMAIL=waitlist@cwkexperience.com
+FROM_NAME=CWK. Experience
+REPLY_TO_EMAIL=kris@cwkexperience.com
+REPLY_TO_NAME=Kris San
