@@ -110,11 +110,14 @@ a:hover {
 /* ── Eyebrow label ─────────────────────────────────────────── */
 .eyebrow {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--pink);
+  background: linear-gradient(90deg, #00E5FF, #7B61FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 12px;
 }
 
