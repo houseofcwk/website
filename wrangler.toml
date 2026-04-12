@@ -1,7 +1,7 @@
 name = "houseofcwk"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-01-01"
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat_v2"]
 
 # ─── Preview / Local Environment ─────────────────────────────────────────────
 # These vars apply to local `wrangler pages dev` and all preview deployments.
