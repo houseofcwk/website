@@ -48,7 +48,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://cwkexperience.com',
+  site: 'https://houseofcwk.com',
   output: 'static',
   adapter: cloudflare(),
   integrations: [
@@ -100,7 +100,7 @@ npm run dev         # http://localhost:4321
 
 | Variable | Value |
 |----------|-------|
-| `PUBLIC_SITE_URL` | `https://cwkexperience.com` |
+| `PUBLIC_SITE_URL` | `https://houseofcwk.com` |
 | `PUBLIC_CF_ANALYTICS_TOKEN` | *(from Cloudflare Web Analytics)* |
 | `NODE_VERSION` | `20` |
 
@@ -119,20 +119,20 @@ npx wrangler pages deploy dist --project-name=cwk-plos-site
 
 ## Custom Domain Setup
 
-### Connect `cwkexperience.com`
+### Connect `houseofcwk.com`
 
 1. In Cloudflare Pages project settings → **Custom domains**
-2. Add `cwkexperience.com` and `www.cwkexperience.com`
+2. Add `houseofcwk.com` and `www.houseofcwk.com`
 3. If the domain's DNS is already on Cloudflare, CNAME records are auto-configured
 4. If not, add these DNS records:
 
 ```
-CNAME   cwkexperience.com       cwk-plos-site.pages.dev
-CNAME   www                     cwk-plos-site.pages.dev
+CNAME   houseofcwk.com       cwk-plos-site.pages.dev
+CNAME   www                  cwk-plos-site.pages.dev
 ```
 
 5. Enable **Always Use HTTPS** in Cloudflare dashboard
-6. Set up a page rule or redirect: `www.cwkexperience.com/*` → `https://cwkexperience.com/$1` (301)
+6. Set up a page rule or redirect: `www.houseofcwk.com/*` → `https://houseofcwk.com/$1` (301)
 
 ---
 
@@ -233,7 +233,7 @@ Before going live:
 Go to https://resend.com and create an account.
 
 ### 2. Verify your sending domain
-In Resend dashboard: Domains → Add domain → `cwkexperience.com`
+In Resend dashboard: Domains → Add domain → `houseofcwk.com`
 Add the DNS records Resend provides (SPF, DKIM, DMARC).
 
 ### 3. Create an API key
@@ -253,9 +253,9 @@ wrangler pages secret put REPLY_TO_NAME   --project-name=houseofcwk
 
 Values:
 - `RESEND_API`: your Resend API key (re_...)
-- `FROM_EMAIL`: `waitlist@cwkexperience.com` (must be on verified domain)
+- `FROM_EMAIL`: `waitlist@houseofcwk.com` (must be on verified domain)
 - `FROM_NAME`: `CWK. Experience`
-- `REPLY_TO_EMAIL`: `kris@cwkexperience.com`
+- `REPLY_TO_EMAIL`: `kris@houseofcwk.com`
 - `REPLY_TO_NAME`: `Kris San`
 
 ### 5. Local dev with Resend
