@@ -180,7 +180,7 @@ function buildConfirmationEmail(): string {
                       Helvetica,Arial,sans-serif;">
               Build. Learn. Earn. Play.
             </p>
-            <p style="margin:0;font-size:12px;color:#44403C;
+            <p style="margin:0 0 10px;font-size:12px;color:#44403C;
                       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
                       Helvetica,Arial,sans-serif;">
               &copy; 2026 CWK. LLC. All rights reserved.
@@ -190,6 +190,17 @@ function buildConfirmationEmail(): string {
               &nbsp;&middot;&nbsp;
               <a href="https://houseofcwk.com/privacy"
                  style="color:#57534E;text-decoration:none;">Privacy</a>
+            </p>
+            <p style="margin:0 0 4px;font-size:11px;color:#292524;
+                      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
+                      Helvetica,Arial,sans-serif;">
+              You received this email because you joined the PLOS waitlist at
+              <a href="https://houseofcwk.com" style="color:#292524;text-decoration:underline;">houseofcwk.com</a>.
+            </p>
+            <p style="margin:0;font-size:11px;color:#292524;
+                      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
+                      Helvetica,Arial,sans-serif;">
+              CWK. LLC &middot; 447 Broadway, 2nd FL #2056 &middot; New York, NY 10013
             </p>
           </td>
         </tr>
@@ -215,17 +226,36 @@ async function sendConfirmation(env: CloudflareEnv, recipientEmail: string): Pro
       from: `${env.FROM_NAME} <${env.FROM_EMAIL}>`,
       to: [recipientEmail],
       reply_to: `${env.REPLY_TO_NAME} <${env.REPLY_TO_EMAIL}>`,
-      subject: "You're on the list.",
+      subject: "You're on the PLOS waitlist — CWK. Experience",
       html: buildConfirmationEmail(),
+      headers: {
+        'List-Unsubscribe': '<mailto:unsubscribe@houseofcwk.com?subject=unsubscribe>',
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      },
       text: [
-        "You're on the list. — CWK. Experience",
+        'CWK. Experience — PLOS Waitlist Confirmation',
+        '============================================',
         '',
-        "We've locked in your spot. When PLOS opens, you'll be among the first to get access.",
+        "You're on the list.",
+        '',
+        "We've reserved your spot. When PLOS opens, you'll be among the first to get access — no scrambling, no waiting in line.",
+        '',
+        "In the meantime, take a look at the work. See what's possible when infrastructure stops leaking and your business actually scales.",
         '',
         'See the work: https://houseofcwk.com/work',
         '',
+        '----',
+        'PLOS — Personal Leverage OS',
+        'Mind · Body · Soul · Pocket',
+        '',
         'Build. Learn. Earn. Play.',
-        '© 2026 CWK. LLC — houseofcwk.com',
+        '© 2026 CWK. LLC',
+        'houseofcwk.com',
+        '',
+        'You received this email because you joined the PLOS waitlist at houseofcwk.com.',
+        'To unsubscribe, reply with "unsubscribe" in the subject line.',
+        '',
+        'CWK. LLC · 447 Broadway, 2nd FL #2056 · New York, NY 10013',
       ].join('\n'),
     }),
   });
