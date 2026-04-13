@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { resolve, dirname } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const isProd = process.argv.includes('build');
 
 export default defineConfig({
   site: 'https://houseofcwk.com',
@@ -18,10 +19,14 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        // react-dom/server.edge is CJS-only and uses `require()` which breaks
-        // in Vite's ESM SSR runner. Point to a local ESM shim that loads it
-        // via createRequire so it works in both dev and prod (Cloudflare Workers).
-        'react-dom/server': resolve(__dirname, 'src/shims/react-dom-server-edge.mjs'),
+        // Dev:  Vite's ESM SSR runner can't run CJS require() — use our ESM shim
+        //       that loads react-dom/server.edge via createRequire (Node-only).
+        // Prod: Vite bundles the CJS file natively during build, so point directly
+        //       at server.edge (avoids createRequire in the Workers bundle where
+        //       import.meta.url is undefined).
+        'react-dom/server': isProd
+          ? 'react-dom/server.edge'
+          : resolve(__dirname, 'src/shims/react-dom-server-edge.mjs'),
       },
     },
   },
