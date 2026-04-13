@@ -11,4 +11,14 @@ export default defineConfig({
     react(),
     sitemap(),
   ],
+  vite: {
+    resolve: {
+      // react-dom/server browser build calls MessageChannel at init time,
+      // which is not available in the Cloudflare Workers runtime.
+      // The edge variant is designed for Workers/Deno and avoids this.
+      alias: {
+        'react-dom/server': 'react-dom/server.edge',
+      },
+    },
+  },
 });
