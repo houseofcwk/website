@@ -1,3 +1,10 @@
+# Sanity Studio — SPA fallback. Every /studio/* subpath serves the Studio
+# shell so Sanity's client router can take over without 404.
+# Target must be a path Pages can resolve (/studio/ → /studio/index.html),
+# not a literal "*.html" filename.
+/studio/*                   /studio/                      200
+
+# Legacy short links → canonical paths
 /aboutkris                  /about                        301
 /krisjourneyarticle         /about                        301
 /flexlink                   /work                         301
@@ -11,7 +18,3 @@
 /lifestapestryarticle       /work/lifes-tapestry          301
 /brandmirrorlobby           /brand-mirror                 301
 /brandmirror                /brand-mirror                 301
-
-# Sanity Studio is a client-side SPA — rewrite all /studio/* paths to the
-# static shell so Studio's internal router can take over without 404s.
-/studio/*                   /studio                       200
