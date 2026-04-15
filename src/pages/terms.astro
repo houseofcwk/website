@@ -1,17 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
+import PortableText from '../components/PortableText.astro';
+import { sanity } from '../lib/sanity';
+import { LEGAL_QUERY } from '../lib/queries';
+
+let data: any = null;
+try { data = await sanity.fetch(LEGAL_QUERY, { slug: 'terms' }); } catch { data = null; }
+
+const pageTitle = data?.seo?.title ?? 'Terms of Service — CWK. Experience';
+const pageDescription = data?.seo?.description ?? 'Terms governing use of houseofcwk.com and CWK. Experience services.';
+const heading = data?.title ?? 'Terms of Service';
+const updatedLabel = data?.updatedAt
+  ? new Date(data.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+  : 'April 2026';
 ---
 
 <Base
-  title="Terms of Service — CWK. Experience"
-  description="Terms governing use of houseofcwk.com and CWK. Experience services."
+  title={pageTitle}
+  description={pageDescription}
 >
   <!-- ── Hero ──────────────────────────────────────────────── -->
   <section class="legal-hero">
     <div class="legal-hero-inner">
       <span class="eyebrow fade-up">Legal</span>
-      <h1 class="fade-up fade-up-delay-1">Terms of Service</h1>
-      <p class="last-updated fade-up fade-up-delay-2">Last updated: April 2026</p>
+      <h1 class="fade-up fade-up-delay-1">{heading}</h1>
+      <p class="last-updated fade-up fade-up-delay-2">Last updated: {updatedLabel}</p>
     </div>
   </section>
 
@@ -20,6 +33,10 @@ import Base from '../layouts/Base.astro';
     <div class="section-inner">
       <div class="glass-card prose-card fade-up">
 
+      {data?.body ? (
+        <div class="pt-body"><PortableText value={data.body} /></div>
+      ) : (
+        <>
         <div class="prose-section">
           <h2>Acceptance</h2>
           <p>
@@ -89,6 +106,8 @@ import Base from '../layouts/Base.astro';
             Questions about these Terms of Service? Reach us at <a href="mailto:kris@houseofcwk.com">kris@houseofcwk.com</a>.
           </p>
         </div>
+        </>
+      )}
 
       </div>
 
@@ -168,6 +187,24 @@ import Base from '../layouts/Base.astro';
     background: var(--gb);
     flex-shrink: 0;
   }
+
+  /* Portable Text rendering — same shape as the hardcoded prose-section. */
+  .pt-body :global(h2) {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin: 28px 0 12px;
+  }
+  .pt-body :global(h2:first-child) { margin-top: 0; }
+  .pt-body :global(p) {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+  .pt-body :global(strong) { color: var(--text); font-weight: 600; }
+  .pt-body :global(a)      { color: var(--cyan); }
 
   /* Footer note */
   .footer-note {

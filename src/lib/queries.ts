@@ -1,143 +1,83 @@
 import groq from 'groq';
 
-/**
- * Site-wide settings singleton: navigation, footer, and default SEO metadata.
- */
+// Shared SEO + image projections kept inline (GROQ has no fragments).
+// Image dereferencing always pulls asset->{ url, metadata } so the static build
+// can read width/height + LQIP without a follow-up request.
+
 export const SITE_SETTINGS_QUERY = groq`
   *[_type == "siteSettings"][0]{
     nav,
     footer,
-    defaultSeo
+    defaultSeo{
+      title,
+      description,
+      ogImage{ ..., asset->{ url, metadata } }
+    }
   }
 `;
 
-/**
- * Home page singleton — project all fields including nested sections and
- * dereferenced image assets so we can render without extra round-trips.
- */
 export const HOME_QUERY = groq`
   *[_type == "homePage"][0]{
-    ...,
-    hero{
-      ...,
-      image{
-        ...,
-        asset->{ url, metadata }
-      }
-    },
-    sections[]{
-      ...,
-      image{
-        ...,
-        asset->{ url, metadata }
-      },
-      images[]{
-        ...,
-        asset->{ url, metadata }
-      }
-    },
+    heroEyebrow,
+    heroHeadline,
+    wordFlipPhrases,
+    heroSubtext,
+    heroCta,
+    pillars[]{ key, title, body },
+    features[]{ id, headline, body, highlights },
     seo
   }
 `;
 
-/**
- * Product page singleton.
- */
 export const PRODUCT_QUERY = groq`
   *[_type == "productPage"][0]{
-    ...,
-    hero{
-      ...,
-      image{ ..., asset->{ url, metadata } }
-    },
-    sections[]{
-      ...,
-      image{ ..., asset->{ url, metadata } },
-      images[]{ ..., asset->{ url, metadata } }
-    },
+    heroEyebrow,
+    heroHeadline,
+    heroSubtext,
+    features[]{ id, headline, body, highlights },
     seo
   }
 `;
 
-/**
- * About page singleton.
- */
 export const ABOUT_QUERY = groq`
   *[_type == "aboutPage"][0]{
-    ...,
-    hero{
-      ...,
-      image{ ..., asset->{ url, metadata } }
-    },
-    sections[]{
-      ...,
-      image{ ..., asset->{ url, metadata } },
-      images[]{ ..., asset->{ url, metadata } }
-    },
+    heroHeadline,
+    bio,
+    stats[]{ value, label },
     seo
   }
 `;
 
-/**
- * Journey page singleton.
- */
 export const JOURNEY_QUERY = groq`
   *[_type == "journeyPage"][0]{
-    ...,
-    hero{
-      ...,
-      image{ ..., asset->{ url, metadata } }
-    },
-    sections[]{
-      ...,
-      image{ ..., asset->{ url, metadata } },
-      images[]{ ..., asset->{ url, metadata } }
-    },
+    heroEyebrow,
+    heroHeadline,
+    body,
     seo
   }
 `;
 
-/**
- * Brand Mirror page singleton.
- */
 export const BRAND_MIRROR_QUERY = groq`
   *[_type == "brandMirrorPage"][0]{
-    ...,
-    hero{
-      ...,
-      image{ ..., asset->{ url, metadata } }
-    },
-    sections[]{
-      ...,
-      image{ ..., asset->{ url, metadata } },
-      images[]{ ..., asset->{ url, metadata } }
-    },
+    heroEyebrow,
+    heroHeadline,
+    heroSubtext,
+    body,
+    quizCta,
     seo
   }
 `;
 
-/**
- * Side Quests page singleton.
- */
 export const SIDE_QUESTS_QUERY = groq`
   *[_type == "sideQuestsPage"][0]{
-    ...,
-    hero{
-      ...,
-      image{ ..., asset->{ url, metadata } }
-    },
-    sections[]{
-      ...,
-      image{ ..., asset->{ url, metadata } },
-      images[]{ ..., asset->{ url, metadata } }
-    },
+    heroEyebrow,
+    heroHeadline,
+    body,
     seo
   }
 `;
 
-/**
- * Case study list — card-level fields only, ordered for index/grid display.
- */
+// Card-level fields only — used by /work index grid.
 export const CASE_LIST_QUERY = groq`
   *[_type == "caseStudy"] | order(order asc, publishedAt desc){
     "slug": slug.current,
@@ -150,10 +90,12 @@ export const CASE_LIST_QUERY = groq`
   }
 `;
 
-/**
- * Single case study by slug — full body, images, testimonial, SEO.
- * Parameterised on $slug.
- */
+// Slug-only list — feeds getStaticPaths() for the dynamic /work/[slug] route.
+export const CASE_SLUGS_QUERY = groq`
+  *[_type == "caseStudy" && defined(slug.current)][].slug.current
+`;
+
+// Full case study by slug. Inline images in body[] are auto-dereferenced.
 export const CASE_BY_SLUG_QUERY = groq`
   *[_type == "caseStudy" && slug.current == $slug][0]{
     _id,
@@ -163,42 +105,23 @@ export const CASE_BY_SLUG_QUERY = groq`
     tagClass,
     cardDescription,
     cardStat,
-    order,
-    publishedAt,
-    hero{
-      ...,
-      image{ ..., asset->{ url, metadata } }
-    },
+    headline,
+    duration,
+    result,
+    resultLabel,
+    stats[]{ value, label },
     body[]{
       ...,
-      _type == "image" => {
-        ...,
-        asset->{ url, metadata }
-      },
-      markDefs[]{ ... }
+      _type == "image" => { ..., asset->{ url, metadata } }
     },
-    images[]{
-      ...,
-      asset->{ url, metadata }
-    },
-    testimonial{
-      ...,
-      avatar{ ..., asset->{ url, metadata } }
-    },
+    images[]{ ..., asset->{ url, metadata } },
+    testimonial{ quote, author, role },
+    publishedAt,
     seo
   }
 `;
 
-/**
- * All published case-study slugs — used by getStaticPaths().
- */
-export const CASE_SLUGS_QUERY = groq`
-  *[_type == "caseStudy" && defined(slug.current)][].slug.current
-`;
-
-/**
- * Legal page by slug (privacy, terms, etc). Parameterised on $slug.
- */
+// Privacy / terms / future legal docs by slug.
 export const LEGAL_QUERY = groq`
   *[_type == "legalPage" && slug.current == $slug][0]{
     title,

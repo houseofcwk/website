@@ -1,17 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
+import PortableText from '../components/PortableText.astro';
+import { sanity } from '../lib/sanity';
+import { LEGAL_QUERY } from '../lib/queries';
+
+// Sanity-first; falls back to the hardcoded copy below until a "privacy"
+// legalPage doc is published. Intentional swallow — a missing doc is not
+// a build failure during the migration window.
+let data: any = null;
+try { data = await sanity.fetch(LEGAL_QUERY, { slug: 'privacy' }); } catch { data = null; }
+
+const pageTitle = data?.seo?.title ?? 'Privacy Policy — CWK. Experience';
+const pageDescription = data?.seo?.description ?? 'How CWK. LLC collects, uses, and protects your information.';
+const heading = data?.title ?? 'Privacy Policy';
+const updatedLabel = data?.updatedAt
+  ? new Date(data.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+  : 'April 2026';
 ---
 
 <Base
-  title="Privacy Policy — CWK. Experience"
-  description="How CWK. LLC collects, uses, and protects your information."
+  title={pageTitle}
+  description={pageDescription}
 >
   <!-- ── Hero ──────────────────────────────────────────────── -->
   <section class="legal-hero">
     <div class="legal-hero-inner">
       <span class="eyebrow fade-up">Legal</span>
-      <h1 class="fade-up fade-up-delay-1">Privacy Policy</h1>
-      <p class="last-updated fade-up fade-up-delay-2">Last updated: April 2026</p>
+      <h1 class="fade-up fade-up-delay-1">{heading}</h1>
+      <p class="last-updated fade-up fade-up-delay-2">Last updated: {updatedLabel}</p>
     </div>
   </section>
 
@@ -20,6 +36,10 @@ import Base from '../layouts/Base.astro';
     <div class="section-inner">
       <div class="glass-card prose-card fade-up">
 
+      {data?.body ? (
+        <div class="pt-body"><PortableText value={data.body} /></div>
+      ) : (
+        <>
         <div class="prose-section">
           <h2>Information We Collect</h2>
           <p>We collect the following types of information when you interact with houseofcwk.com:</p>
@@ -73,6 +93,8 @@ import Base from '../layouts/Base.astro';
             If you have questions or concerns about this Privacy Policy or how your data is handled, please contact us at <a href="mailto:kris@houseofcwk.com">kris@houseofcwk.com</a>.
           </p>
         </div>
+        </>
+      )}
 
       </div>
 
@@ -182,6 +204,46 @@ import Base from '../layouts/Base.astro';
     background: var(--gb);
     flex-shrink: 0;
   }
+
+  /* Portable Text rendering — mimics .prose-section spacing without
+     wrapping each h2-block in a div (Portable Text emits flat children). */
+  .pt-body :global(h2) {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin: 28px 0 12px;
+  }
+  .pt-body :global(h2:first-child) { margin-top: 0; }
+  .pt-body :global(p) {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+  .pt-body :global(ul) {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 12px;
+  }
+  .pt-body :global(li) {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .pt-body :global(li::before) {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--cyan);
+    font-size: 11px;
+    top: 3px;
+  }
+  .pt-body :global(strong) { color: var(--text); font-weight: 600; }
+  .pt-body :global(a)      { color: var(--cyan); }
 
   /* Footer note */
   .footer-note {
