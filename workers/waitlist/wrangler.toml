@@ -20,9 +20,12 @@ preview_id = "1ed95845bab948dd8e276272f98fa74f"
 # Production overrides — deploy with `wrangler deploy --env production`
 [env.production]
 name = "cwk-waitlist-prod"
+# The waitlist worker owns api.houseofcwk.com as a Custom Domain (this also
+# auto-creates the proxied DNS record). All requests to the hostname fall
+# through to this worker by default; sibling workers (e.g. cwk-contact-prod)
+# override specific path prefixes via zone routes.
 routes = [
-  { pattern = "api.houseofcwk.com/waitlist", custom_domain = true },
-  { pattern = "api.houseofcwk.com/healthz",  custom_domain = true },
+  { pattern = "api.houseofcwk.com", custom_domain = true },
 ]
 
 [env.production.vars]

@@ -18,20 +18,20 @@ CONTACT_INBOX_TO = "hello@houseofcwk.com"
 
 [[kv_namespaces]]
 binding    = "CONTACTS"
-id         = "PLACEHOLDER_CONTACTS_KV_ID"
-preview_id = "PLACEHOLDER_CONTACTS_KV_ID"
+id         = "e7ccad6c4f564047af0c8aea9fe0c77d"
+preview_id = "07c6ce83f95a4997b0894a69937b461f"
 
 [[kv_namespaces]]
 binding    = "RATE_LIMIT"
-id         = "PLACEHOLDER_RATELIMIT_KV_ID"
-preview_id = "PLACEHOLDER_RATELIMIT_KV_ID"
+id         = "24265f0620de4fb7bbb0679676355a01"
+preview_id = "3b1956ad390e44409ad62d6fbadf329d"
 
 # Production overrides — deploy with `wrangler deploy --env production`
 [env.production]
 name = "cwk-contact-prod"
 routes = [
-  { pattern = "api.houseofcwk.com/contact",         custom_domain = true },
-  { pattern = "api.houseofcwk.com/contact/healthz", custom_domain = true },
+  { pattern = "api.houseofcwk.com/contact",         zone_name = "houseofcwk.com" },
+  { pattern = "api.houseofcwk.com/contact/healthz", zone_name = "houseofcwk.com" },
 ]
 
 [env.production.vars]
@@ -45,8 +45,8 @@ CONTACT_INBOX_TO = "hello@houseofcwk.com"
 
 [[env.production.kv_namespaces]]
 binding = "CONTACTS"
-id      = "PLACEHOLDER_CONTACTS_PROD_KV_ID"
+id      = "e7ccad6c4f564047af0c8aea9fe0c77d"
 
 [[env.production.kv_namespaces]]
 binding = "RATE_LIMIT"
-id      = "PLACEHOLDER_RATELIMIT_PROD_KV_ID"
+id      = "24265f0620de4fb7bbb0679676355a01"
