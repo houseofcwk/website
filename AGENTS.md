@@ -75,8 +75,6 @@ cwk-plos-site/
 │   │   ├── brand-mirror.astro # Brand Mirror quiz page
 │   │   ├── side-quests.astro  # Side quests page
 │   │   └── 404.astro          # Custom 404
-│   ├── functions/             # Cloudflare Pages Functions
-│   │   └── api/waitlist.ts    # Waitlist email capture endpoint (KV storage)
 │   ├── content/               # Content Collections
 │   │   ├── config.ts          # Collection schemas
 │   │   └── work/              # Case study markdown files

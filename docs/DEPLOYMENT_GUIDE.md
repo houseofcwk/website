@@ -240,29 +240,38 @@ Add the DNS records Resend provides (SPF, DKIM, DMARC).
 Resend → API Keys → Create API Key → name it "cwk-plos-production"
 Save the key — you will only see it once.
 
-### 4. Set secrets on Cloudflare Pages
-Run each command and paste the value when prompted:
+### 4. Set secrets on the API Worker
+APIs now live in `workers/api/` (a single consolidated worker —
+`cwk-api-prod` — at `api.houseofcwk.com`). Only `RESEND_API` is a secret;
+the rest are plain vars in `workers/api/wrangler.toml`.
 
 ```bash
-wrangler pages secret put RESEND_API      --project-name=houseofcwk
-wrangler pages secret put FROM_EMAIL      --project-name=houseofcwk
-wrangler pages secret put FROM_NAME       --project-name=houseofcwk
-wrangler pages secret put REPLY_TO_EMAIL  --project-name=houseofcwk
-wrangler pages secret put REPLY_TO_NAME   --project-name=houseofcwk
+cd workers/api
+wrangler secret put RESEND_API       --env production
+# Optional — only if you want contact-form spam defenses on full strength:
+wrangler secret put TURNSTILE_SECRET --env production
+wrangler secret put HASH_SALT        --env production
 ```
 
 Values:
 - `RESEND_API`: your Resend API key (re_...)
-- `FROM_EMAIL`: `waitlist@houseofcwk.com` (must be on verified domain)
-- `FROM_NAME`: `CWK. Experience`
-- `REPLY_TO_EMAIL`: `kris@houseofcwk.com`
-- `REPLY_TO_NAME`: `Kris San`
+- `TURNSTILE_SECRET`: Cloudflare Turnstile site secret (for contact form)
+- `HASH_SALT`: any random string; salts the SHA-256 IP hash used by the
+  contact rate limiter. Rotating it invalidates existing rate-limit keys.
 
-### 5. Local dev with Resend
-Copy `.dev.vars.example` to `.dev.vars` and fill in your key.
-Start local dev:
+The `FROM_EMAIL`, `FROM_NAME`, `REPLY_TO_EMAIL`, `REPLY_TO_NAME`,
+`CONTACT_INBOX_TO` values are plain `[vars]` / `[env.production.vars]` in
+`workers/api/wrangler.toml` — edit the file and redeploy, no secret step
+needed.
+
+### 5. Local dev
+Run the Astro dev server and the API worker independently:
 
 ```bash
-npm run build
-npx wrangler pages dev dist --kv WAITLIST
+# terminal 1 — static site
+npm run dev
+
+# terminal 2 — API worker with local KV
+cd workers/api
+wrangler dev
 ```

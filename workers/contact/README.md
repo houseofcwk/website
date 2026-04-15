@@ -92,11 +92,11 @@ IPs are never persisted.
 |--------------------|--------------------------------------|-------------------------|
 | `ENVIRONMENT`      | `preview`                            | `production`            |
 | `ALLOWED_ORIGIN`   | `https://houseofcwk.pages.dev`       | `https://houseofcwk.com`|
-| `FROM_EMAIL`       | `hello@houseofcwk.com`               | same                    |
+| `FROM_EMAIL`       | `hello@cwkexperience.com`               | same                    |
 | `FROM_NAME`        | `CWK. Experience`                    | same                    |
-| `REPLY_TO_EMAIL`   | `hello@houseofcwk.com`               | same                    |
+| `REPLY_TO_EMAIL`   | `hello@cwkexperience.com`               | same                    |
 | `REPLY_TO_NAME`    | `CWK. Team`                          | same                    |
-| `CONTACT_INBOX_TO` | `hello@houseofcwk.com`               | same                    |
+| `CONTACT_INBOX_TO` | `hello@cwkexperience.com`               | same                    |
 
 ## Secrets — `wrangler secret put ... --env production`
 

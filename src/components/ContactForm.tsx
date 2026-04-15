@@ -181,7 +181,7 @@ export default function ContactForm() {
         <p>
           Thanks for reaching out — we've got your note. Expect a reply within
           1–2 business days. If it's urgent, email{' '}
-          <a href="mailto:hello@houseofcwk.com">hello@houseofcwk.com</a>.
+          <a href="mailto:hello@cwkexperience.com">hello@cwkexperience.com</a>.
         </p>
       </div>
     );
@@ -324,7 +324,7 @@ export default function ContactForm() {
         </button>
         <p className="contact-legal">
           Protected by Cloudflare Turnstile. Responses sent from{' '}
-          <a href="mailto:hello@houseofcwk.com">hello@houseofcwk.com</a>.
+          <a href="mailto:hello@cwkexperience.com">hello@cwkexperience.com</a>.
         </p>
       </div>
 

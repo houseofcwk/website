@@ -1,7 +1,7 @@
-name: Deploy (Pages + Workers)
+name: Deploy (Pages + API Worker)
 
 # Triggered by:
-#   push main         — production deploy (Pages + waitlist worker)
+#   push main         — production deploy (Pages + cwk-api worker)
 #   pull_request main — preview deploy (Pages only)
 #   workflow_dispatch — Sanity webhook fires this when content changes so the
 #                       static site rebuilds with fresh CMS data.
@@ -72,8 +72,8 @@ jobs:
           accountId: 1e48d0c8c1ba072982901bb60cf6fc75
           command: pages deploy dist --project-name=houseofcwk --branch=${{ github.head_ref }}
 
-  worker-waitlist:
-    name: Worker (waitlist API)
+  worker-api:
+    name: Worker (cwk-api — consolidated waitlist + contact)
     # Only deploy the worker when code actually changed (main push) — skip on
     # content-only Sanity rebuilds and on PR previews.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -82,7 +82,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: workers/waitlist
+        working-directory: workers/api
 
     steps:
       - name: Checkout
@@ -93,7 +93,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: workers/waitlist/package-lock.json
+          cache-dependency-path: workers/api/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -106,40 +106,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: 1e48d0c8c1ba072982901bb60cf6fc75
-          workingDirectory: workers/waitlist
-          command: deploy --env production
-
-  worker-contact:
-    name: Worker (contact API)
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    defaults:
-      run:
-        working-directory: workers/contact
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: workers/contact/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Deploy (Production)
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 1e48d0c8c1ba072982901bb60cf6fc75
-          workingDirectory: workers/contact
+          workingDirectory: workers/api
           command: deploy --env production

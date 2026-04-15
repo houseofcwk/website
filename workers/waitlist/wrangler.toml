@@ -7,9 +7,9 @@ compatibility_flags = ["nodejs_compat_v2"]
 [vars]
 ENVIRONMENT    = "preview"
 ALLOWED_ORIGIN = "https://houseofcwk.pages.dev"
-FROM_EMAIL     = "hello@houseofcwk.com"
+FROM_EMAIL     = "hello@cwkexperience.com"
 FROM_NAME      = "CWK. Experience"
-REPLY_TO_EMAIL = "hello@houseofcwk.com"
+REPLY_TO_EMAIL = "hello@cwkexperience.com"
 REPLY_TO_NAME  = "Kris San — CWK."
 
 [[kv_namespaces]]
@@ -31,9 +31,9 @@ routes = [
 [env.production.vars]
 ENVIRONMENT    = "production"
 ALLOWED_ORIGIN = "https://houseofcwk.com"
-FROM_EMAIL     = "hello@houseofcwk.com"
+FROM_EMAIL     = "hello@cwkexperience.com"
 FROM_NAME      = "CWK. Experience"
-REPLY_TO_EMAIL = "hello@houseofcwk.com"
+REPLY_TO_EMAIL = "hello@cwkexperience.com"
 REPLY_TO_NAME  = "Kris San — CWK."
 
 [[env.production.kv_namespaces]]

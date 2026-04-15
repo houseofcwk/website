@@ -74,8 +74,6 @@ src/
 │       ├── MockActions.astro
 │       ├── MockKaia.astro
 │       └── MockDestination.astro
-├── functions/
-│   └── api/waitlist.ts       # POST handler — KV dedup + Resend email
 ├── layouts/
 │   └── Base.astro            # HTML shell, ambient orbs, noise overlay
 ├── middleware.ts             # HTTP Basic Auth (pre-launch gate)
@@ -98,18 +96,38 @@ docs/
 
 ---
 
-## Waitlist API
+## API
 
-`POST /api/waitlist` — handled by `src/functions/api/waitlist.ts`
+All HTTP APIs are served by a single Cloudflare Worker (`cwk-api-prod`)
+bound to `api.houseofcwk.com`. Source lives at [`workers/api/`](./workers/api/);
+see [`workers/api/README.md`](./workers/api/README.md) for the endpoint map,
+deploy steps, and secrets.
+
+| Endpoint                                | Handler                                              |
+|-----------------------------------------|------------------------------------------------------|
+| `POST https://api.houseofcwk.com/waitlist` | [handlers/waitlist.ts](./workers/api/src/handlers/waitlist.ts) |
+| `POST https://api.houseofcwk.com/contact`  | [handlers/contact.ts](./workers/api/src/handlers/contact.ts)   |
+| `GET  https://api.houseofcwk.com/healthz`  | `{ "ok": true }`                                     |
+
+### Waitlist (`POST /waitlist`)
 
 | Response | Meaning |
 |----------|---------|
-| `200` | Email stored in KV; confirmation sent via Resend |
+| `200` | Email stored in `WAITLIST` KV; confirmation sent via Resend |
 | `409` | Email already on the waitlist |
 | `422` | Invalid email format |
 | `500` | Server error |
 
-Duplicate detection uses Cloudflare KV (`WAITLIST` namespace). Confirmation email fires via `context.waitUntil()` — non-blocking, fire-and-forget.
+Duplicate detection uses Cloudflare KV (`WAITLIST` namespace). Confirmation
+email fires via `ctx.waitUntil()` — non-blocking, fire-and-forget.
+
+### Contact (`POST /contact`)
+
+Layered spam defenses (honeypot, time-floor, Turnstile, content heuristics,
+disposable-email blocklist) plus KV rate limits (IP 5/10min + 20/day, email
+3/day). Submissions persist to the `CONTACTS` KV with a 180-day TTL and salted
+SHA-256 IP hashing. Full payload + response schema in
+[`workers/api/src/handlers/contact.ts`](./workers/api/src/handlers/contact.ts).
 
 ---
 

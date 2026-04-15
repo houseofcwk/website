@@ -1,37 +1,44 @@
-name = "cwk-contact"
+name = "cwk-api"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat_v2"]
 
-# Preview / dev defaults (override in env.production)
+# The single API worker for houseofcwk.com. Internally routes:
+#   POST /waitlist           -> handlers/waitlist.ts  (confirmation email)
+#   POST /contact            -> handlers/contact.ts   (notification + rate limit + spam)
+#   GET  /healthz            -> { ok: true }
+#   GET  /contact/healthz    -> { ok: true }          (kept for backward compat)
+# Owns api.houseofcwk.com as a Custom Domain in env.production.
+
 [vars]
 ENVIRONMENT      = "preview"
 ALLOWED_ORIGIN   = "https://houseofcwk.pages.dev"
 FROM_EMAIL       = "hello@cwkexperience.com"
 FROM_NAME        = "CWK. Experience"
 REPLY_TO_EMAIL   = "hello@cwkexperience.com"
-REPLY_TO_NAME    = "CWK. Team"
+REPLY_TO_NAME    = "Kris San — CWK."
 CONTACT_INBOX_TO = "hello@cwkexperience.com"
-# Leave TURNSTILE_SITE_KEY unset here; injected as a Pages build var client-side.
-# RESEND_API, TURNSTILE_SECRET, HASH_SALT are Worker secrets set via
-# `wrangler secret put` (never committed).
+
+[[kv_namespaces]]
+binding    = "WAITLIST"
+id         = "1ed95845bab948dd8e276272f98fa74f"
+preview_id = "1ed95845bab948dd8e276272f98fa74f"
 
 [[kv_namespaces]]
 binding    = "CONTACTS"
-id         = "e7ccad6c4f564047af0c8aea9fe0c77d"
+id         = "07c6ce83f95a4997b0894a69937b461f"
 preview_id = "07c6ce83f95a4997b0894a69937b461f"
 
 [[kv_namespaces]]
 binding    = "RATE_LIMIT"
-id         = "24265f0620de4fb7bbb0679676355a01"
+id         = "3b1956ad390e44409ad62d6fbadf329d"
 preview_id = "3b1956ad390e44409ad62d6fbadf329d"
 
 # Production overrides — deploy with `wrangler deploy --env production`
 [env.production]
-name = "cwk-contact-prod"
+name = "cwk-api-prod"
 routes = [
-  { pattern = "api.houseofcwk.com/contact",         zone_name = "houseofcwk.com" },
-  { pattern = "api.houseofcwk.com/contact/healthz", zone_name = "houseofcwk.com" },
+  { pattern = "api.houseofcwk.com", custom_domain = true },
 ]
 
 [env.production.vars]
@@ -40,8 +47,14 @@ ALLOWED_ORIGIN   = "https://houseofcwk.com"
 FROM_EMAIL       = "hello@cwkexperience.com"
 FROM_NAME        = "CWK. Experience"
 REPLY_TO_EMAIL   = "hello@cwkexperience.com"
-REPLY_TO_NAME    = "CWK. Team"
+REPLY_TO_NAME    = "Kris San — CWK."
 CONTACT_INBOX_TO = "hello@cwkexperience.com"
+
+# Existing KV namespace IDs — data from cwk-waitlist-prod and cwk-contact-prod
+# carries over because we rebind rather than recreate.
+[[env.production.kv_namespaces]]
+binding = "WAITLIST"
+id      = "c025d8eee2234c7abeab8cfdabfb7a9d"
 
 [[env.production.kv_namespaces]]
 binding = "CONTACTS"

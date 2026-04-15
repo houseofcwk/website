@@ -2,9 +2,11 @@ name = "houseofcwk"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-01-01"
 
-# Cloudflare Pages now serves pure static HTML. No _worker.js, no KV.
-# The waitlist API was extracted to workers/waitlist/ and deploys separately
-# to api.houseofcwk.com (see that project's wrangler.toml for KV + Resend).
+# Cloudflare Pages serves pure static HTML. No _worker.js, no KV.
+# The APIs (waitlist + contact) live in a single consolidated Worker at
+# workers/api/ and deploy separately to api.houseofcwk.com. See
+# workers/api/wrangler.toml for the KV bindings and workers/api/README.md
+# for the endpoint map + deploy steps.
 #
 # Values below are public (PUBLIC_* or env labels) — they ship to the browser.
 # Sanity content is fetched at BUILD time in GitHub Actions, so the project

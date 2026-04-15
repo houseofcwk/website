@@ -2,6 +2,21 @@
 
 > `cwk-plos-site` · Astro 5 · Cloudflare Pages · houseofcwk.com
 
+> **Note:** The diagrams below were drawn pre-Sanity (when the waitlist ran as
+> an Astro API route under `_worker.js` SSR). Current truth:
+> - Pages is **pure static** — no `_worker.js`, no Basic Auth middleware.
+> - Content pages are built at deploy time from **Sanity**
+>   (project `3fsa3jok`, dataset `production`).
+> - APIs live in a **single consolidated Cloudflare Worker** at
+>   [`workers/api/`](../workers/api/) (`cwk-api-prod`), bound to
+>   `api.houseofcwk.com`. Handlers: `POST /waitlist`, `POST /contact`.
+> - The `KV: WAITLIST` namespace is reused byte-for-byte; `CONTACTS` +
+>   `RATE_LIMIT` KV are bound to the same worker.
+>
+> The sequence/structure diagrams below still capture the request shape
+> correctly, but paths/bindings should be read as
+> `api.houseofcwk.com/{waitlist,contact}` rather than `/api/waitlist`.
+
 ---
 
 ## High-Level System Architecture
@@ -22,7 +37,7 @@ graph TB
             MW["Middleware<br/>Basic Auth Gate"]
             Router["Astro Router"]
             SSR["SSR Pages"]
-            API["API Routes<br/>/api/waitlist"]
+            API["API Routes<br/>api.houseofcwk.com/{waitlist,contact}"]
         end
 
         subgraph STORAGE["Cloudflare Storage"]
@@ -58,7 +73,7 @@ sequenceDiagram
     participant CF as Cloudflare Edge
     participant MW as Middleware
     participant R as Astro Router
-    participant API as /api/waitlist
+    participant API as api.houseofcwk.com/{waitlist,contact}
     participant KV as KV Store
     participant RS as Resend
 
@@ -71,7 +86,7 @@ sequenceDiagram
     R->>B: SSR HTML response
 
     Note over B,RS: Waitlist Submission
-    B->>CF: POST /api/waitlist {email}
+    B->>CF: POST api.houseofcwk.com/{waitlist,contact} {email}
     CF->>MW: Route request
     MW->>API: /api/* bypass auth
     API->>KV: WAITLIST.get(email)
@@ -143,7 +158,7 @@ graph TD
         PRIVACY["/privacy"]
         TERMS["/terms"]
         ERR404["/404"]
-        API_WL["/api/waitlist<br/>POST · OPTIONS"]
+        API_WL["api.houseofcwk.com/{waitlist,contact}<br/>POST · OPTIONS"]
     end
 
     HOME --- ABOUT
@@ -343,9 +358,9 @@ graph LR
 |----------|---------|------------|
 | `ENVIRONMENT` | `preview` | `production` |
 | `PUBLIC_SITE_URL` | `https://houseofcwk.pages.dev` | `https://houseofcwk.com` |
-| `FROM_EMAIL` | `hello@houseofcwk.com` | `hello@houseofcwk.com` |
+| `FROM_EMAIL` | `hello@cwkexperience.com` | `hello@cwkexperience.com` |
 | `FROM_NAME` | `CWK. Experience` | `CWK. Experience` |
-| `REPLY_TO_EMAIL` | `hello@houseofcwk.com` | `hello@houseofcwk.com` |
+| `REPLY_TO_EMAIL` | `hello@cwkexperience.com` | `hello@cwkexperience.com` |
 | `REPLY_TO_NAME` | `Kris San — CWK.` | `Kris San — CWK.` |
 
 ### Secrets (set via `wrangler pages secret put`)

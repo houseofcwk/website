@@ -25,10 +25,10 @@ Add (no credentials needed):
 
 ---
 
-## 3. Waitlist worker — first-time deploy
+## 3. API worker — first-time deploy
 
 ```sh
-cd workers/waitlist
+cd workers/api
 
 # 1. Authenticate wrangler if you haven't already.
 npx wrangler login
@@ -40,16 +40,21 @@ npx wrangler login
 npx wrangler secret put RESEND_API --env production
 # Paste the Resend API key when prompted.
 
-# 3. Bind the api.houseofcwk.com custom domain.
+# 3. (Optional) Contact-specific secrets:
+npx wrangler secret put TURNSTILE_SECRET --env production   # if using Turnstile
+npx wrangler secret put HASH_SALT        --env production   # salt for IP hashing
+
+# 4. Bind the api.houseofcwk.com custom domain.
 #    The first deploy registers the worker; the routes in wrangler.toml
 #    declare custom_domain=true so Cloudflare provisions the cert.
 npx wrangler deploy --env production
 
-# 4. Smoke-test:
-curl https://api.houseofcwk.com/healthz       # → {"ok":true}
+# 5. Smoke-test:
+curl https://api.houseofcwk.com/healthz         # → {"ok":true}
+curl https://api.houseofcwk.com/contact/healthz # → {"ok":true}
 curl -X POST https://api.houseofcwk.com/waitlist \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com"}'           # → {"success":true}
+  -d '{"email":"test@example.com"}'             # → {"success":true}
 ```
 
 If `api.houseofcwk.com` is not yet on Cloudflare, add it as a zone first
@@ -152,10 +157,10 @@ Each publish fires the webhook → GitHub Actions → site rebuilds in ~2 min.
 - **Studio** (`/studio`): client-only React island, served as the same
   static `dist/studio/index.html` for any `/studio/*` path via the
   `_redirects` rewrite rule.
-- **API** (Cloudflare Worker `cwk-waitlist-prod`): bound to
-  `api.houseofcwk.com`. Routes: `POST /waitlist`, `GET /healthz`. Uses
-  the same KV ids as the legacy Pages waitlist so existing emails carry
-  over.
+- **API** (Cloudflare Worker `cwk-api-prod`, source at `workers/api/`):
+  bound to `api.houseofcwk.com`. Routes: `POST /waitlist`, `POST /contact`,
+  `GET /healthz`, `GET /contact/healthz`. Reuses the KV namespaces from
+  the prior waitlist + contact workers so existing entries carry over.
 - **CMS** (Sanity, project `3fsa3jok`, dataset `production`): public-read
   dataset; the build queries it without a token. Webhook fires GitHub
   `workflow_dispatch` on any non-draft change to one of the 9 schema doc
