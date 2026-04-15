@@ -358,7 +358,7 @@ graph LR
 |----------|---------|------------|
 | `ENVIRONMENT` | `preview` | `production` |
 | `PUBLIC_SITE_URL` | `https://houseofcwk.pages.dev` | `https://houseofcwk.com` |
-| `FROM_EMAIL` | `hello@cwkexperience.com` | `hello@cwkexperience.com` |
+| `FROM_EMAIL` | `hello@houseofcwk.com` | `hello@houseofcwk.com` |
 | `FROM_NAME` | `CWK. Experience` | `CWK. Experience` |
 | `REPLY_TO_EMAIL` | `hello@cwkexperience.com` | `hello@cwkexperience.com` |
 | `REPLY_TO_NAME` | `Kris San — CWK.` | `Kris San — CWK.` |

@@ -92,7 +92,7 @@ IPs are never persisted.
 |--------------------|--------------------------------------|-------------------------|
 | `ENVIRONMENT`      | `preview`                            | `production`            |
 | `ALLOWED_ORIGIN`   | `https://houseofcwk.pages.dev`       | `https://houseofcwk.com`|
-| `FROM_EMAIL`       | `hello@cwkexperience.com`               | same                    |
+| `FROM_EMAIL`       | `hello@houseofcwk.com`                  | same                    |
 | `FROM_NAME`        | `CWK. Experience`                    | same                    |
 | `REPLY_TO_EMAIL`   | `hello@cwkexperience.com`               | same                    |
 | `REPLY_TO_NAME`    | `CWK. Team`                          | same                    |
