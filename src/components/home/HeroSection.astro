@@ -1,0 +1,585 @@
+---
+import PortableText from '../PortableText.astro';
+
+interface Props {
+  eyebrow: string;
+  headline: string;
+  phrases: string[];
+  ctaLabel: string;
+  subtext?: any;
+}
+
+const { eyebrow, headline, phrases, ctaLabel, subtext } = Astro.props;
+---
+
+<section class="hero">
+
+  <!-- Animated background layer -->
+  <div class="hero-bg" aria-hidden="true">
+
+    <!-- Ambient glow orbs -->
+    <div class="orb orb-cyan"></div>
+    <div class="orb orb-purple"></div>
+    <div class="orb orb-pink"></div>
+
+    <!-- Light streaks -->
+    <div class="streak streak-1"></div>
+    <div class="streak streak-2"></div>
+    <div class="streak streak-3"></div>
+
+    <!-- Floating glass cards — left side -->
+    <div class="float-card fc-1">
+      <div class="fc-bar fc-bar--md" style="width:100px"></div>
+      <div class="fc-bar fc-bar--sm" style="width:60px"></div>
+      <div class="fc-bar fc-bar--md" style="width:120px"></div>
+    </div>
+    <div class="float-card fc-2">
+      <div class="fc-bar fc-bar--sm" style="width:80px"></div>
+      <div class="fc-bar fc-bar--md" style="width:110px"></div>
+    </div>
+    <div class="float-card fc-3">
+      <div class="fc-bar fc-bar--md" style="width:90px"></div>
+      <div class="fc-bar fc-bar--sm" style="width:50px"></div>
+    </div>
+
+    <!-- Floating glass cards — right side -->
+    <div class="float-card fc-4">
+      <div class="fc-bar fc-bar--md" style="width:120px"></div>
+      <div class="fc-bar fc-bar--sm" style="width:70px"></div>
+      <div class="fc-bar fc-bar--md" style="width:100px"></div>
+    </div>
+    <div class="float-card fc-5">
+      <div class="fc-bar fc-bar--sm" style="width:90px"></div>
+      <div class="fc-bar fc-bar--md" style="width:110px"></div>
+    </div>
+    <div class="float-card fc-6">
+      <div class="fc-bar fc-bar--md" style="width:80px"></div>
+      <div class="fc-bar fc-bar--sm" style="width:50px"></div>
+    </div>
+
+    <!-- Decorative lines -->
+    <div class="deco-line dl-1"></div>
+    <div class="deco-line dl-2"></div>
+    <div class="deco-line dl-3"></div>
+    <div class="deco-line dl-4"></div>
+
+    <!-- Decorative icons (Lucide: trending-up, hexagon, zap, sparkles) -->
+    <svg class="deco-icon di-1" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+      <polyline points="16 7 22 7 22 13"/>
+    </svg>
+    <svg class="deco-icon di-2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+    </svg>
+    <svg class="deco-icon di-3" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+    <svg class="deco-icon di-4" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+      <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+    </svg>
+
+    <!-- Accent squares -->
+    <div class="acc-sq as-1"></div>
+    <div class="acc-sq as-2"></div>
+    <div class="acc-sq as-3"></div>
+
+    <!-- Abstract Lottie (loaded lazily via lottie-web) -->
+    <div class="hero-lottie" data-lottie="/animations/technology.json" aria-hidden="true"></div>
+  </div>
+
+  <!-- Hero content -->
+  <div class="hero-inner">
+    <span class="hero-eyebrow fade-up">{eyebrow}</span>
+    <h1 class="hero-headline fade-up fade-up-delay-1">
+      <span class="hl-line hl-white">{headline}</span>
+      <span class="hl-line hl-cyan word-flip-wrap" aria-live="polite" aria-atomic="true">
+        <span class="word-flip-track" id="word-flip-track">
+          {phrases.map((phrase, i) => (
+            <span class="word-flip-item" aria-hidden={i !== 0}>{phrase}</span>
+          ))}
+          <!-- duplicate of first item — enables seamless infinite loop -->
+          <span class="word-flip-item word-flip-sentinel" aria-hidden="true">{phrases[0]}</span>
+        </span>
+      </span>
+      <span class="hl-line hl-white">for entrepreneurs.</span>
+    </h1>
+    {subtext ? (
+      <div class="hero-sub fade-up fade-up-delay-2 pt-hero-sub"><PortableText value={subtext} /></div>
+    ) : (
+      <p class="hero-sub fade-up fade-up-delay-2">
+        We rep your career, install the infrastructure that scales you, and
+        manage your growth like a PE firm manages a portfolio company.
+      </p>
+    )}
+    <div class="hero-ctas fade-up fade-up-delay-3">
+      <button class="btn-hero-join" data-open-waitlist>
+        {ctaLabel}
+        <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </button>
+      <div class="hero-links">
+        <a href="/brand-mirror" class="hero-link">
+          <span class="hl-emoji">🔥</span>
+          <span class="hl-text">Find Your Bottleneck</span>
+          <em class="hl-badge">Free Tool</em>
+        </a>
+        <span class="hero-link-divider" aria-hidden="true"></span>
+        <a href="/product" class="hero-link">
+          <span class="hl-emoji">👁️</span>
+          <span class="hl-text">See the Product</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 800px;
+    display: flex;
+    align-items: center;
+    padding-top: 144px;
+    padding-bottom: 96px;
+  }
+
+  /* ── Background layer ─────────────────────────────── */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .orb-cyan {
+    width: 600px; height: 500px;
+    left: 3.5%; top: 120px;
+    background: radial-gradient(circle, #00E5FF 0%, transparent 70%);
+    opacity: 0.07;
+    filter: blur(120px);
+    animation: orb-breathe 8s ease-in-out infinite;
+  }
+  .orb-purple {
+    width: 500px; height: 400px;
+    right: 5%; top: 100px;
+    background: radial-gradient(circle, #7B61FF 0%, transparent 70%);
+    opacity: 0.06;
+    filter: blur(110px);
+    animation: orb-breathe 10s ease-in-out infinite 2s;
+  }
+  .orb-pink {
+    width: 300px; height: 250px;
+    left: 50%; top: 460px;
+    background: radial-gradient(circle, #FB3079 0%, transparent 70%);
+    opacity: 0.03;
+    filter: blur(80px);
+    animation: orb-breathe-cx 12s ease-in-out infinite 4s;
+  }
+  @keyframes orb-breathe {
+    0%, 100% { scale: 1; }
+    50%       { scale: 1.08; }
+  }
+  @keyframes orb-breathe-cx {
+    0%, 100% { translate: -50% 0; scale: 1; }
+    50%       { translate: -50% 0; scale: 1.1; }
+  }
+
+  /* Light streaks */
+  .streak {
+    position: absolute;
+    border-radius: 2px;
+  }
+  .streak-1 {
+    width: 70%; height: 2px;
+    left: 7%; top: 200px;
+    background: #00E5FF;
+    opacity: 0.1; filter: blur(25px);
+    rotate: 4deg;
+    animation: streak-drift 15s ease-in-out infinite;
+  }
+  .streak-2 {
+    width: 76%; height: 3px;
+    left: 14%; top: 400px;
+    background: #7B61FF;
+    opacity: 0.1; filter: blur(28px);
+    rotate: -3deg;
+    animation: streak-drift 18s ease-in-out infinite 3s;
+  }
+  .streak-3 {
+    width: 63%; height: 2px;
+    left: 10%; top: 550px;
+    background: #FB3079;
+    opacity: 0.12; filter: blur(22px);
+    rotate: 5deg;
+    animation: streak-drift 12s ease-in-out infinite 6s;
+  }
+  @keyframes streak-drift {
+    0%, 100% { translate: 0 0; opacity: 0.1; }
+    50%       { translate: 0 -20px; opacity: 0.15; }
+  }
+
+  /* Floating glass cards */
+  .float-card {
+    position: absolute;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .fc-bar {
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .fc-bar--md { height: 10px; background: rgba(255,255,255,0.14); }
+  .fc-bar--sm { height:  8px; background: rgba(255,255,255,0.08); }
+
+  /* Left cards */
+  .fc-1 { width: 190px; left: 2.8%;  top: 140px; rotate: 5deg;  animation: card-float  9s ease-in-out infinite; }
+  .fc-2 { width: 170px; left: 6.9%;  top: 350px; rotate: -6deg; animation: card-float 11s ease-in-out infinite 1.5s; }
+  .fc-3 { width: 160px; left: 1.4%;  top: 530px; rotate: 3deg;  animation: card-float 13s ease-in-out infinite 3s; }
+  /* Right cards */
+  .fc-4 { width: 170px; right: 13%; top:  50px; rotate: -7deg; animation: card-float 10s ease-in-out infinite 0.8s; }
+  .fc-5 { width: 150px; right: 10%; top: 310px; rotate: 5deg;  animation: card-float 8.5s ease-in-out infinite 2.2s; }
+  .fc-6 { width: 165px; right: 14%; top: 580px; rotate: -3deg; animation: card-float 12s ease-in-out infinite 4.5s; }
+  @keyframes card-float {
+    0%, 100% { translate: 0 0; }
+    50%       { translate: 0 -14px; }
+  }
+
+  /* Decorative lines */
+  .deco-line {
+    position: absolute;
+    height: 0;
+    border-top: 1px solid rgba(255,255,255,0.14);
+  }
+  .dl-1 { width: 120px; left: 13.9%; top: 280px; rotate:  25deg; opacity: 0.5; }
+  .dl-2 { width: 100px; left: 10.4%; top: 480px; rotate: -15deg; opacity: 0.4; }
+  .dl-3 { width: 110px; right: 9.7%; top: 270px; rotate: -20deg; opacity: 0.5; }
+  .dl-4 { width:  90px; right:11.1%; top: 470px; rotate:  18deg; opacity: 0.4; }
+
+  /* Decorative icons */
+  .deco-icon {
+    position: absolute;
+  }
+  .di-1 { color: #00E5FF; opacity: 0.6; left: 81.9%; top:  60px; animation: icon-drift 11s ease-in-out infinite; }
+  .di-2 { color: #7B61FF; opacity: 0.4; left:   18%;  top: 300px; animation: icon-drift 13s ease-in-out infinite 2s; }
+  .di-3 { color: #FB3079; opacity: 0.5; left: 80.6%; top: 620px; animation: icon-drift  9s ease-in-out infinite 1s; }
+  .di-4 { color: #00E5FF; opacity: 0.3; left: 18.75%; top: 70px; animation: icon-drift 14s ease-in-out infinite 3s; }
+  @keyframes icon-drift {
+    0%, 100% { translate: 0 0;    rotate:  0deg; }
+    33%       { translate: 4px -8px;  rotate:  5deg; }
+    66%       { translate: -4px -4px; rotate: -3deg; }
+  }
+
+  /* Accent squares */
+  .acc-sq {
+    position: absolute;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .as-1 { width:34px; height:34px; left:19.4%; top:180px; border-radius:7px; opacity:0.45; rotate: 15deg; animation: acc-drift 16s ease-in-out infinite; }
+  .as-2 { width:38px; height:38px; left:79.9%; top:500px; border-radius:8px; opacity:0.4;  rotate:-12deg; animation: acc-drift 12s ease-in-out infinite 3s; }
+  .as-3 { width:30px; height:30px; left:17.4%; top:600px; border-radius:6px; opacity:0.5;  rotate: 22deg; animation: acc-drift 18s ease-in-out infinite 6s; }
+  @keyframes acc-drift {
+    0%, 100% { translate: 0 0; }
+    25%       { translate:  5px -10px; }
+    75%       { translate: -5px  -5px; }
+  }
+
+  /* ── Abstract Lottie layer ─────────────────────────── */
+  /* The source animation paints everything in #150529 (near-black), so we
+     invert + hue-rotate to get a bright cyan-leaning render that reads on
+     the dark hero bg without fighting the CTAs. */
+  .hero-lottie {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(1100px, 95vw);
+    aspect-ratio: 1 / 1;
+    translate: -50% -50%;
+    opacity: 0;
+    pointer-events: none;
+    filter: invert(1) hue-rotate(170deg) saturate(0.85) brightness(0.85);
+    transition: opacity 1.4s ease-out;
+  }
+  .hero-lottie.is-ready { opacity: 0.22; }
+  .hero-lottie svg { display: block; width: 100%; height: 100%; }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-lottie { display: none; }
+  }
+
+  /* ── Hero content ──────────────────────────────────── */
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Eyebrow */
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #00E5FF;
+    margin-bottom: 24px;
+  }
+
+  /* Headline */
+  .hero-headline {
+    font-size: clamp(46px, 6.5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin: 0 0 32px;
+  }
+  .hl-line  { display: block; }
+  .hl-white { color: var(--text); }
+  .hl-cyan  { color: #00E5FF; }
+
+  /* ── Word-flip slot machine ────────────────────────── */
+  .word-flip-wrap {
+    display: inline-block;
+    overflow: hidden;
+    height: 1.2em;
+    clip-path: inset(0 0 0 0);
+    vertical-align: bottom;
+    position: relative;
+    padding: 0.05em 0;
+    margin: 0.06em 0;
+  }
+  .word-flip-track {
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+  }
+  .word-flip-item {
+    display: block;
+    line-height: 1.2em;
+    height: 1.2em;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .word-flip-track.is-animating {
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .word-flip-track.no-transition {
+    transition: none;
+  }
+
+  /* Subtext */
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 580px;
+    line-height: 1.65;
+    margin: 0 0 40px;
+  }
+
+  /* CTA area */
+  .hero-ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Primary button */
+  .btn-hero-join {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 36px;
+    background: linear-gradient(180deg, #00E5FF 0%, #00B4D8 100%);
+    color: #07090F;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 24px rgba(0,229,255,0.30);
+    transition: box-shadow 0.3s ease, filter 0.2s ease, transform 0.1s ease;
+  }
+  .btn-hero-join:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 6px 32px rgba(0,229,255,0.45);
+  }
+  .btn-hero-join:active { transform: scale(0.98); }
+  .btn-arrow { flex-shrink: 0; }
+
+  /* Secondary links */
+  .hero-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-link-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .hero-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .hl-emoji { font-size: 13px; line-height: 1; }
+  .hl-text {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--muted) 35%, transparent);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+  }
+  .hl-badge {
+    font-style: normal;
+    font-size: 9px;
+    font-weight: 700;
+    color: #FF7A30;
+    background: rgba(255,122,48,0.12);
+    border-radius: 4px;
+    padding: 2px 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .hero-link:hover { color: var(--text); }
+  .hero-link:hover .hl-text {
+    text-decoration-color: color-mix(in srgb, var(--text) 50%, transparent);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    /* Hide right-side background cards on mid-size screens */
+    .fc-4, .fc-5, .fc-6, .dl-3, .dl-4, .di-1, .di-3, .as-2 { display: none; }
+  }
+  @media (max-width: 768px) {
+    /* Hide all background decoration on mobile */
+    .float-card, .deco-line, .deco-icon, .acc-sq, .streak { display: none; }
+  }
+  @media (max-width: 640px) {
+    .hero { padding-top: 112px; min-height: auto; }
+    .btn-hero-join { width: 100%; max-width: 320px; justify-content: center; }
+    .hero-links { flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .hero-link-divider { display: none; }
+  }
+</style>
+
+<script>
+  (() => {
+    const INTERVAL = 2800; // ms between flips
+
+    const track = document.getElementById('word-flip-track') as HTMLElement | null;
+    if (!track) return;
+
+    const allItems = Array.from(track.querySelectorAll<HTMLElement>('.word-flip-item'));
+    const real  = allItems.filter(el => !el.classList.contains('word-flip-sentinel'));
+    const total = real.length;
+    if (total < 2) return;
+
+    let current = 0;
+    track.style.transform = 'translateY(0)';
+
+    function advance() {
+      const visualNext = current + 1;
+
+      track!.classList.add('is-animating');
+      track!.style.transform = `translateY(-${visualNext * 1.2}em)`;
+
+      real[current % total].setAttribute('aria-hidden', 'true');
+      real[visualNext % total].setAttribute('aria-hidden', 'false');
+
+      if (visualNext === total) {
+        track!.addEventListener('transitionend', () => {
+          track!.classList.remove('is-animating');
+          track!.classList.add('no-transition');
+          track!.style.transform = 'translateY(0)';
+          void (track!.offsetHeight);
+          track!.classList.remove('no-transition');
+          current = 0;
+        }, { once: true });
+      } else {
+        current = visualNext;
+      }
+    }
+
+    setTimeout(() => {
+      setInterval(advance, INTERVAL);
+    }, INTERVAL);
+  })();
+</script>
+
+<script>
+  // Lazy-load the abstract Lottie in the hero background.
+  // Skips on reduced-motion; fetches lottie-web ESM only when the element
+  // scrolls into view (first paint is unaffected).
+  (() => {
+    const host = document.querySelector<HTMLElement>('.hero-lottie');
+    if (!host) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const path = host.dataset.lottie;
+    if (!path) return;
+
+    const lottieUrl = 'https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/+esm';
+    const mount = () => import(/* @vite-ignore */ lottieUrl)
+      .then(({ default: lottie }) => {
+        const anim = lottie.loadAnimation({
+          container: host,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path,
+          // progressiveLoad:false buffers the whole JSON before first paint —
+          // prevents the loop-boundary flash some browsers show when chunks
+          // are still streaming in. preserveAspectRatio keeps it centered.
+          rendererSettings: { progressiveLoad: false, preserveAspectRatio: 'xMidYMid slice' },
+        });
+
+        // Sub-frame interpolation smooths the transition at the loop seam.
+        anim.setSubframe(true);
+        anim.setSpeed(0.5);
+
+        anim.addEventListener('DOMLoaded', () => host.classList.add('is-ready'));
+      })
+      .catch(() => { /* silent — hero still renders without it */ });
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        if (entries.some(e => e.isIntersecting)) { obs.disconnect(); mount(); }
+      });
+      io.observe(host);
+    } else {
+      mount();
+    }
+  })();
+</script>

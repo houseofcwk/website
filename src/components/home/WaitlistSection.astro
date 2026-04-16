@@ -1,0 +1,71 @@
+---
+import WaitlistForm from '../WaitlistForm';
+---
+
+<section id="waitlist" class="section waitlist-section">
+  <div class="section-inner">
+    <div class="waitlist-card glass-card">
+      <span class="eyebrow">Early Access</span>
+      <h2>We're building something for founders<br>who are done patching leaks.</h2>
+      <p class="section-sub">
+        CWK. Agent+ is the operating system that manages your growth across Mind, Body, Soul, and Pocket. Join the waitlist to get early access when we launch.
+      </p>
+      <WaitlistForm client:visible />
+      <p class="social-proof-line">Join 50+ founders already on the list.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .waitlist-section {
+    text-align: center;
+  }
+
+  .waitlist-card {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 56px 48px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .waitlist-card::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    height: 240px;
+    background: radial-gradient(ellipse, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .waitlist-card > * {
+    position: relative;
+  }
+
+  .waitlist-card h2 {
+    font-size: clamp(22px, 3.5vw, 30px);
+    margin-bottom: 12px;
+  }
+
+  .waitlist-card .section-sub {
+    max-width: 440px;
+    margin: 0 auto 28px;
+  }
+
+  .social-proof-line {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--dim);
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .waitlist-card { padding: 40px 28px 36px; }
+  }
+</style>
