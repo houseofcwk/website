@@ -1558,7 +1558,8 @@ const pillars = (Array.isArray(s?.pillars) && s.pillars.length > 0) ? s.pillars 
     const path = host.dataset.lottie;
     if (!path) return;
 
-    const mount = () => import('https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/+esm')
+    const lottieUrl = 'https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/+esm';
+    const mount = () => import(/* @vite-ignore */ lottieUrl)
       .then(({ default: lottie }) => {
         const anim = lottie.loadAnimation({
           container: host,
