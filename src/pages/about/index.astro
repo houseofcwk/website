@@ -8,10 +8,11 @@ import { ABOUT_QUERY } from '../../lib/queries';
 let s: any = null;
 try { s = await sanity.fetch(ABOUT_QUERY); } catch { s = null; }
 
-const HARDCODED_STATS = [
-  { value: '3.5yr', label: 'Avg Engagement' },
+const HARDCODED_STATS: Array<{ value: string; label: string; note?: string }> = [
   { value: '8+',    label: 'Brands Built' },
-  { value: 'ATX',   label: 'Austin, TX' },
+  { value: '2.5yr', label: 'Avg Time Working Together', note: 'longest: 4 years' },
+  { value: '$5M+',  label: 'Revenue Growth Contributor' },
+  { value: '10x',   label: 'Content Output for Rob Dial' },
 ];
 
 const PILLARS = [
@@ -72,14 +73,12 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
   <section class="section stats-section">
     <div class="section-inner">
       <div class="stats-bar glass-card">
-        {stats.map((stat: { value: string; label: string }, i: number) => (
-          <>
-            {i > 0 && <div class="stat-divider"></div>}
-            <div class="stat">
-              <span class="stat-number gradient-text">{stat.value}</span>
-              <span class="stat-label">{stat.label}</span>
-            </div>
-          </>
+        {stats.map((stat: { value: string; label: string; note?: string }) => (
+          <div class="stat">
+            <span class="stat-number gradient-text">{stat.value}</span>
+            <span class="stat-label">{stat.label}</span>
+            {stat.note && <span class="stat-note">{stat.note}</span>}
+          </div>
         ))}
       </div>
     </div>
@@ -235,15 +234,51 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
     margin-top: 8px;
   }
 
-  /* ── Stats ────────────────────────────────────────── */
+  /* ── Stats (2×2 grid with internal dividers) ───────── */
   .stats-bar {
     display: grid;
-    grid-template-columns: 1fr auto 1fr auto 1fr;
-    align-items: center;
-    padding: 32px 40px;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
+    overflow: hidden;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 24px;
+  }
+
+  /* Internal "+" divider: bottom border on top row, right border on left col */
+  .stat:nth-child(-n+2) { border-bottom: 1px solid var(--gb); }
+  .stat:nth-child(odd)  { border-right: 1px solid var(--gb); }
+
+  .stat-number {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    max-width: 22ch;
+  }
+
+  .stat-note {
+    font-size: 11px;
+    color: var(--dim);
+    font-style: italic;
+    letter-spacing: 0.02em;
   }
 
   /* ── Closing CTA ──────────────────────────────────── */
@@ -254,32 +289,6 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
   .about-cta-inner {
     display: flex;
     justify-content: center;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .stat-number {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-  }
-
-  .stat-divider {
-    width: 1px;
-    height: 48px;
-    background: var(--gb);
-    margin: 0 24px;
   }
 
   /* ── Responsive ───────────────────────────────────── */
@@ -301,14 +310,11 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
 
     .stats-bar {
       grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 28px 24px;
     }
-
-    .stat-divider {
-      width: 48px;
-      height: 1px;
-      margin: 0 auto;
-    }
+    /* Single-column: horizontal divider between every stat */
+    .stat:nth-child(-n+2)  { border-bottom: 1px solid var(--gb); }
+    .stat:nth-child(3)     { border-bottom: 1px solid var(--gb); }
+    .stat:nth-child(odd)   { border-right: none; }
+    .stat { padding: 24px 20px; }
   }
 </style>
