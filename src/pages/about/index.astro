@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PortableText from '../../components/PortableText.astro';
+import PillarsSection from '../../components/home/PillarsSection.astro';
 import { sanity } from '../../lib/sanity';
 import { ABOUT_QUERY } from '../../lib/queries';
 
@@ -11,6 +12,13 @@ const HARDCODED_STATS = [
   { value: '3.5yr', label: 'Avg Engagement' },
   { value: '8+',    label: 'Brands Built' },
   { value: 'ATX',   label: 'Austin, TX' },
+];
+
+const PILLARS = [
+  { key: 'mind',   title: 'Mind',   body: 'Strategic clarity, decision frameworks, mental performance, and clearing psychological blockers that stop growth.' },
+  { key: 'body',   title: 'Body',   body: 'The operational systems required for the body to be nurtured through access to nutrition and regular fitness habits.' },
+  { key: 'soul',   title: 'Soul',   body: 'Legacy building, IP development, thought leadership positioning, and turning your expertise into community building.' },
+  { key: 'pocket', title: 'Pocket', body: 'Revenue systems, opportunity sourcing, deal structuring, and building the financial engine that funds your vision.' },
 ];
 
 const heroHeadline = s?.heroHeadline ?? 'My Why.';
@@ -77,6 +85,9 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
       </div>
     </div>
   </section>
+
+  <!-- ── Four Pillars (PLOS Framework) ─────────────────────── -->
+  <PillarsSection pillars={PILLARS} />
 </Base>
 
 <style>
