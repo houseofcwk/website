@@ -38,36 +38,35 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
       <span class="eyebrow fade-up">About Kris</span>
       <h1 class="hero-headline fade-up fade-up-delay-1">{heroHeadline}</h1>
       {!s?.bio && (
-        <blockquote class="hero-quote fade-up fade-up-delay-2">
-          <p>I didn't grow up around entrepreneurship, wealth, or legacy.</p>
-          <p>I grew up watching what it looks like to never live up to your potential, and I made a vow to never let that be my story.</p>
-          <p>I exist to help exceptional people turn their creative power into a brand that sets them free.</p>
-        </blockquote>
+        <>
+          <blockquote class="hero-quote fade-up fade-up-delay-2">
+            <p>I didn't grow up around entrepreneurship, wealth, or legacy.</p>
+            <p>I grew up watching what it looks like to never live up to your potential, and I made a vow to never let that be my story.</p>
+            <p>I exist to help exceptional people turn their creative power into a brand that sets them free.</p>
+          </blockquote>
+          <div class="hero-ctas fade-up fade-up-delay-3">
+            <a href="/about/journey" class="btn btn-primary">Learn More About My Journey →</a>
+            <a href="/work" class="btn btn-secondary">See The Work →</a>
+          </div>
+        </>
       )}
     </div>
   </section>
 
-  <!-- ── Bio Card ──────────────────────────────────────────── -->
-  <section class="section bio-section">
-    <div class="section-inner">
-      <div class="bio-card glass-card">
-        <span class="eyebrow">My Why</span>
-        {s?.bio ? (
+  {s?.bio && (
+    <!-- ── Bio Card (Sanity-driven path only) ──────────────── -->
+    <section class="section bio-section">
+      <div class="section-inner">
+        <div class="bio-card glass-card">
           <div class="bio-body pt-body"><PortableText value={s.bio} /></div>
-        ) : (
-          <div class="bio-body">
-            <p>I didn't grow up around entrepreneurship, wealth, or legacy.</p>
-            <p>I grew up watching what it looks like to never live up to your potential, and I made a vow to never let that be my story.</p>
-            <p>I exist to help exceptional people turn their creative power into a brand that sets them free.</p>
+          <div class="bio-ctas">
+            <a href="/about/journey" class="btn btn-primary">Learn More About My Journey →</a>
+            <a href="/work" class="btn btn-secondary">See The Work →</a>
           </div>
-        )}
-        <div class="bio-ctas">
-          <a href="/about/journey" class="btn btn-primary">Learn More About My Journey →</a>
-          <a href="/work" class="btn btn-secondary">See The Work →</a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <!-- ── Stats Row ─────────────────────────────────────────── -->
   <section class="section stats-section">
@@ -88,6 +87,15 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
 
   <!-- ── Four Pillars (PLOS Framework) ─────────────────────── -->
   <PillarsSection pillars={PILLARS} />
+
+  <!-- ── Closing CTA ───────────────────────────────────────── -->
+  <section class="section about-cta-section">
+    <div class="section-inner">
+      <div class="about-cta-inner">
+        <a href="/#waitlist" class="btn btn-primary">Join the Waitlist →</a>
+      </div>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -146,13 +154,21 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
     font-weight: 600;
   }
 
+  .hero-ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
   /* ── Bio Card ─────────────────────────────────────── */
   .bio-card {
     padding: var(--pad-lg);
     display: flex;
     flex-direction: column;
     gap: 24px;
-    max-width: 680px;
+    max-width: 800px;
     margin: 0 auto;
   }
 
@@ -225,9 +241,19 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
     grid-template-columns: 1fr auto 1fr auto 1fr;
     align-items: center;
     padding: 32px 40px;
-    max-width: 680px;
+    max-width: 800px;
     margin: 0 auto;
     text-align: center;
+  }
+
+  /* ── Closing CTA ──────────────────────────────────── */
+  .about-cta-section {
+    padding-top: 40px;
+    padding-bottom: 16px;
+  }
+  .about-cta-inner {
+    display: flex;
+    justify-content: center;
   }
 
   .stat {
@@ -267,8 +293,10 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
       padding: var(--pad-md);
     }
 
-    .bio-ctas {
+    .bio-ctas,
+    .hero-ctas {
       flex-direction: column;
+      width: 100%;
     }
 
     .stats-bar {
