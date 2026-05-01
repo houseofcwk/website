@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import HeroSection from '../components/home/HeroSection.astro';
 import MissionSection from '../components/home/MissionSection.astro';
 import WhatCwkDoesSection from '../components/home/WhatCwkDoesSection.astro';
+import ThreeLevelsSection from '../components/home/ThreeLevelsSection.astro';
 import PillarsSection from '../components/home/PillarsSection.astro';
 import ProofSection from '../components/home/ProofSection.astro';
 import TestimonialCTASection from '../components/home/TestimonialCTASection.astro';
@@ -46,6 +47,7 @@ const pillars = (Array.isArray(s?.pillars) && s.pillars.length > 0) ? s.pillars 
   />
   <MissionSection />
   <WhatCwkDoesSection />
+  <ThreeLevelsSection />
   <PillarsSection pillars={pillars} />
   <ProofSection />
   <TestimonialCTASection />

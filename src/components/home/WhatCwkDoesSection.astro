@@ -86,8 +86,13 @@ const spokes = [
       </span>
 
       <p class="wc-lead reveal-up reveal-delay-1">
-        <span class="wc-lead-em">CWK. is your long-term partner.</span> We install the
-        infrastructure that catches everything, then manage your operations and coordinate your growth.
+        <span class="wc-anti-line">
+          <span class="wc-anti-frag">This isn't a course.</span>
+          <span class="wc-anti-frag">It's not a coach.</span>
+          <span class="wc-anti-frag">It's not a mastermind.</span>
+        </span>
+        <span class="wc-lead-em">It's the infrastructure layer your brand has been missing,</span>
+        and the partner who stays until it's built.
       </p>
 
       <p class="wc-sub reveal-up reveal-delay-2">
@@ -286,6 +291,32 @@ const spokes = [
     letter-spacing: -0.005em;
   }
   .wc-lead-em { font-weight: 700; }
+
+  .wc-anti-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .wc-anti-frag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    text-decoration: line-through;
+    text-decoration-color: rgba(251, 48, 121, 0.55);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 2px;
+    opacity: 0.85;
+  }
 
   .wc-sub {
     margin: 0;

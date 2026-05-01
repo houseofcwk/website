@@ -1,0 +1,494 @@
+---
+const levels = [
+  {
+    n: '01',
+    slug: 'sandbox',
+    title: 'CWK. Sandbox',
+    archetypes: ['Explorer', 'Committer'],
+    body: "You're figuring out the game. We create the space to test, discover, and find your lane without burning everything down on a whim.",
+    statusLabel: 'Coming Soon',
+    cta: { kind: 'waitlist', label: 'Join the List' },
+    state: 'soon',
+  },
+  {
+    n: '02',
+    slug: 'power-ups',
+    title: 'CWK. Power Ups',
+    archetypes: ['Builder', 'Operator'],
+    body: "You're in the game but it's chaos. We install the pieces you're missing, one power up at a time or all at once.",
+    statusLabel: 'Modular',
+    cta: { kind: 'link', href: '/product', label: 'See the Power Ups' },
+    state: 'live',
+  },
+  {
+    n: '03',
+    slug: 'command-center',
+    title: 'CWK. Command Center',
+    archetypes: ['Operator', 'Sovereign'],
+    body: "You've built it. Now you need it to run without you. Humans + Kaia + PLOS. The full infrastructure layer.",
+    statusLabel: 'Waitlist',
+    cta: { kind: 'waitlist', label: 'Join the Waitlist' },
+    state: 'vip',
+  },
+];
+---
+
+<section class="section levels-section" aria-labelledby="levels-heading">
+  <div class="levels-inner">
+    <header class="levels-header">
+      <span class="levels-eyebrow reveal-up">
+        <span class="levels-eyebrow-dot"></span>
+        ACCESS TIERS
+      </span>
+      <h2 id="levels-heading" class="levels-title reveal-up reveal-delay-1">The 3 Levels</h2>
+      <p class="levels-sub reveal-up reveal-delay-2">
+        Three ways to enter the CWK. ecosystem. Pick the level that matches where you are right now.
+      </p>
+    </header>
+
+    <ol class="levels-grid">
+      {levels.map((lvl, i) => (
+        <li class={`level-card level-card--${lvl.state} reveal-up reveal-delay-${Math.min(i + 1, 3)}`}>
+          <div class="level-meta">
+            <span class="level-num">{lvl.n}</span>
+            <span class={`level-status level-status--${lvl.state}`}>
+              <span class="level-status-dot"></span>
+              {lvl.statusLabel}
+            </span>
+          </div>
+
+          <div class="level-icon" aria-hidden="true">
+            {lvl.state === 'soon' && (
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8"/>
+                <path d="M3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8"/>
+                <path d="M3 8 12 13l9-5"/><path d="M12 22V13"/>
+              </svg>
+            )}
+            {lvl.state === 'live' && (
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              </svg>
+            )}
+            {lvl.state === 'vip' && (
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            )}
+          </div>
+
+          <h3 class="level-title">{lvl.title}</h3>
+          <p class="level-archetype">
+            {lvl.archetypes.map((a, ai) => (
+              <>
+                {ai > 0 && <span class="level-arch-sep" aria-hidden="true">·</span>}
+                <span class="level-arch-tag">{a}</span>
+              </>
+            ))}
+          </p>
+
+          <p class="level-body">{lvl.body}</p>
+
+          {lvl.cta.kind === 'waitlist' ? (
+            <button class="level-cta" data-open-waitlist>
+              <span>{lvl.cta.label}</span>
+              <svg class="level-cta-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </button>
+          ) : (
+            <a class="level-cta" href={lvl.cta.href}>
+              <span>{lvl.cta.label}</span>
+              <svg class="level-cta-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+          )}
+
+          <span class="level-glow" aria-hidden="true"></span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .levels-section {
+    background: var(--bg);
+    padding-top: 96px;
+    padding-bottom: 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  .levels-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(800px 400px at 12% 0%, rgba(0,229,255,0.06) 0%, transparent 60%),
+      radial-gradient(700px 400px at 88% 100%, rgba(123,97,255,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .levels-inner {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Header ───────────────────────────────────────────── */
+  .levels-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+    margin-bottom: 56px;
+  }
+  .levels-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid rgba(0, 229, 255, 0.22);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--cyan);
+  }
+  .levels-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.55);
+  }
+  .levels-title {
+    margin: 0;
+    font-size: clamp(34px, 4.6vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    line-height: 1.05;
+  }
+  .levels-sub {
+    margin: 0;
+    max-width: 560px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* ── Cards grid ───────────────────────────────────────── */
+  .levels-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    counter-reset: lvl;
+    align-items: stretch;
+  }
+
+  .level-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 28px;
+    background: var(--glass);
+    border: 1px solid var(--gb);
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      background 0.3s ease;
+  }
+
+  /* Tier-specific accent — subtle gradient hairline at the top */
+  .level-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    opacity: 0.85;
+  }
+  .level-card--soon::before {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  }
+  .level-card--live::before {
+    background: linear-gradient(90deg, transparent, rgba(0,229,255,0.6), transparent);
+  }
+  .level-card--vip::before {
+    background: linear-gradient(90deg, transparent, rgba(0,229,255,0.6), rgba(123,97,255,0.6), transparent);
+  }
+
+  /* "Soon" cards read slightly muted to convey gated/locked */
+  .level-card--soon {
+    background: rgba(255,255,255,0.018);
+  }
+  .level-card--soon .level-icon { color: var(--muted); }
+
+  .level-card--live .level-icon { color: var(--cyan); }
+  .level-card--vip .level-icon  { color: var(--cyan); }
+
+  /* "VIP" / Command Center is the headline tier — slightly stronger ambient */
+  .level-card--vip {
+    background: linear-gradient(180deg, rgba(0,229,255,0.04) 0%, rgba(123,97,255,0.05) 100%);
+    border-color: rgba(0,229,255,0.22);
+  }
+
+  @media (hover: hover) {
+    .level-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    }
+    .level-card--live:hover { border-color: rgba(0,229,255,0.4); }
+    .level-card--vip:hover  { border-color: rgba(123,97,255,0.45); }
+  }
+
+  /* ── Card meta row (number + status) ─────────────────── */
+  .level-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .level-num {
+    font-family: var(--font-primary);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+  .level-card--vip .level-num { color: var(--cyan); opacity: 0.85; }
+
+  .level-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .level-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .level-status--soon {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+  }
+  .level-status--soon .level-status-dot {
+    background: rgba(255,255,255,0.5);
+    box-shadow: 0 0 0 0 rgba(255,255,255,0.4);
+    animation: lvl-pulse-soft 2.6s ease-out infinite;
+  }
+  .level-status--live {
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.3);
+    color: var(--cyan);
+  }
+  .level-status--live .level-status-dot {
+    background: var(--cyan);
+    box-shadow: 0 0 8px rgba(0,229,255,0.55);
+  }
+  .level-status--vip {
+    background: linear-gradient(135deg, rgba(0,229,255,0.14), rgba(123,97,255,0.16));
+    border: 1px solid rgba(123,97,255,0.4);
+    color: #C9C2FF;
+  }
+  .level-status--vip .level-status-dot {
+    background: var(--purple);
+    box-shadow: 0 0 8px rgba(123,97,255,0.65);
+  }
+
+  @keyframes lvl-pulse-soft {
+    0%   { box-shadow: 0 0 0 0   rgba(255,255,255,0.35); }
+    70%  { box-shadow: 0 0 0 8px rgba(255,255,255,0);    }
+    100% { box-shadow: 0 0 0 0   rgba(255,255,255,0);    }
+  }
+
+  /* ── Icon ─────────────────────────────────────────────── */
+  .level-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 18px;
+  }
+  .level-card--vip .level-icon {
+    background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(123,97,255,0.14));
+    border-color: rgba(0,229,255,0.3);
+    box-shadow: 0 0 24px rgba(0,229,255,0.18);
+  }
+  .level-card--live .level-icon {
+    background: rgba(0,229,255,0.06);
+    border-color: rgba(0,229,255,0.22);
+  }
+
+  /* ── Title + archetypes ──────────────────────────────── */
+  .level-title {
+    margin: 0 0 8px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .level-archetype {
+    margin: 0 0 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .level-arch-tag {
+    padding: 3px 9px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+  }
+  .level-card--live .level-arch-tag {
+    background: rgba(0,229,255,0.06);
+    border-color: rgba(0,229,255,0.18);
+    color: #9be7f3;
+  }
+  .level-card--vip .level-arch-tag {
+    background: rgba(123,97,255,0.08);
+    border-color: rgba(123,97,255,0.28);
+    color: #c9c2ff;
+  }
+  .level-arch-sep {
+    color: rgba(255,255,255,0.18);
+    font-weight: 700;
+  }
+
+  /* ── Body copy ───────────────────────────────────────── */
+  .level-body {
+    margin: 0 0 24px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    flex-grow: 1;
+  }
+
+  /* ── CTA ─────────────────────────────────────────────── */
+  .level-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.005em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.1s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    border: 1px solid transparent;
+  }
+  .level-cta-arrow {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .level-cta:hover .level-cta-arrow { transform: translateX(3px); }
+  .level-cta:active { transform: scale(0.985); }
+
+  /* Soon (Sandbox) — secondary look */
+  .level-card--soon .level-cta {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+  .level-card--soon .level-cta:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.18);
+  }
+
+  /* Live (Power Ups) — outline cyan */
+  .level-card--live .level-cta {
+    background: rgba(0,229,255,0.06);
+    border-color: rgba(0,229,255,0.3);
+    color: var(--cyan);
+  }
+  .level-card--live .level-cta:hover {
+    background: rgba(0,229,255,0.12);
+    border-color: rgba(0,229,255,0.55);
+  }
+
+  /* VIP (Command Center) — solid gradient */
+  .level-card--vip .level-cta {
+    background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%);
+    color: #07090F;
+    box-shadow: 0 6px 24px rgba(0,229,255,0.22);
+  }
+  .level-card--vip .level-cta:hover {
+    box-shadow: 0 10px 32px rgba(123,97,255,0.32);
+    filter: brightness(1.05);
+  }
+
+  /* Subtle bottom-right glow only on the headline VIP tier */
+  .level-glow {
+    pointer-events: none;
+    position: absolute;
+    bottom: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    opacity: 0;
+    filter: blur(50px);
+    transition: opacity 0.4s ease;
+  }
+  .level-card--vip .level-glow {
+    background: radial-gradient(circle, rgba(123,97,255,0.5), transparent 70%);
+    opacity: 0.25;
+  }
+  @media (hover: hover) {
+    .level-card--vip:hover .level-glow { opacity: 0.4; }
+  }
+
+  /* ── Responsive ──────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .levels-grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
+  }
+  @media (max-width: 640px) {
+    .levels-section { padding-top: 64px; padding-bottom: 64px; }
+    .levels-header { margin-bottom: 36px; }
+    .level-card { padding: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .level-card, .level-cta-arrow, .level-glow, .level-status-dot {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
