@@ -327,7 +327,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       p('On April 24, 2021, Stephy Lee was ten minutes from home.'),
       p('She had just finished the second show of a four-date Texas tour, opening for established acts, with real momentum.'),
       p('What followed could have ended her career. Instead, it became the foundation for her most defining chapter.'),
-      p("Within days, the question wasn't how to capitalize on attention; it was how to protect the brand from sinking into irrelevancy while she fought to survive and recover."),
+      p('While Stephy Lee was fighting for her life, we had to find a way to protect the brand from sinking into irrelevancy.'),
       p('That work began immediately. By May 1, 2021, the first piece of media documenting what happened was released.'),
       yt('https://www.youtube.com/embed/S581bcAIc7M?rel=0', 'Stephy Lee and her team go through a traumatic experience'),
 
