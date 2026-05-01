@@ -136,7 +136,8 @@ export const POWER_UPS: PowerUp[] = [
     fix: 'You look different everywhere. No consistent colors, fonts, or visual language. Your brand feels amateur even when your work is exceptional. This Power Up delivers a complete visual identity system so you look like what you are worth.',
     notFor: 'You have not defined your positioning or voice yet. Visual identity built without that foundation will need to be rebuilt.',
     bestMoment: 'The moment you feel embarrassed sending someone to your website because the visuals do not match the quality of your work.',
-    price: '$597',
+    price: '$1,597',
+    prereq: ['The Positioning Statement', 'The Voice and Tone Guide'],
   },
 
   // ── Systems ───────────────────────────────────────────────
@@ -332,8 +333,8 @@ export const BUNDLES: Bundle[] = [
       'You leave with a complete Identity OS',
     ],
     engagement: '30 days. Clock starts at onboarding. Sessions in weeks 1 and 2. Implementation and accountability weeks 3 and 4.',
-    price: '$5,500',
-    individualTotal: '$4,179',
+    price: '$6,500',
+    individualTotal: '$5,179',
   },
   {
     category: 'systems',
@@ -384,9 +385,28 @@ export const BUNDLES: Bundle[] = [
       '30 days starts at first post going live',
     ],
     engagement: '30 days. Clock starts at first post going live. Production and delivery weeks 1 and 2. Posting begins week 3. Accountability and real-time adjustments week 4.',
-    price: '$22,500',
+    price: '$20,000',
     individualTotal: '$11,000',
   },
 ];
 
-export const COMPLETE_STACK_PRICE = '$44,500';
+export const COMPLETE_STACK_PRICE = '$43,000';
+
+// Numeric mirrors for tray totalling (the $-formatted strings above stay as
+// the canonical source for display).
+export const PRICE_NUM: Record<string, number> = {
+  // Identity (1.x)
+  '1.1': 597, '1.2': 597, '1.3': 597, '1.4': 597, '1.5': 597, '1.6': 597, '1.7': 1597,
+  // Systems (2.x)
+  '2.1': 597, '2.2': 597, '2.3': 597, '2.4': 2000, '2.5': 3000, '2.6': 1000, '2.7': 1500, '2.8': 1000, '2.9': 1500,
+  // Presence (3.x) — Digital Home tiers picked separately
+  '3.1': 1000, '3.2': 2000, '3.3': 2000, '3.4': 2000, '3.5': 4000, '3.6': 0,
+};
+
+export const BUNDLE_PRICE_NUM: Record<PowerUpCategory, number> = {
+  identity: 6500,
+  systems: 16500,
+  presence: 20000,
+};
+
+export const COMPLETE_STACK_NUM = 43000;

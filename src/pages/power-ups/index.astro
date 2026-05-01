@@ -1,253 +1,653 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { POWER_UPS, BUNDLES, CATEGORY_META, COMPLETE_STACK_PRICE, type PowerUpCategory } from '../../data/powerUps';
+import {
+  POWER_UPS,
+  BUNDLES,
+  CATEGORY_META,
+  COMPLETE_STACK_PRICE,
+  type PowerUpCategory,
+} from '../../data/powerUps';
 
-const pageTitle = 'Power Ups | CWK. Experience';
-const pageDescription = 'CWK. Power Ups: 21 single-focus transformation tools across Identity, Systems, and Presence. Done With You in 45 minutes or less. Three bundles. One complete business in 90 days.';
+const pageTitle = 'Power Ups | Level 2 — CWK. Experience';
+const pageDescription = 'Level up one Power Up at a time. 21 single-focus transformation tools across Identity, Systems, and Presence. Three bundles. One complete business in 90 days.';
 
 const CATEGORIES: PowerUpCategory[] = ['identity', 'systems', 'presence'];
 const byCategory = (cat: PowerUpCategory) => POWER_UPS.filter((pu) => pu.category === cat);
 const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === cat)!;
+
+// Quiz definition. Each option points at a category. Most-frequent wins; ties
+// fall back to the first-listed track (Identity).
+const QUIZ = [
+  {
+    q: 'Where are you most stuck right now?',
+    options: [
+      { text: "I can't explain what I do clearly. People don't get it.", track: 'identity' as const },
+      { text: 'Sales conversations feel inconsistent. Close rate is up and down.', track: 'systems' as const },
+      { text: "I'm invisible in my market. People don't know I exist.", track: 'presence' as const },
+    ],
+  },
+  {
+    q: "What's your biggest day-to-day pain?",
+    options: [
+      { text: 'Wrong-fit clients keep slipping through. I keep saying yes to the wrong people.', track: 'identity' as const },
+      { text: 'Deals die because nothing is tracked. I forget to follow up.', track: 'systems' as const },
+      { text: 'I post, I show up, but nothing compounds. The reach is flat.', track: 'presence' as const },
+    ],
+  },
+  {
+    q: 'What would unblock you in 30 days?',
+    options: [
+      { text: 'A locked positioning, voice, and visual identity I can stand on.', track: 'identity' as const },
+      { text: 'A working sales engine that runs without me as the bottleneck.', track: 'systems' as const },
+      { text: 'A consistent presence on the platforms my audience lives on.', track: 'presence' as const },
+    ],
+  },
+];
 ---
 
 <Base title={pageTitle} description={pageDescription}>
   <!-- ── Hero ────────────────────────────────────────────── -->
   <section class="pu-hero">
     <div class="pu-hero-inner">
-      <span class="pu-eyebrow fade-up">⚡ Power Ups</span>
+      <span class="pu-eyebrow fade-up">Level 2 · Power Ups</span>
       <h1 class="pu-hero-headline fade-up fade-up-delay-1">
-        What used to take years <br />
-        <span class="pu-hero-accent">done in 45 minutes or less.</span>
+        Level up <em>one Power Up at a time.</em>
       </h1>
       <p class="pu-hero-sub fade-up fade-up-delay-2">
-        21 single-focus transformation tools. Three bundles. One complete business in 90 days. Surgical. Fast. Done With You.
+        Pick your track. Select what you need. Build the ecosystem piece by piece, or take the whole box and move faster.
       </p>
-
-      <ul class="pu-hero-stats fade-up fade-up-delay-3">
-        <li><strong>3</strong><span>Categories</span></li>
-        <li><strong>21</strong><span>Power Ups</span></li>
-        <li><strong>3</strong><span>Bundles</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ── What is a Power Up ──────────────────────────────── -->
-  <section class="pu-model">
-    <div class="pu-model-inner">
-      <h2 class="pu-section-title">What Is a Power Up</h2>
-      <p class="pu-lede">
-        A Power Up is a <strong>single, focused transformation tool</strong>. One problem. One solution. One result.
-      </p>
-      <p class="pu-callout"><em>You look. You select. You pay. You get.</em></p>
-      <p>
-        Every Power Up is delivered <strong>DWY (Done With You)</strong>. Pre-work is assigned before the session so the time together is pure delivery, not discovery. You come prepared. We execute. You leave with the asset in your hands.
-      </p>
-
-      <div class="pu-format-grid">
-        <div><span class="pu-format-label">Format</span><strong>Done With You</strong></div>
-        <div><span class="pu-format-label">Session time</span><strong>≤ 45 minutes</strong></div>
-        <div><span class="pu-format-label">Delivery</span><strong>Same day to 30 days</strong></div>
-        <div><span class="pu-format-label">Accountability</span><strong>Bundles only</strong></div>
-      </div>
-
-      <div class="pu-compare">
-        <article>
-          <span class="pu-compare-tag">🎯 Individual Power Up</span>
-          <p>You know exactly what you need. You grab it and go. One session. One deliverable. Execution and accountability are yours.</p>
-          <p class="pu-compare-tail"><strong>Surgical. Fast. Independent.</strong></p>
-        </article>
-        <article>
-          <span class="pu-compare-tag">📦 The Bundle</span>
-          <p>You want the full transformation with someone guiding the sequence. 30 days. Concierge progression. Accountability baked in. Data collected. Real-time adjustments made.</p>
-          <p class="pu-compare-tail"><strong>Power Ups give you the tool. The bundle gives you the transformation.</strong></p>
-        </article>
+      <div class="pu-hero-actions fade-up fade-up-delay-3">
+        <a href="#quiz" class="pu-hero-cta">Find my track →</a>
+        <a href="#tracks" class="pu-hero-cta-secondary">Skip the quiz</a>
       </div>
     </div>
   </section>
 
-  <!-- ── Architecture (3 categories) ─────────────────────── -->
-  <section class="pu-arch">
-    <div class="pu-arch-inner">
-      <h2 class="pu-section-title">Three Categories. One Complete Business.</h2>
-      <p class="pu-lede">Every Power Up lives inside one named problem lane. You know immediately which lane you are in and what you need.</p>
+  <!-- ── Quiz ────────────────────────────────────────────── -->
+  <section id="quiz" class="pu-quiz" aria-labelledby="quiz-heading">
+    <div class="pu-quiz-inner">
+      <header class="pu-quiz-header">
+        <span class="pu-quiz-tag">⚡ Three questions</span>
+        <h2 id="quiz-heading">Where do you start?</h2>
+        <p>Answer three quick questions. We'll point you at the track that matches what you actually need right now.</p>
+      </header>
 
-      <ul class="pu-arch-grid">
+      <div class="pu-quiz-stage" data-quiz>
+        {QUIZ.map((step, i) => (
+          <div class={`pu-quiz-step ${i === 0 ? 'is-active' : ''}`} data-step={i}>
+            <div class="pu-quiz-progress" aria-hidden="true">
+              <span class="pu-quiz-progress-num">{i + 1}/{QUIZ.length}</span>
+              <span class="pu-quiz-progress-bar"><span style={`width:${((i + 1) / QUIZ.length) * 100}%`}></span></span>
+            </div>
+            <h3>{step.q}</h3>
+            <ul>
+              {step.options.map((opt) => (
+                <li>
+                  <button type="button" data-quiz-pick={opt.track}>
+                    <span>{opt.text}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        <div class="pu-quiz-step pu-quiz-result" data-step="result">
+          <span class="pu-quiz-result-tag">Your match</span>
+          <h3 data-quiz-result-title>Start with Identity.</h3>
+          <p data-quiz-result-blurb>Lock who you are, what you stand for, and how you sound. Everything else is built on this.</p>
+          <div class="pu-quiz-result-actions">
+            <button type="button" data-quiz-go class="pu-quiz-go">See the recommended track →</button>
+            <button type="button" data-quiz-restart class="pu-quiz-restart">Restart quiz</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Tracks ──────────────────────────────────────────── -->
+  <section id="tracks" class="pu-tracks">
+    <div class="pu-tracks-inner">
+      <!-- Tab nav -->
+      <nav class="pu-tab-nav" role="tablist" aria-label="Power Up tracks">
         {CATEGORIES.map((cat) => {
           const meta = CATEGORY_META[cat];
           const bundle = bundleFor(cat);
           return (
-            <li class={`pu-arch-card pu-arch-card--${cat}`} style={`--accent: ${meta.accent}`}>
-              <span class="pu-arch-num">0{meta.index}</span>
-              <h3 class="pu-arch-label">{meta.label}</h3>
-              <p class="pu-arch-blurb">{meta.blurb}</p>
-              <div class="pu-arch-meta">
-                <span>{meta.count}</span>
-                <span class="pu-dot" aria-hidden="true">·</span>
-                <span>{bundle.name}</span>
-                <span class="pu-dot" aria-hidden="true">·</span>
-                <strong>{bundle.price}</strong>
-              </div>
-              <a href={`#category-${cat}`} class="pu-arch-link">Explore {meta.label} →</a>
-            </li>
+            <button
+              role="tab"
+              type="button"
+              class={`pu-tab ${cat === 'identity' ? 'is-active' : ''}`}
+              data-tab={cat}
+              aria-selected={cat === 'identity' ? 'true' : 'false'}
+              aria-controls={`panel-${cat}`}
+              style={`--accent: ${meta.accent}`}
+            >
+              <span class="pu-tab-name">{bundle.name}</span>
+              <span class="pu-tab-price">{bundle.price}</span>
+            </button>
           );
         })}
-      </ul>
+        <button
+          role="tab"
+          type="button"
+          class="pu-tab pu-tab--stack"
+          data-tab="stack"
+          aria-selected="false"
+          aria-controls="panel-stack"
+        >
+          <span class="pu-tab-name">90-Day Stack</span>
+          <span class="pu-tab-price">{COMPLETE_STACK_PRICE}</span>
+        </button>
+      </nav>
 
-      <aside class="pu-arc">
-        <span class="pu-arc-label">🗓️ The 90-Day Arc</span>
-        <p>Each bundle is its own sovereign 30-day engagement. Run them sequentially and you build a complete business in 90 days.</p>
-        <ol class="pu-arc-list">
-          <li><strong>Days 1–30</strong> Brand in a Box. Identity built. <em>(30 days starts at onboarding.)</em></li>
-          <li><strong>Days 31–60</strong> Sales in a Box. Revenue system installed. <em>(30 days starts at first advertising execution or first booking attempt.)</em></li>
-          <li><strong>Days 61–90</strong> Presence in a Box. Market presence deployed. <em>(30 days starts at first post going live.)</em></li>
-        </ol>
-      </aside>
-    </div>
-  </section>
-
-  <!-- ── Categories ─────────────────────────────────────── -->
-  {CATEGORIES.map((cat) => {
-    const meta = CATEGORY_META[cat];
-    const bundle = bundleFor(cat);
-    const items = byCategory(cat);
-    return (
-      <section
-        id={`category-${cat}`}
-        class={`pu-category pu-category--${cat}`}
-        style={`--accent: ${meta.accent}`}
-      >
-        <div class="pu-category-inner">
-          <header class="pu-category-header">
-            <span class="pu-category-num">0{meta.index}</span>
-            <h2 class="pu-category-title">⚡ {meta.label}</h2>
-            <p class="pu-category-blurb">{meta.blurb}</p>
-          </header>
-
-          <ul class="pu-list">
-            {items.map((pu) => (
-              <li class="pu-card">
-                <header class="pu-card-head">
-                  <span class="pu-card-id">⚡ {pu.id}</span>
-                  <h3 class="pu-card-name">{pu.name}</h3>
-                  {pu.prereq && pu.prereq.length > 0 && (
-                    <span class="pu-card-prereq">Requires: {pu.prereq.join(' + ')}</span>
-                  )}
-                </header>
-
-                <dl class="pu-card-dl">
-                  <div>
-                    <dt>The Fix</dt>
-                    <dd>{pu.fix}</dd>
-                  </div>
-                  <div>
-                    <dt>Who this is not for</dt>
-                    <dd>{pu.notFor}</dd>
-                  </div>
-                  <div>
-                    <dt>Best moment to buy</dt>
-                    <dd>{pu.bestMoment}</dd>
-                  </div>
-                </dl>
-
-                {pu.tiers && (
-                  <ul class="pu-tier-list">
-                    {pu.tiers.map((t) => (
-                      <li class="pu-tier">
-                        <header><strong>{t.name}</strong><span>{t.timeline}</span></header>
-                        <p>{t.description}</p>
-                        <span class="pu-tier-price">{t.price}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <footer class="pu-card-foot">
-                  <span class="pu-card-price">{pu.price}</span>
-                  <a href={`/contact?powerup=${pu.id}`} class="pu-buy-btn">Buy this Power Up →</a>
-                </footer>
-              </li>
-            ))}
-          </ul>
-
-          <article class={`pu-bundle pu-bundle--${cat}`}>
-            <header>
-              <span class="pu-bundle-tag">📦 The Bundle</span>
-              <h3 class="pu-bundle-name">⚡ {bundle.name}</h3>
-              <p class="pu-bundle-tagline">{bundle.tagline}</p>
+      <!-- Track panels -->
+      {CATEGORIES.map((cat) => {
+        const meta = CATEGORY_META[cat];
+        const bundle = bundleFor(cat);
+        const items = byCategory(cat);
+        return (
+          <article
+            id={`panel-${cat}`}
+            class={`pu-panel ${cat === 'identity' ? 'is-active' : ''}`}
+            data-panel={cat}
+            role="tabpanel"
+            style={`--accent: ${meta.accent}`}
+          >
+            <header class="pu-panel-banner">
+              <div>
+                <span class="pu-panel-tag">⚡ Track 0{meta.index} · {meta.label}</span>
+                <h2 class="pu-panel-title">{bundle.name}</h2>
+                <p class="pu-panel-blurb">{meta.blurb}</p>
+              </div>
+              <div class="pu-panel-pricebox">
+                <span class="pu-panel-pricebox-label">Bundle price</span>
+                <span class="pu-panel-pricebox-num">{bundle.price}</span>
+                <span class="pu-panel-pricebox-note">Individual total {bundle.individualTotal} · The bundle is an upgrade in experience, not a discount.</span>
+              </div>
             </header>
 
-            <div class="pu-bundle-cols">
-              <div>
-                <h4>What is included</h4>
-                <ol>
-                  {bundle.includes.map((item) => <li>{item}</li>)}
-                </ol>
-              </div>
-              <div>
-                <h4>The bundle difference</h4>
-                <ul>
-                  {bundle.differences.map((d) => <li>{d}</li>)}
-                </ul>
-              </div>
-            </div>
+            <ul class="pu-list">
+              {items.map((pu) => (
+                <li
+                  class="pu-row"
+                  data-row={pu.id}
+                  data-track={cat}
+                  data-price={pu.price}
+                >
+                  <header class="pu-row-head" data-row-toggle>
+                    <div class="pu-row-left">
+                      <span class="pu-row-num">{pu.id}</span>
+                      <div class="pu-row-meta">
+                        <span class="pu-row-name">{pu.name}</span>
+                        <span class="pu-row-prereq">
+                          {pu.prereq && pu.prereq.length > 0 ? `Requires: ${pu.prereq.join(' + ')}` : 'No prerequisites'}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="pu-row-right">
+                      <span class="pu-row-price">{pu.price}</span>
+                      <span class="pu-row-toggle" aria-hidden="true">+</span>
+                    </div>
+                  </header>
 
-            <p class="pu-bundle-engagement"><strong>Engagement.</strong> {bundle.engagement}</p>
+                  <div class="pu-row-detail">
+                    <div class="pu-row-detail-grid">
+                      <div class="pu-row-block pu-row-block--full">
+                        <span class="pu-row-block-label">What it fixes</span>
+                        <p>{pu.fix}</p>
+                      </div>
+                      <div class="pu-row-block">
+                        <span class="pu-row-block-label">Not for you if</span>
+                        <p>{pu.notFor}</p>
+                      </div>
+                      <div class="pu-row-block">
+                        <span class="pu-row-block-label">Best moment to buy</span>
+                        <p>{pu.bestMoment}</p>
+                      </div>
+                    </div>
 
-            <footer class="pu-bundle-foot">
-              <div class="pu-bundle-price-block">
-                <span class="pu-bundle-price-label">Investment</span>
-                <span class="pu-bundle-price">{bundle.price}</span>
-                <span class="pu-bundle-individual">Individual Power Ups total: {bundle.individualTotal} · The bundle is not a discount, it is an upgrade in experience.</span>
+                    {pu.tiers && (
+                      <ul class="pu-tier-list">
+                        {pu.tiers.map((t) => (
+                          <li class="pu-tier">
+                            <header><strong>{t.name}</strong><span>{t.timeline}</span></header>
+                            <p>{t.description}</p>
+                            <span class="pu-tier-price">{t.price}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <footer class="pu-row-actions">
+                      <button type="button" class="pu-row-select" data-select={pu.id}>
+                        <span class="pu-row-select-add">Add to my build</span>
+                        <span class="pu-row-select-on">✓ Selected</span>
+                      </button>
+                    </footer>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <article class="pu-bundle-card" data-bundle={cat}>
+              <header>
+                <span class="pu-bundle-tag">📦 The Bundle</span>
+                <h3>{bundle.name}</h3>
+                <p>{bundle.tagline}</p>
+              </header>
+
+              <div class="pu-bundle-cols">
+                <div>
+                  <h4>What's included</h4>
+                  <ol>
+                    {bundle.includes.map((item) => <li>{item}</li>)}
+                  </ol>
+                </div>
+                <div>
+                  <h4>The bundle difference</h4>
+                  <ul>
+                    {bundle.differences.map((d) => <li>{d}</li>)}
+                  </ul>
+                </div>
               </div>
-              <a href={`/contact?bundle=${cat}`} class="pu-bundle-cta">Buy {bundle.name} →</a>
-            </footer>
+
+              <p class="pu-bundle-deposit">
+                💎 Bundles require a <strong>25% deposit ({(() => {
+                  const n = parseInt(bundle.price.replace(/[^\d]/g, ''), 10);
+                  return `$${Math.round(n * 0.25).toLocaleString()}`;
+                })()})</strong> to hold your spot. After deposit, we schedule a fit call before the engagement starts.
+              </p>
+
+              <footer>
+                <div class="pu-bundle-price-block">
+                  <span class="pu-bundle-price-label">Investment</span>
+                  <span class="pu-bundle-price">{bundle.price}</span>
+                  <span class="pu-bundle-individual">Individual total {bundle.individualTotal}</span>
+                </div>
+                <button type="button" class="pu-bundle-cta" data-bundle-toggle={cat}>
+                  <span class="pu-bundle-cta-add">Take the whole box →</span>
+                  <span class="pu-bundle-cta-on">✓ Bundle selected — clear to build à la carte</span>
+                </button>
+              </footer>
+            </article>
           </article>
+        );
+      })}
+
+      <!-- 90-Day Stack panel -->
+      <article id="panel-stack" class="pu-panel pu-panel--stack" data-panel="stack" role="tabpanel">
+        <div class="pu-stack-card">
+          <span class="pu-stack-tag">🏆 The 90-Day Complete Stack</span>
+          <h2>All three bundles. 90 days. Complete business.</h2>
+          <p>Identity. Sales. Presence. In that order. In 90 days. Run them sequentially and you build a complete business in three months.</p>
+
+          <ol class="pu-stack-list">
+            <li><strong>Days 1–30</strong> Brand in a Box · Identity built. <em>Clock starts at onboarding.</em></li>
+            <li><strong>Days 31–60</strong> Sales in a Box · Revenue system installed. <em>Clock starts at first advertising execution or first booking attempt.</em></li>
+            <li><strong>Days 61–90</strong> Presence in a Box · Market presence deployed. <em>Clock starts at first post going live.</em></li>
+          </ol>
+
+          <div class="pu-stack-math">
+            <span>Brand <strong>$6,500</strong></span>
+            <span class="pu-stack-plus">+</span>
+            <span>Sales <strong>$16,500</strong></span>
+            <span class="pu-stack-plus">+</span>
+            <span>Presence <strong>$20,000</strong></span>
+          </div>
+
+          <div class="pu-stack-total">
+            <span>Total</span>
+            <span class="pu-stack-total-num">{COMPLETE_STACK_PRICE}</span>
+          </div>
+
+          <button type="button" class="pu-stack-cta" data-stack-toggle>
+            <span class="pu-stack-cta-add">Reserve The Complete Stack →</span>
+            <span class="pu-stack-cta-on">✓ Stack selected — clear to build à la carte</span>
+          </button>
         </div>
-      </section>
-    );
-  })}
-
-  <!-- ── Dependency map ─────────────────────────────────── -->
-  <section class="pu-deps">
-    <div class="pu-deps-inner">
-      <h2 class="pu-section-title">Dependency Map</h2>
-      <p class="pu-lede">Some Power Ups require others before purchase. This is not a restriction. It is integrity. The result will be wrong if the foundation is not in place.</p>
-
-      <ul class="pu-deps-list">
-        {POWER_UPS.filter((pu) => pu.prereq && pu.prereq.length > 0).map((pu) => (
-          <li>
-            <strong>{pu.name}</strong>
-            <span>requires {pu.prereq!.join(' + ')}</span>
-          </li>
-        ))}
-      </ul>
+      </article>
     </div>
   </section>
 
-  <!-- ── The Complete Stack ──────────────────────────────── -->
-  <section class="pu-stack">
-    <div class="pu-stack-inner">
-      <span class="pu-stack-tag">🏆 The Complete Stack</span>
-      <h2 class="pu-stack-title">All three bundles. 90 days. Complete business.</h2>
-      <p class="pu-stack-sub">Identity. Sales. Presence. In that order. In 90 days.</p>
+  <!-- ── Sticky tray ─────────────────────────────────────── -->
+  <aside class="pu-tray" aria-label="Your build">
+    <div class="pu-tray-inner">
+      <header>
+        <span class="pu-tray-title">Your build</span>
+        <span class="pu-tray-count" data-tray-count>0 items</span>
+      </header>
 
-      <div class="pu-stack-math">
-        <span>Brand in a Box <strong>$5,500</strong></span>
-        <span class="pu-stack-plus">+</span>
-        <span>Sales in a Box <strong>$16,500</strong></span>
-        <span class="pu-stack-plus">+</span>
-        <span>Presence in a Box <strong>$22,500</strong></span>
+      <div class="pu-tray-empty" data-tray-empty>
+        <span class="pu-tray-empty-icon" aria-hidden="true">⚡</span>
+        <span>Add a Power Up to start building.</span>
       </div>
 
-      <div class="pu-stack-total">
-        <span>Total</span>
-        <span class="pu-stack-total-num">{COMPLETE_STACK_PRICE}</span>
-      </div>
+      <ul class="pu-tray-list" data-tray-list></ul>
 
-      <a href="/contact?bundle=complete-stack" class="pu-stack-cta">Buy The Complete Stack →</a>
+      <div class="pu-tray-foot" data-tray-foot hidden>
+        <div class="pu-tray-total">
+          <span>Total</span>
+          <span data-tray-total>$0</span>
+        </div>
+        <div class="pu-tray-deposit" data-tray-deposit hidden>
+          <span>25% deposit due today</span>
+          <span data-tray-deposit-num>$0</span>
+        </div>
+        <a class="pu-tray-checkout" data-tray-checkout href="/contact">Proceed to Checkout →</a>
+        <button type="button" class="pu-tray-clear" data-tray-clear>Clear build</button>
+      </div>
     </div>
-  </section>
+  </aside>
 </Base>
+
+<script>
+  type Track = 'identity' | 'systems' | 'presence';
+
+  // Mirror data from src/data/powerUps.ts so the tray can total without a fetch.
+  const PRICE: Record<string, number> = {
+    '1.1': 597, '1.2': 597, '1.3': 597, '1.4': 597, '1.5': 597, '1.6': 597, '1.7': 1597,
+    '2.1': 597, '2.2': 597, '2.3': 597, '2.4': 2000, '2.5': 3000, '2.6': 1000, '2.7': 1500, '2.8': 1000, '2.9': 1500,
+    '3.1': 1000, '3.2': 2000, '3.3': 2000, '3.4': 2000, '3.5': 4000, '3.6': 0,
+  };
+  const BUNDLE_PRICE: Record<Track, number> = { identity: 6500, systems: 16500, presence: 20000 };
+  const STACK_PRICE = 43000;
+
+  const NAMES: Record<string, string> = {};
+  document.querySelectorAll<HTMLElement>('[data-row]').forEach((row) => {
+    const id = row.dataset.row!;
+    const name = row.querySelector<HTMLElement>('.pu-row-name')!.textContent!.trim();
+    NAMES[id] = name;
+  });
+
+  const RECOMMENDATION: Record<Track, { title: string; blurb: string }> = {
+    identity: {
+      title: 'Start with Identity.',
+      blurb: "Lock who you are, what you stand for, and how you sound. Everything else is built on this. Brand in a Box is your fastest path to a real foundation.",
+    },
+    systems: {
+      title: 'Start with Systems.',
+      blurb: 'Your sales engine is the bottleneck. Sales in a Box installs the infrastructure: lead generation, scripts, booking, CRM, and follow-up. Built so it runs without you in the chair.',
+    },
+    presence: {
+      title: 'Start with Presence.',
+      blurb: 'Your market needs to find you and recognize you. Presence in a Box stands up your platform game across Facebook, Instagram, LinkedIn, TikTok, and YouTube — with content in hand for 30 days.',
+    },
+  };
+
+  // ── State ─────────────────────────────────────────────────
+  type State = {
+    track: Track | 'stack';
+    selected: Set<string>;        // power-up ids
+    bundles: Set<Track>;          // track bundles
+    stack: boolean;               // 90-day complete stack
+    expanded: Set<string>;        // expanded card ids
+    quiz: { step: number; answers: Track[] };
+  };
+  const state: State = {
+    track: 'identity',
+    selected: new Set(),
+    bundles: new Set(),
+    stack: false,
+    expanded: new Set(),
+    quiz: { step: 0, answers: [] },
+  };
+
+  // ── Tabs ──────────────────────────────────────────────────
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.pu-tab');
+  const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
+
+  function setTrack(track: Track | 'stack') {
+    state.track = track;
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === track;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', String(on));
+    });
+    panels.forEach((p) => p.classList.toggle('is-active', p.dataset.panel === track));
+  }
+
+  tabs.forEach((t) => {
+    t.addEventListener('click', () => {
+      const tab = t.dataset.tab as Track | 'stack';
+      setTrack(tab);
+      const panel = document.getElementById(`panel-${tab}`);
+      panel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // ── Quiz ──────────────────────────────────────────────────
+  const stage = document.querySelector<HTMLElement>('[data-quiz]')!;
+  const steps = stage.querySelectorAll<HTMLElement>('.pu-quiz-step');
+
+  function renderStep() {
+    steps.forEach((s) => s.classList.remove('is-active'));
+    if (state.quiz.step < steps.length - 1) {
+      steps[state.quiz.step].classList.add('is-active');
+    } else {
+      const winner = pickWinner(state.quiz.answers);
+      const r = RECOMMENDATION[winner];
+      stage.querySelector<HTMLElement>('[data-quiz-result-title]')!.textContent = r.title;
+      stage.querySelector<HTMLElement>('[data-quiz-result-blurb]')!.textContent = r.blurb;
+      const goBtn = stage.querySelector<HTMLButtonElement>('[data-quiz-go]')!;
+      goBtn.dataset.target = winner;
+      stage.querySelector('.pu-quiz-result')!.classList.add('is-active');
+    }
+  }
+
+  function pickWinner(answers: Track[]): Track {
+    const tally: Record<Track, number> = { identity: 0, systems: 0, presence: 0 };
+    answers.forEach((a) => { tally[a]++; });
+    const order: Track[] = ['identity', 'systems', 'presence'];
+    let winner: Track = order[0];
+    let max = -1;
+    order.forEach((t) => { if (tally[t] > max) { max = tally[t]; winner = t; } });
+    return winner;
+  }
+
+  stage.querySelectorAll<HTMLButtonElement>('[data-quiz-pick]').forEach((b) => {
+    b.addEventListener('click', () => {
+      state.quiz.answers.push(b.dataset.quizPick as Track);
+      state.quiz.step++;
+      renderStep();
+    });
+  });
+
+  stage.querySelector<HTMLButtonElement>('[data-quiz-restart]')!.addEventListener('click', () => {
+    state.quiz = { step: 0, answers: [] };
+    renderStep();
+  });
+
+  stage.querySelector<HTMLButtonElement>('[data-quiz-go]')!.addEventListener('click', (e) => {
+    const target = (e.currentTarget as HTMLButtonElement).dataset.target as Track;
+    setTrack(target);
+    document.getElementById('tracks')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ── Card expand/select ────────────────────────────────────
+  document.querySelectorAll<HTMLElement>('[data-row]').forEach((row) => {
+    const id = row.dataset.row!;
+    const head = row.querySelector<HTMLElement>('[data-row-toggle]')!;
+    const selectBtn = row.querySelector<HTMLButtonElement>('[data-select]')!;
+
+    head.addEventListener('click', () => {
+      if (state.expanded.has(id)) state.expanded.delete(id);
+      else state.expanded.add(id);
+      row.classList.toggle('is-open', state.expanded.has(id));
+      const t = row.querySelector<HTMLElement>('.pu-row-toggle')!;
+      t.textContent = state.expanded.has(id) ? '−' : '+';
+    });
+
+    selectBtn.addEventListener('click', () => {
+      const track = row.dataset.track as Track;
+      if (state.bundles.has(track) || state.stack) return; // gated
+      if (state.selected.has(id)) state.selected.delete(id);
+      else state.selected.add(id);
+      row.classList.toggle('is-selected', state.selected.has(id));
+      renderTray();
+    });
+  });
+
+  // ── Bundle toggles ────────────────────────────────────────
+  document.querySelectorAll<HTMLButtonElement>('[data-bundle-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const track = btn.dataset.bundleToggle as Track;
+      if (state.bundles.has(track)) {
+        state.bundles.delete(track);
+      } else {
+        state.bundles.add(track);
+        // Clear individual selections in this track
+        document.querySelectorAll<HTMLElement>(`[data-row][data-track="${track}"]`).forEach((r) => {
+          state.selected.delete(r.dataset.row!);
+          r.classList.remove('is-selected');
+        });
+        // Stack and bundle are mutually exclusive
+        state.stack = false;
+      }
+      syncBundleUi();
+      renderTray();
+    });
+  });
+
+  document.querySelector<HTMLButtonElement>('[data-stack-toggle]')!.addEventListener('click', () => {
+    state.stack = !state.stack;
+    if (state.stack) {
+      state.bundles.clear();
+      state.selected.clear();
+      document.querySelectorAll<HTMLElement>('[data-row]').forEach((r) => r.classList.remove('is-selected'));
+    }
+    syncBundleUi();
+    renderTray();
+  });
+
+  function syncBundleUi() {
+    document.querySelectorAll<HTMLElement>('[data-bundle]').forEach((b) => {
+      const track = b.dataset.bundle as Track;
+      b.classList.toggle('is-selected', state.bundles.has(track));
+    });
+    document.querySelector('.pu-stack-card')!.classList.toggle('is-selected', state.stack);
+    // Gate individual rows in tracks where bundle / stack is set.
+    document.querySelectorAll<HTMLElement>('[data-row]').forEach((r) => {
+      const track = r.dataset.track as Track;
+      const gated = state.stack || state.bundles.has(track);
+      r.classList.toggle('is-gated', gated);
+    });
+  }
+
+  // ── Tray render ───────────────────────────────────────────
+  const trayCount = document.querySelector<HTMLElement>('[data-tray-count]')!;
+  const trayEmpty = document.querySelector<HTMLElement>('[data-tray-empty]')!;
+  const trayList = document.querySelector<HTMLUListElement>('[data-tray-list]')!;
+  const trayFoot = document.querySelector<HTMLElement>('[data-tray-foot]')!;
+  const trayTotal = document.querySelector<HTMLElement>('[data-tray-total]')!;
+  const trayDeposit = document.querySelector<HTMLElement>('[data-tray-deposit]')!;
+  const trayDepositNum = document.querySelector<HTMLElement>('[data-tray-deposit-num]')!;
+  const trayCheckout = document.querySelector<HTMLAnchorElement>('[data-tray-checkout]')!;
+  const trayClear = document.querySelector<HTMLButtonElement>('[data-tray-clear]')!;
+
+  function fmt(n: number) {
+    return '$' + n.toLocaleString();
+  }
+
+  function renderTray() {
+    const items: { id: string; name: string; price: number; remove: () => void }[] = [];
+
+    if (state.stack) {
+      items.push({
+        id: 'stack',
+        name: '90-Day Complete Stack',
+        price: STACK_PRICE,
+        remove: () => { state.stack = false; syncBundleUi(); renderTray(); },
+      });
+    }
+
+    state.bundles.forEach((track) => {
+      items.push({
+        id: `bundle-${track}`,
+        name: BUNDLES_NAMES[track] + ' (Full Bundle)',
+        price: BUNDLE_PRICE[track],
+        remove: () => { state.bundles.delete(track); syncBundleUi(); renderTray(); },
+      });
+    });
+
+    state.selected.forEach((id) => {
+      items.push({
+        id,
+        name: NAMES[id] || id,
+        price: PRICE[id] ?? 0,
+        remove: () => {
+          state.selected.delete(id);
+          document.querySelector(`[data-row="${id}"]`)?.classList.remove('is-selected');
+          renderTray();
+        },
+      });
+    });
+
+    trayCount.textContent = items.length === 1 ? '1 item' : `${items.length} items`;
+    trayEmpty.hidden = items.length > 0;
+    trayList.innerHTML = '';
+
+    if (items.length === 0) {
+      trayFoot.hidden = true;
+      return;
+    }
+
+    items.forEach((it) => {
+      const li = document.createElement('li');
+      li.className = 'pu-tray-item';
+      li.innerHTML = `
+        <span class="pu-tray-item-name">${it.name}</span>
+        <span class="pu-tray-item-price">${fmt(it.price)}</span>
+        <button type="button" class="pu-tray-item-remove" aria-label="Remove">×</button>
+      `;
+      li.querySelector<HTMLButtonElement>('.pu-tray-item-remove')!.addEventListener('click', it.remove);
+      trayList.appendChild(li);
+    });
+
+    const total = items.reduce((sum, it) => sum + it.price, 0);
+    trayFoot.hidden = false;
+    trayTotal.textContent = fmt(total);
+
+    const hasBundle = state.stack || state.bundles.size > 0;
+    if (hasBundle) {
+      trayDeposit.hidden = false;
+      trayDepositNum.textContent = fmt(Math.round(total * 0.25));
+      trayCheckout.textContent = `Reserve my spot · ${fmt(Math.round(total * 0.25))} deposit →`;
+    } else {
+      trayDeposit.hidden = true;
+      trayCheckout.textContent = `Proceed to Checkout · ${fmt(total)} →`;
+    }
+
+    // Encode the selection into the contact link query string.
+    const params = new URLSearchParams();
+    if (state.stack) params.set('cart', 'stack');
+    if (state.bundles.size) params.set('bundles', Array.from(state.bundles).join(','));
+    if (state.selected.size) params.set('powerups', Array.from(state.selected).join(','));
+    trayCheckout.href = `/contact?${params.toString()}`;
+  }
+
+  trayClear.addEventListener('click', () => {
+    state.selected.clear();
+    state.bundles.clear();
+    state.stack = false;
+    document.querySelectorAll<HTMLElement>('[data-row]').forEach((r) => r.classList.remove('is-selected'));
+    syncBundleUi();
+    renderTray();
+  });
+
+  const BUNDLES_NAMES: Record<Track, string> = {
+    identity: 'Brand in a Box',
+    systems: 'Sales in a Box',
+    presence: 'Presence in a Box',
+  };
+
+  // Initial render
+  syncBundleUi();
+  renderTray();
+</script>
 
 <style>
   /* ── Hero ──────────────────────────────────────────────── */
@@ -282,7 +682,8 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     letter-spacing: -0.03em;
     color: var(--text);
   }
-  .pu-hero-accent {
+  .pu-hero-headline em {
+    font-style: italic;
     background: linear-gradient(90deg, #00E5FF, #7B61FF 60%, #FB3079);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -295,380 +696,578 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     line-height: 1.6;
     max-width: 640px;
   }
-  .pu-hero-stats {
-    list-style: none;
-    margin: 24px 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(120px, 1fr));
-    gap: 14px;
-    width: 100%;
-    max-width: 560px;
-  }
-  .pu-hero-stats li {
-    padding: 18px 12px;
-    border: 1px solid var(--gb);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.02);
+  .pu-hero-actions {
+    margin-top: 12px;
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  .pu-hero-stats strong {
-    font-size: 28px;
+  .pu-hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 26px;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF);
+    color: #0a0e1a;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+  .pu-hero-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .pu-hero-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 22px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 100px;
+    border: 1px solid var(--gb);
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .pu-hero-cta-secondary:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  /* ── Quiz ──────────────────────────────────────────────── */
+  .pu-quiz {
+    padding: 48px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .pu-quiz-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .pu-quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .pu-quiz-tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    border: 1px solid rgba(0, 229, 255, 0.32);
+    background: rgba(0, 229, 255, 0.06);
+    font-weight: 700;
+  }
+  .pu-quiz-header h2 {
+    margin: 6px 0 8px;
+    font-size: clamp(24px, 3vw, 32px);
     font-weight: 800;
     letter-spacing: -0.02em;
+  }
+  .pu-quiz-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.55;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .pu-quiz-stage {
+    position: relative;
+  }
+  .pu-quiz-step {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    position: absolute;
+    inset: 0;
+    padding: 28px 28px 32px;
+    border: 1px solid var(--gb);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .pu-quiz-step.is-active {
+    position: relative;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .pu-quiz-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .pu-quiz-progress-num {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--dim);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .pu-quiz-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .pu-quiz-progress-bar > span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF);
+    transition: width 0.4s ease;
+  }
+  .pu-quiz-step h3 {
+    margin: 0 0 18px;
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+  .pu-quiz-step ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pu-quiz-step button {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid var(--gb);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  }
+  .pu-quiz-step button > span:first-child {
+    flex: 1;
+    line-height: 1.5;
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+  .pu-quiz-step button > svg {
+    flex-shrink: 0;
+    color: var(--dim);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .pu-quiz-step button:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.05);
+    transform: translateX(4px);
+  }
+  .pu-quiz-step button:hover > span:first-child { color: var(--text); }
+  .pu-quiz-step button:hover > svg { color: var(--cyan); transform: translateX(2px); }
+
+  .pu-quiz-result-tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--pink);
+    border: 1px solid rgba(251, 48, 121, 0.32);
+    background: rgba(251, 48, 121, 0.06);
+    font-weight: 700;
+  }
+  .pu-quiz-result h3 {
+    margin: 6px 0 10px;
+    font-size: clamp(24px, 3vw, 32px);
     background: linear-gradient(90deg, #00E5FF, #7B61FF, #FB3079);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .pu-hero-stats span {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--dim);
-  }
-
-  /* ── Generic section helpers ─────────────────────────── */
-  .pu-section-title {
-    font-size: clamp(26px, 3.6vw, 38px);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--text);
-    margin: 0 0 12px;
-  }
-  .pu-lede {
-    font-size: 16px;
-    line-height: 1.65;
+  .pu-quiz-result p {
+    margin: 0 0 18px;
     color: var(--muted);
-    margin: 0 0 16px;
-    max-width: 720px;
+    line-height: 1.6;
+  }
+  .pu-quiz-result-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .pu-quiz-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 22px;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF);
+    color: #0a0e1a;
+    font-size: 13.5px;
+    font-weight: 700;
+    border: 0;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+  .pu-quiz-go:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .pu-quiz-restart {
+    padding: 12px 18px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid var(--gb);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .pu-quiz-restart:hover { color: var(--text); border-color: var(--gb2); }
+
+  /* ── Tracks ────────────────────────────────────────────── */
+  .pu-tracks {
+    padding: 56px 24px 96px;
+  }
+  .pu-tracks-inner {
+    max-width: 1080px;
+    margin: 0 auto;
   }
 
-  /* ── Model section ──────────────────────────────────── */
-  .pu-model { padding: 64px 24px; }
-  .pu-model-inner { max-width: 1080px; margin: 0 auto; }
-  .pu-callout {
-    margin: 0 0 16px;
-    font-size: 18px;
+  .pu-tab-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-bottom: 1px solid var(--gb);
+    margin-bottom: 28px;
+  }
+  .pu-tab {
+    --accent: #00E5FF;
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 18px 16px;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    color: var(--dim);
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    text-align: left;
+  }
+  .pu-tab:hover { color: var(--muted); background: rgba(255, 255, 255, 0.02); }
+  .pu-tab.is-active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+  .pu-tab-name {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .pu-tab-price {
+    font-size: 11.5px;
+    color: var(--dim);
+    letter-spacing: 0.04em;
+  }
+  .pu-tab.is-active .pu-tab-price { color: var(--accent); font-weight: 700; }
+  .pu-tab--stack { background: rgba(0, 229, 255, 0.04); }
+
+  .pu-panel {
+    display: none;
+    --accent: #00E5FF;
+    animation: pu-panel-in 0.35s ease both;
+  }
+  .pu-panel.is-active { display: block; }
+  @keyframes pu-panel-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Panel banner */
+  .pu-panel-banner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    padding: 24px 26px;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--gb));
+    background:
+      radial-gradient(80% 60% at 0% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+    margin-bottom: 24px;
+  }
+  .pu-panel-tag {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .pu-panel-title {
+    margin: 6px 0 4px;
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
     color: var(--text);
   }
-  .pu-format-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin: 24px 0 32px;
+  .pu-panel-blurb {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.55;
+    font-size: 14.5px;
+    max-width: 480px;
   }
-  .pu-format-grid > div {
-    padding: 16px 18px;
+  .pu-panel-pricebox {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .pu-panel-pricebox-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--dim);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .pu-panel-pricebox-num {
+    font-size: clamp(26px, 3vw, 32px);
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .pu-panel-pricebox-note {
+    margin-top: 4px;
+    font-size: 10.5px;
+    color: var(--dim);
+    max-width: 240px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* Power Up rows */
+  .pu-list {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pu-row {
     border: 1px solid var(--gb);
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.02);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, background 0.25s ease, opacity 0.25s ease;
   }
-  .pu-format-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--dim);
+  .pu-row:hover { border-color: var(--gb2); }
+  .pu-row.is-selected {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
   }
-  .pu-format-grid strong { color: var(--text); font-size: 15px; }
-  .pu-compare {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-  }
-  .pu-compare article {
-    padding: 24px;
-    border: 1px solid var(--gb);
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .pu-compare-tag {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--cyan);
-  }
-  .pu-compare p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 15px; }
-  .pu-compare-tail strong { color: var(--text); }
-
-  /* ── Architecture section ────────────────────────────── */
-  .pu-arch { padding: 56px 24px; }
-  .pu-arch-inner { max-width: 1200px; margin: 0 auto; }
-  .pu-arch-grid {
-    list-style: none;
-    margin: 28px 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-  .pu-arch-card {
-    padding: 28px;
-    border: 1px solid var(--gb);
-    border-radius: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: relative;
-    background:
-      radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
-    transition: border-color 0.3s ease, transform 0.4s ease;
-  }
-  .pu-arch-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 40%, var(--gb));
-    transform: translateY(-3px);
-  }
-  .pu-arch-num {
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    color: var(--accent);
-    font-weight: 700;
-  }
-  .pu-arch-label {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    color: var(--text);
-  }
-  .pu-arch-blurb {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14.5px;
-    line-height: 1.55;
-  }
-  .pu-arch-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--muted);
-    padding-top: 10px;
-    border-top: 1px solid var(--gb);
-  }
-  .pu-arch-meta strong { color: var(--accent); }
-  .pu-dot { color: var(--dim); }
-  .pu-arch-link {
-    margin-top: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--accent);
-    text-decoration: none;
-  }
-  .pu-arch-link:hover { text-decoration: underline; }
-
-  .pu-arc {
-    margin-top: 36px;
-    padding: 24px 28px;
-    border: 1px solid var(--gb);
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
-  }
-  .pu-arc-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--cyan);
-  }
-  .pu-arc p { margin: 6px 0 12px; color: var(--muted); }
-  .pu-arc-list {
-    margin: 0;
-    padding: 0 0 0 18px;
-    color: var(--muted);
-    font-size: 14.5px;
-    line-height: 1.7;
-  }
-  .pu-arc-list strong { color: var(--text); }
-  .pu-arc-list em { color: var(--dim); font-style: italic; }
-
-  /* ── Category section ────────────────────────────────── */
-  .pu-category { padding: 64px 24px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-  .pu-category-inner { max-width: 1200px; margin: 0 auto; }
-  .pu-category-header {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 36px;
-  }
-  .pu-category-num {
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    color: var(--accent);
-    font-weight: 700;
-  }
-  .pu-category-title {
-    margin: 0;
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--text);
-  }
-  .pu-category-blurb {
-    margin: 0;
-    color: var(--muted);
-    max-width: 640px;
-    font-size: 16px;
-    line-height: 1.6;
+  .pu-row.is-gated {
+    opacity: 0.45;
+    pointer-events: none;
   }
 
-  /* Power Up cards */
-  .pu-list {
-    list-style: none;
-    margin: 0 0 36px;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-  }
-  .pu-card {
-    padding: 26px;
-    border: 1px solid var(--gb);
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    transition: border-color 0.3s ease, transform 0.4s ease;
-  }
-  .pu-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 35%, var(--gb));
-    transform: translateY(-2px);
-  }
-  .pu-card-head { display: flex; flex-direction: column; gap: 6px; }
-  .pu-card-id {
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--accent);
-    font-weight: 700;
-  }
-  .pu-card-name {
-    margin: 0;
-    font-size: 19px;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    line-height: 1.25;
-  }
-  .pu-card-prereq {
-    font-size: 11px;
-    color: var(--dim);
-    font-style: italic;
-  }
-  .pu-card-dl {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .pu-card-dl > div { display: flex; flex-direction: column; gap: 4px; }
-  .pu-card-dl dt {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin: 0;
-  }
-  .pu-card-dl dd {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .pu-card-foot {
-    margin-top: auto;
-    padding-top: 14px;
-    border-top: 1px solid var(--gb);
+  .pu-row-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    flex-wrap: wrap;
+    padding: 16px 18px;
+    cursor: pointer;
   }
-  .pu-card-price {
-    font-size: 22px;
-    font-weight: 800;
+  .pu-row-left { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1; }
+  .pu-row-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--gb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--dim);
+    flex-shrink: 0;
+  }
+  .pu-row.is-selected .pu-row-num {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
     color: var(--accent);
+  }
+  .pu-row-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .pu-row-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .pu-row-prereq {
+    font-size: 11.5px;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+  .pu-row-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .pu-row-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text);
     letter-spacing: -0.01em;
   }
-  .pu-buy-btn {
+  .pu-row.is-selected .pu-row-price { color: var(--accent); }
+  .pu-row-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--gb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--dim);
+    flex-shrink: 0;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .pu-row-head:hover .pu-row-toggle { color: var(--text); background: rgba(255, 255, 255, 0.08); }
+
+  .pu-row-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+    padding: 0 18px;
+  }
+  .pu-row.is-open .pu-row-detail {
+    max-height: 800px;
+    padding: 0 18px 18px;
+  }
+  .pu-row-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .pu-row-block {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--gb);
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .pu-row-block--full { grid-column: 1 / -1; }
+  .pu-row-block-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .pu-row-block p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .pu-row-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 12px;
+    border-top: 1px solid var(--gb);
+  }
+  .pu-row-select {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 10px 18px;
     border-radius: 100px;
-    background: var(--accent);
-    color: #0a0e1a;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
     font-size: 13px;
     font-weight: 700;
-    text-decoration: none;
-    transition: filter 0.2s ease, transform 0.15s ease;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
   }
-  .pu-buy-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .pu-row-select:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); transform: translateY(-1px); }
+  .pu-row-select-on { display: none; }
+  .pu-row.is-selected .pu-row-select {
+    background: var(--accent);
+    color: #0a0e1a;
+  }
+  .pu-row.is-selected .pu-row-select-add { display: none; }
+  .pu-row.is-selected .pu-row-select-on { display: inline; }
 
-  /* Tiered cards (Digital Home) */
+  /* Tier list (Digital Home) */
   .pu-tier-list {
     list-style: none;
-    margin: 0;
+    margin: 0 0 14px;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
   .pu-tier {
-    padding: 14px 16px;
+    padding: 12px 14px;
     border: 1px solid var(--gb);
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
   }
   .pu-tier header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     gap: 8px;
+    margin-bottom: 4px;
   }
-  .pu-tier header strong { color: var(--text); font-size: 14px; }
+  .pu-tier header strong { color: var(--text); font-size: 13px; }
   .pu-tier header span {
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--dim);
   }
-  .pu-tier p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--muted); }
-  .pu-tier-price {
-    align-self: flex-start;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--accent);
-  }
+  .pu-tier p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .pu-tier-price { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--accent); }
 
-  /* Bundle */
-  .pu-bundle {
-    padding: 32px;
-    border-radius: 20px;
+  /* Bundle card */
+  .pu-bundle-card {
+    padding: 28px;
+    border-radius: 18px;
     border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--gb));
     background:
       radial-gradient(80% 60% at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
       linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
   }
-  .pu-bundle header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .pu-bundle-card.is-selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+  .pu-bundle-card header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
   .pu-bundle-tag {
     font-size: 11px;
     letter-spacing: 0.18em;
@@ -676,20 +1275,19 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     color: var(--accent);
     font-weight: 700;
   }
-  .pu-bundle-name {
+  .pu-bundle-card header h3 {
     margin: 0;
-    font-size: clamp(22px, 2.5vw, 30px);
+    font-size: clamp(22px, 2.5vw, 28px);
     font-weight: 800;
     letter-spacing: -0.02em;
-    color: var(--text);
   }
-  .pu-bundle-tagline { margin: 0; color: var(--muted); }
+  .pu-bundle-card header p { margin: 0; color: var(--muted); }
 
   .pu-bundle-cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    margin: 12px 0 18px;
+    gap: 26px;
+    margin-bottom: 16px;
   }
   .pu-bundle-cols h4 {
     margin: 0 0 8px;
@@ -705,21 +1303,21 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     padding-left: 18px;
     color: var(--muted);
     line-height: 1.65;
-    font-size: 14px;
+    font-size: 13.5px;
   }
-  .pu-bundle-cols li { margin-bottom: 4px; }
-  .pu-bundle-engagement {
+
+  .pu-bundle-deposit {
     margin: 0 0 18px;
     padding: 12px 14px;
-    border: 1px dashed var(--gb);
-    border-radius: 8px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 40%, var(--gb));
+    border-radius: 10px;
     color: var(--muted);
-    font-size: 13.5px;
+    font-size: 13px;
     line-height: 1.55;
   }
-  .pu-bundle-engagement strong { color: var(--text); }
+  .pu-bundle-deposit strong { color: var(--accent); }
 
-  .pu-bundle-foot {
+  .pu-bundle-card footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -754,61 +1352,44 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     gap: 8px;
     padding: 14px 24px;
     border-radius: 100px;
+    border: 0;
     background: var(--accent);
     color: #0a0e1a;
     font-size: 14px;
     font-weight: 700;
-    text-decoration: none;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
     transition: filter 0.2s ease, transform 0.15s ease;
   }
   .pu-bundle-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .pu-bundle-cta-on { display: none; }
+  .pu-bundle-card.is-selected .pu-bundle-cta {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .pu-bundle-card.is-selected .pu-bundle-cta-add { display: none; }
+  .pu-bundle-card.is-selected .pu-bundle-cta-on { display: inline; }
 
-  /* ── Dependency map ─────────────────────────────────── */
-  .pu-deps {
-    padding: 64px 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  /* Stack panel */
+  .pu-panel--stack {
+    --accent: #7B61FF;
   }
-  .pu-deps-inner { max-width: 880px; margin: 0 auto; }
-  .pu-deps-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .pu-deps-list li {
-    padding: 14px 18px;
-    border: 1px solid var(--gb);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.02);
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .pu-deps-list strong { color: var(--text); font-weight: 700; }
-
-  /* ── Complete Stack ─────────────────────────────────── */
-  .pu-stack {
-    padding: 96px 24px 120px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  .pu-stack-card {
+    padding: 36px;
+    border-radius: 22px;
+    border: 1px solid rgba(123, 97, 255, 0.32);
     background:
       radial-gradient(60% 60% at 50% 0%, rgba(0, 229, 255, 0.10), transparent 60%),
       radial-gradient(50% 60% at 80% 50%, rgba(123, 97, 255, 0.10), transparent 60%),
       radial-gradient(50% 60% at 20% 50%, rgba(251, 48, 121, 0.10), transparent 60%);
-  }
-  .pu-stack-inner {
-    max-width: 720px;
-    margin: 0 auto;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .pu-stack-card.is-selected {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.32);
   }
   .pu-stack-tag {
     font-size: 11px;
@@ -817,36 +1398,47 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     color: var(--cyan);
     font-weight: 700;
   }
-  .pu-stack-title {
-    margin: 0;
-    font-size: clamp(28px, 4vw, 42px);
+  .pu-stack-card h2 {
+    margin: 8px 0 8px;
+    font-size: clamp(24px, 3.4vw, 36px);
     font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--text);
+    letter-spacing: -0.02em;
   }
-  .pu-stack-sub {
-    margin: 0 0 24px;
+  .pu-stack-card > p {
+    margin: 0 auto 20px;
     color: var(--muted);
-    font-size: 15px;
+    max-width: 540px;
+    line-height: 1.55;
   }
+  .pu-stack-list {
+    margin: 0 auto 24px;
+    padding-left: 18px;
+    text-align: left;
+    max-width: 540px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .pu-stack-list strong { color: var(--text); }
+  .pu-stack-list em { color: var(--dim); font-style: italic; }
   .pu-stack-math {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: baseline;
     gap: 14px;
     color: var(--muted);
-    font-size: 15px;
+    font-size: 14.5px;
+    margin-bottom: 14px;
   }
   .pu-stack-math strong { color: var(--text); }
   .pu-stack-plus { color: var(--dim); }
   .pu-stack-total {
-    margin-top: 18px;
+    margin: 8px auto 18px;
     padding: 18px 32px;
     border: 1px solid var(--gb);
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.03);
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
@@ -859,7 +1451,7 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     font-weight: 700;
   }
   .pu-stack-total-num {
-    font-size: clamp(40px, 6vw, 64px);
+    font-size: clamp(40px, 6vw, 56px);
     font-weight: 800;
     letter-spacing: -0.03em;
     background: linear-gradient(90deg, #00E5FF, #7B61FF, #FB3079);
@@ -868,36 +1460,224 @@ const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === 
     background-clip: text;
   }
   .pu-stack-cta {
-    margin-top: 10px;
-    padding: 16px 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 30px;
+    border: 0;
     border-radius: 100px;
     background: linear-gradient(90deg, #00E5FF, #7B61FF, #FB3079);
     color: #0a0e1a;
     font-size: 15px;
     font-weight: 700;
-    text-decoration: none;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
     transition: filter 0.2s ease, transform 0.15s ease;
   }
   .pu-stack-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .pu-stack-cta-on { display: none; }
+  .pu-stack-card.is-selected .pu-stack-cta {
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+  }
+  .pu-stack-card.is-selected .pu-stack-cta-add { display: none; }
+  .pu-stack-card.is-selected .pu-stack-cta-on { display: inline; }
 
-  /* ── Responsive ────────────────────────────────────── */
+  /* ── Tray ──────────────────────────────────────────────── */
+  .pu-tray {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 100;
+    width: 320px;
+    max-height: calc(100vh - 100px);
+    border: 1px solid var(--gb);
+    border-radius: 16px;
+    background: rgba(11, 14, 24, 0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+  }
+  .pu-tray-inner {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: inherit;
+    overflow-y: auto;
+  }
+  .pu-tray-inner header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gb);
+  }
+  .pu-tray-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .pu-tray-count {
+    font-size: 11px;
+    color: var(--dim);
+  }
+  .pu-tray-empty {
+    text-align: center;
+    color: var(--dim);
+    font-size: 12.5px;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .pu-tray-empty-icon { font-size: 22px; }
+  .pu-tray-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pu-tray-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 9px 10px;
+    border: 1px solid var(--gb);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    animation: pu-tray-in 0.25s ease both;
+  }
+  @keyframes pu-tray-in {
+    from { opacity: 0; transform: translateX(8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .pu-tray-item-name {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .pu-tray-item-price {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .pu-tray-item-remove {
+    width: 22px;
+    height: 22px;
+    background: transparent;
+    border: 0;
+    color: var(--dim);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .pu-tray-item-remove:hover { color: var(--pink); background: rgba(255, 45, 120, 0.08); }
+
+  .pu-tray-foot {
+    border-top: 1px solid var(--gb);
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pu-tray-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .pu-tray-total > span:first-child {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .pu-tray-total > span:last-child {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .pu-tray-deposit {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(0, 229, 255, 0.06);
+    border: 1px solid rgba(0, 229, 255, 0.18);
+    color: var(--muted);
+  }
+  .pu-tray-deposit > span:last-child {
+    font-weight: 700;
+    color: var(--cyan);
+  }
+  .pu-tray-checkout {
+    text-align: center;
+    padding: 13px 12px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF);
+    color: #0a0e1a;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+  .pu-tray-checkout:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .pu-tray-clear {
+    padding: 8px;
+    background: transparent;
+    border: 1px solid var(--gb);
+    color: var(--dim);
+    font-size: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .pu-tray-clear:hover { color: var(--pink); border-color: var(--pink); }
+
+  /* ── Responsive ────────────────────────────────────────── */
   @media (max-width: 880px) {
-    .pu-arch-grid,
-    .pu-list,
-    .pu-bundle-cols,
-    .pu-compare {
+    .pu-row-detail-grid,
+    .pu-bundle-cols {
       grid-template-columns: 1fr;
     }
-    .pu-hero-stats {
+    .pu-panel-banner {
       grid-template-columns: 1fr;
+    }
+    .pu-panel-pricebox {
+      text-align: left;
+    }
+    .pu-panel-pricebox-note { text-align: left; max-width: none; }
+    .pu-bundle-card footer { flex-direction: column; align-items: stretch; }
+    .pu-tray {
+      right: 12px;
+      left: 12px;
+      bottom: 12px;
+      width: auto;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pu-arch-card,
-    .pu-card,
-    .pu-buy-btn,
+    .pu-quiz-step,
+    .pu-panel,
+    .pu-row-detail,
+    .pu-row-select,
     .pu-bundle-cta,
-    .pu-stack-cta { transition: none; }
+    .pu-stack-cta,
+    .pu-tray-item,
+    .pu-quiz-go,
+    .pu-quiz-restart,
+    .pu-quiz-step button { transition: none; animation: none; }
   }
 </style>
