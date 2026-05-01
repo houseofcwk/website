@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import WaitlistForm from '../components/WaitlistForm';
 import MockDashboard from '../components/mocks/MockDashboard.astro';
 import MockRelationships from '../components/mocks/MockRelationships.astro';
 import MockPipeline from '../components/mocks/MockPipeline.astro';
@@ -112,8 +111,8 @@ const pageDescription = s?.seo?.description ?? 'See inside the Agent+ dashboard:
       <p class="hero-sub fade-up fade-up-delay-2">
         {heroSubtext}
       </p>
-      <a href="#waitlist" class="btn btn-gradient fade-up fade-up-delay-3">
-        Join the Waitlist →
+      <a href="#player-xray" class="btn btn-gradient fade-up fade-up-delay-3">
+        Take the X-Ray ↓
       </a>
     </div>
   </section>
@@ -244,15 +243,28 @@ const pageDescription = s?.seo?.description ?? 'See inside the Agent+ dashboard:
     </div>
   </section>
 
-  <!-- ── Bottom Waitlist ────────────────────────────────────── -->
-  <section id="waitlist" class="section waitlist-bottom">
+  <!-- ── Bottom Player X-Ray CTA ────────────────────────────── -->
+  <section id="player-xray" class="section waitlist-bottom xray-cta">
     <div class="section-inner" style="text-align:center;">
-      <span class="eyebrow">Ready?</span>
-      <h2>This is the infrastructure your business has been missing.</h2>
+      <span class="eyebrow">Player X-Ray</span>
+      <h2>The right infrastructure starts with knowing what kind of player you are.</h2>
       <p class="waitlist-sub">
-        CWK. Agent+ is currently in private beta. Join the waitlist to be first in line.
+        Take the X-Ray. Five questions. Free. Walk away knowing exactly where you
+        are and the right level to start building from.
       </p>
-      <WaitlistForm client:visible />
+
+      <ul class="xray-pills" aria-label="What you get">
+        <li class="xray-pill"><span class="xray-pill-dot"></span>Free</li>
+        <li class="xray-pill"><span class="xray-pill-dot"></span>5 questions</li>
+        <li class="xray-pill"><span class="xray-pill-dot"></span>Long-term clarity</li>
+      </ul>
+
+      <a href="/brand-mirror" class="xray-cta-btn">
+        Take the X-Ray
+        <svg class="xray-cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
     </div>
   </section>
 </Base>
@@ -418,10 +430,67 @@ const pageDescription = s?.seo?.description ?? 'See inside the Agent+ dashboard:
 
   .waitlist-sub {
     color: var(--muted);
-    max-width: 420px;
+    max-width: 540px;
     margin: 0 auto 28px;
     font-size: 15px;
+    line-height: 1.6;
   }
+
+  /* Player X-Ray pills */
+  .xray-pills {
+    list-style: none;
+    margin: 0 auto 28px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 10px;
+  }
+  .xray-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    background: rgba(0, 229, 255, 0.06);
+    border: 1px solid rgba(0, 229, 255, 0.22);
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .xray-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.55);
+  }
+
+  /* Take the X-Ray button */
+  .xray-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%);
+    color: #07090F;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 6px 28px rgba(0, 229, 255, 0.25);
+    transition: box-shadow 0.3s ease, transform 0.1s ease, filter 0.2s ease;
+  }
+  .xray-cta-btn:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 10px 36px rgba(123, 97, 255, 0.34);
+  }
+  .xray-cta-btn:active { transform: scale(0.985); }
+  .xray-cta-arrow {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .xray-cta-btn:hover .xray-cta-arrow { transform: translateX(3px); }
 
   /* Responsive */
   @media (max-width: 900px) {
