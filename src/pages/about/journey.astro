@@ -8,10 +8,76 @@ let s: any = null;
 try { s = await sanity.fetch(JOURNEY_QUERY); } catch { s = null; }
 
 const heroEyebrow  = s?.heroEyebrow  ?? 'The Journey';
-const heroHeadline = s?.heroHeadline ?? 'Chapter by chapter.';
+const heroHeadline = s?.heroHeadline ?? 'A picture story.';
 
 const pageTitle = s?.seo?.title ?? "Kris's Journey | CWK. Experience";
-const pageDescription = s?.seo?.description ?? 'From Caguas, Puerto Rico to Austin, TX: the chapter-by-chapter story of Kris San, founder of CWK. Experience.';
+const pageDescription = s?.seo?.description ?? 'A picture story of Kris San: from Caguas, Puerto Rico to Austin, TX, chapter by chapter.';
+
+interface Chapter {
+  number: number;
+  title: string;
+  year?: string;
+  body?: string;
+  image?: string;
+  imageAlt?: string;
+  gallery?: { src: string; alt: string }[];
+  current?: boolean;
+}
+
+const CHAPTERS: Chapter[] = [
+  {
+    number: 1,
+    title: 'Puerto Rico',
+    body: 'I was raised in Caguas, Puerto Rico.',
+    image: '/images/about-kris/journey/chapter-1.webp',
+    imageAlt: 'Caguas, Puerto Rico — childhood roots',
+  },
+  {
+    number: 2,
+    title: 'Leaving Puerto Rico',
+    year: '2010',
+    body: 'Arrived in Austin, TX alone without knowing anyone. I was so lost.',
+    image: '/images/about-kris/journey/chapter-2.webp',
+    imageAlt: 'Arrival in Austin, Texas, 2010',
+  },
+  {
+    number: 3,
+    title: 'Waking Up',
+    year: '2015 – 2018',
+    body: 'My living on purpose clock started in 2015 when I started my first business, KSSO.',
+    gallery: [
+      { src: '/images/about-kris/journey/chapter-3-01.webp', alt: 'Waking Up — KSSO era 01' },
+      { src: '/images/about-kris/journey/chapter-3-02.webp', alt: 'Waking Up — KSSO era 02' },
+      { src: '/images/about-kris/journey/chapter-3-03.webp', alt: 'Waking Up — KSSO era 03' },
+      { src: '/images/about-kris/journey/chapter-3-04.webp', alt: 'Waking Up — KSSO era 04' },
+      { src: '/images/about-kris/journey/chapter-3-05.webp', alt: 'Waking Up — KSSO era 05' },
+    ],
+  },
+  {
+    number: 4,
+    title: 'Picking a Direction',
+    year: '2019',
+    body: 'It was time to start building a body of work.',
+    image: '/images/about-kris/journey/chapter-4.webp',
+    imageAlt: 'Picking a direction, 2019',
+  },
+  {
+    number: 5,
+    title: 'Building the Body of Work While Building Myself',
+    year: '2020 – 2025',
+    body: 'Five years in constant motion. Learning. Earning. Compounding.',
+    image: '/images/about-kris/journey/chapter-5.webp',
+    imageAlt: 'Building the body of work, 2020 – 2025',
+  },
+  {
+    number: 6,
+    title: 'In Progress',
+    body: 'The story is still being written.',
+    image: '/images/about-kris/journey/chapter-6.webp',
+    imageAlt: 'Chapter 6 — in progress',
+    current: true,
+  },
+];
 ---
 
 <Base
@@ -19,16 +85,16 @@ const pageDescription = s?.seo?.description ?? 'From Caguas, Puerto Rico to Aust
   description={pageDescription}
 >
   <!-- ── Hero ─────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-inner">
-      <a href="/about" class="back-link">← Back to About</a>
+  <section class="jr-hero">
+    <div class="jr-hero-inner">
+      <a href="/about" class="jr-back">← Back to About</a>
       <span class="eyebrow fade-up">{heroEyebrow}</span>
-      <h1 class="hero-headline fade-up fade-up-delay-1">{heroHeadline}</h1>
+      <h1 class="jr-hero-headline fade-up fade-up-delay-1">{heroHeadline}</h1>
+      <p class="jr-hero-sub fade-up fade-up-delay-2">Six chapters, one journey, in pictures.</p>
     </div>
   </section>
 
   {s?.body ? (
-    <!-- ── Sanity-authored body ───────────────────────────── -->
     <section class="section body-section">
       <div class="section-inner">
         <div class="pt-body"><PortableText value={s.body} /></div>
@@ -36,353 +102,395 @@ const pageDescription = s?.seo?.description ?? 'From Caguas, Puerto Rico to Aust
     </section>
   ) : (
   <>
-  <!-- ── Timeline ──────────────────────────────────────────── -->
-  <section class="section timeline-section">
-    <div class="section-inner">
-      <div class="timeline">
-
-        <!-- Chapter 1 -->
-        <div class="timeline-item">
-          <div class="timeline-connector">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="chapter-card glass-card">
-            <span class="eyebrow">Chapter 1</span>
-            <h2 class="chapter-heading">Puerto Rico</h2>
-            <p class="chapter-body">I was raised in Caguas, Puerto Rico.</p>
-          </div>
+    <!-- ── Chapters ───────────────────────────────────────── -->
+    {CHAPTERS.map((c, i) => (
+      <section class={`jr-chapter ${i % 2 === 1 ? 'jr-chapter--reverse' : ''} ${c.current ? 'jr-chapter--current' : ''}`}>
+        <div class="jr-chapter-inner">
+          {c.gallery ? (
+            <>
+              <div class="jr-chapter-text reveal-up">
+                <span class="jr-chapter-num">Chapter {c.number}{c.year ? ` · ${c.year}` : ''}</span>
+                <h2 class="jr-chapter-title">{c.title}</h2>
+                {c.body && <p class="jr-chapter-body">{c.body}</p>}
+              </div>
+              <div class="jr-chapter-gallery reveal-card">
+                {c.gallery.map((g, gi) => (
+                  <figure class={`jr-gallery-item jr-gallery-item--${gi + 1}`} style={`--gi:${gi}`}>
+                    <img src={g.src} alt={g.alt} loading="lazy" decoding="async" />
+                  </figure>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <div class="jr-chapter-text reveal-up">
+                <span class="jr-chapter-num">
+                  Chapter {c.number}{c.year ? ` · ${c.year}` : ''}
+                  {c.current && <span class="jr-chapter-now">Now</span>}
+                </span>
+                <h2 class="jr-chapter-title">{c.title}</h2>
+                {c.body && <p class="jr-chapter-body">{c.body}</p>}
+              </div>
+              {c.image && (
+                <figure class="jr-chapter-image reveal-card">
+                  <img src={c.image} alt={c.imageAlt ?? c.title} loading="lazy" decoding="async" />
+                </figure>
+              )}
+            </>
+          )}
         </div>
+      </section>
+    ))}
 
-        <!-- Chapter 2 -->
-        <div class="timeline-item">
-          <div class="timeline-connector">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="chapter-card glass-card">
-            <span class="eyebrow">Chapter 2</span>
-            <h2 class="chapter-heading">Leaving Puerto Rico <span class="chapter-year">2010</span></h2>
-            <p class="chapter-body">Arrived in Austin, TX alone without knowing anyone. I was so lost.</p>
-          </div>
+    <!-- ── CTA ─────────────────────────────────────────────── -->
+    <section class="section jr-cta-section">
+      <div class="section-inner">
+        <div class="jr-cta-block glass-card">
+          <span class="eyebrow">The Work</span>
+          <h2>See what this journey produced.</h2>
+          <p>Every chapter built the foundation for what CWK. does for clients today.</p>
+          <a href="/case-studies" class="btn btn-primary">See The Case Studies →</a>
         </div>
-
-        <!-- Chapter 3 -->
-        <div class="timeline-item">
-          <div class="timeline-connector">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="chapter-card glass-card">
-            <span class="eyebrow">Chapter 3</span>
-            <h2 class="chapter-heading">Waking Up <span class="chapter-year">2015</span></h2>
-            <p class="chapter-body">My living on purpose clock started in 2015 when I founded my first business KSSO.</p>
-          </div>
-        </div>
-
-        <!-- Chapter 4 -->
-        <div class="timeline-item">
-          <div class="timeline-connector">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="chapter-card glass-card">
-            <span class="eyebrow">Chapter 4</span>
-            <h2 class="chapter-heading">Picking a Direction <span class="chapter-year">2019</span></h2>
-            <p class="chapter-body">It was time to start building a cohesive body of work.</p>
-          </div>
-        </div>
-
-        <!-- Chapter 5 -->
-        <div class="timeline-item">
-          <div class="timeline-connector">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="chapter-card glass-card">
-            <span class="eyebrow">Chapter 5</span>
-            <h2 class="chapter-heading">Building the Body of Work <span class="chapter-year">2019 – 2025</span></h2>
-            <p class="chapter-body">I've stayed in constant motion. Learning &amp; Earning.</p>
-          </div>
-        </div>
-
-        <!-- Chapter 6 -->
-        <div class="timeline-item timeline-item-last">
-          <div class="timeline-connector">
-            <div class="timeline-dot timeline-dot-active"></div>
-          </div>
-          <div class="chapter-card glass-card chapter-card-active">
-            <span class="eyebrow">Chapter 6</span>
-            <h2 class="chapter-heading">In Progress <span class="chapter-year chapter-year-live">Now</span></h2>
-            <p class="chapter-body">The story is still being written.</p>
-          </div>
-        </div>
-
       </div>
-    </div>
-  </section>
-
-  <!-- ── CTA ───────────────────────────────────────────────── -->
-  <section class="section cta-section">
-    <div class="section-inner">
-      <div class="cta-block glass-card">
-        <span class="eyebrow">The Work</span>
-        <h2>See what this journey produced.</h2>
-        <p>Every chapter built the foundation for what CWK. does for clients today.</p>
-        <a href="/case-studies" class="btn btn-primary">See The Case Studies →</a>
-      </div>
-    </div>
-  </section>
+    </section>
   </>
   )}
+
+  <!-- ── Image lightbox (matches case studies #108) ───────── -->
+  <dialog id="jr-lightbox" class="jr-lightbox" aria-label="Image viewer">
+    <button type="button" class="jr-lightbox-close" aria-label="Close image">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+      </svg>
+    </button>
+    <figure class="jr-lightbox-figure">
+      <img alt="" />
+    </figure>
+  </dialog>
+
+  <script>
+    const dialog = document.getElementById('jr-lightbox') as HTMLDialogElement | null;
+    if (dialog) {
+      const fig = dialog.querySelector('figure') as HTMLElement;
+      const dialogImg = dialog.querySelector('img') as HTMLImageElement;
+      const closeBtn = dialog.querySelector('.jr-lightbox-close') as HTMLButtonElement;
+
+      const open = (img: HTMLImageElement) => {
+        dialogImg.src = img.currentSrc || img.src;
+        dialogImg.alt = img.alt || '';
+        dialog.showModal();
+        document.body.style.overflow = 'hidden';
+      };
+
+      const close = () => {
+        if (dialog.open) dialog.close();
+        document.body.style.overflow = '';
+      };
+
+      document.querySelectorAll<HTMLImageElement>('.jr-chapter-image img, .jr-gallery-item img').forEach((img) => {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', (e) => {
+          e.preventDefault();
+          open(img);
+        });
+      });
+
+      closeBtn.addEventListener('click', close);
+      dialog.addEventListener('click', (e) => {
+        if (e.target instanceof Node && !fig.contains(e.target)) close();
+      });
+      dialog.addEventListener('close', () => { document.body.style.overflow = ''; });
+    }
+  </script>
 </Base>
 
 <style>
   /* ── Hero ─────────────────────────────────────────── */
-  .hero {
-    padding-top: 144px;
-    padding-bottom: 64px;
-    padding-left: 24px;
-    padding-right: 24px;
+  .jr-hero {
+    padding: 144px 24px 72px;
     text-align: center;
   }
-
-  .hero-inner {
+  .jr-hero-inner {
     max-width: 720px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;
   }
-
-  .back-link {
+  .jr-back {
     display: inline-block;
     font-size: 13px;
     color: var(--dim);
     text-decoration: none;
     letter-spacing: 0.04em;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     transition: color 0.2s ease;
   }
-
-  .back-link:hover {
-    color: var(--cyan);
-  }
-
-  .hero-inner .eyebrow {
-    margin-bottom: 16px;
-  }
-
-  .hero-headline {
-    font-size: clamp(40px, 7vw, 72px);
+  .jr-back:hover { color: var(--cyan); }
+  .jr-hero-inner .eyebrow { margin-bottom: 16px; }
+  .jr-hero-headline {
+    font-size: clamp(44px, 7vw, 76px);
     font-weight: 800;
     line-height: 1.0;
     letter-spacing: -0.04em;
     color: var(--text);
+    margin: 0 0 16px;
+  }
+  .jr-hero-sub {
     margin: 0;
+    font-size: clamp(15px, 1.6vw, 18px);
+    color: var(--muted);
+    line-height: 1.5;
   }
 
-  /* ── Timeline ─────────────────────────────────────── */
-  .timeline-section .section-inner {
-    max-width: 680px;
+  /* ── Chapter section ──────────────────────────────── */
+  .jr-chapter {
+    padding: clamp(48px, 7vw, 96px) 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
+  .jr-chapter:first-of-type { border-top: 0; }
 
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .timeline-item {
+  .jr-chapter-inner {
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 32px 1fr;
-    gap: 0 20px;
-  }
-
-  .timeline-item-last .timeline-connector {
-    justify-content: flex-start;
-  }
-
-  .timeline-connector {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(32px, 5vw, 80px);
     align-items: center;
   }
-
-  .timeline-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--cyan);
-    flex-shrink: 0;
-    margin-top: 28px;
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  .jr-chapter--reverse .jr-chapter-inner {
+    grid-template-columns: 7fr 5fr;
   }
+  .jr-chapter--reverse .jr-chapter-text { order: 2; }
+  .jr-chapter--reverse .jr-chapter-image,
+  .jr-chapter--reverse .jr-chapter-gallery { order: 1; }
 
-  .timeline-dot-active {
-    width: 14px;
-    height: 14px;
-    background: var(--cyan);
-    box-shadow: 0 0 16px rgba(0, 229, 255, 0.7), 0 0 32px rgba(0, 229, 255, 0.3);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 16px rgba(0, 229, 255, 0.7), 0 0 32px rgba(0, 229, 255, 0.3); }
-    50% { box-shadow: 0 0 24px rgba(0, 229, 255, 0.9), 0 0 48px rgba(0, 229, 255, 0.5); }
-  }
-
-  .timeline-line {
-    width: 1px;
-    flex: 1;
-    background: linear-gradient(to bottom, var(--cyan), rgba(0, 229, 255, 0.1));
-    margin-top: 8px;
-    margin-bottom: 0;
-    min-height: 24px;
-  }
-
-  .chapter-card {
-    padding: var(--pad-md);
-    margin-bottom: var(--gap-tile);
-    border-left: 2px solid var(--cyan);
+  .jr-chapter-text {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 14px;
   }
 
-  .chapter-card-active {
-    border-left-color: var(--cyan);
-    background: rgba(0, 229, 255, 0.04);
-  }
-
-  .chapter-card .eyebrow {
-    margin-bottom: 4px;
-  }
-
-  .chapter-heading {
-    font-size: clamp(18px, 2.5vw, 22px);
+  .jr-chapter-num {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
     font-weight: 700;
-    color: var(--text);
-    line-height: 1.2;
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .chapter-year {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--dim);
-    letter-spacing: 0.02em;
-  }
-
-  .chapter-year-live {
     color: var(--cyan);
-    font-weight: 600;
+  }
+  .jr-chapter-now {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    background: rgba(251, 48, 121, 0.12);
+    border: 1px solid rgba(251, 48, 121, 0.32);
+    color: var(--pink);
+    letter-spacing: 0.18em;
+  }
+  .jr-chapter-now::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--pink);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(251, 48, 121, 0.7);
+    animation: jr-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes jr-pulse {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
   }
 
-  .chapter-body {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.65;
+  .jr-chapter-title {
     margin: 0;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text);
   }
 
-  /* ── CTA Block ────────────────────────────────────── */
-  .cta-block {
-    padding: 48px var(--pad-lg);
+  .jr-chapter-body {
+    margin: 0;
+    font-size: clamp(16px, 1.7vw, 19px);
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  /* Single image */
+  .jr-chapter-image {
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--gb);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .jr-chapter-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .jr-chapter-image:hover img { transform: scale(1.03); }
+
+  /* Gallery (Chapter 3) — 3-up irregular collage */
+  .jr-chapter-gallery {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 110px;
+    gap: 12px;
+  }
+  .jr-gallery-item {
+    margin: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--gb);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .jr-gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .jr-gallery-item:hover img { transform: scale(1.05); }
+  .jr-gallery-item--1 { grid-column: span 4; grid-row: span 2; }
+  .jr-gallery-item--2 { grid-column: span 2; grid-row: span 1; }
+  .jr-gallery-item--3 { grid-column: span 2; grid-row: span 1; }
+  .jr-gallery-item--4 { grid-column: span 3; grid-row: span 2; }
+  .jr-gallery-item--5 { grid-column: span 3; grid-row: span 2; }
+
+  /* ── Closing CTA ──────────────────────────────────── */
+  .jr-cta-section {
+    padding-top: clamp(64px, 8vw, 96px);
+    padding-bottom: clamp(40px, 6vw, 64px);
+  }
+  .jr-cta-block {
+    padding: clamp(32px, 5vw, 56px);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    max-width: 680px;
+    gap: 12px;
+    max-width: 800px;
     margin: 0 auto;
   }
-
-  .cta-block .eyebrow {
-    margin-bottom: 4px;
-  }
-
-  .cta-block h2 {
-    font-size: clamp(20px, 3vw, 28px);
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.2;
+  .jr-cta-block h2 {
     margin: 0;
+    font-size: clamp(24px, 3vw, 32px);
+  }
+  .jr-cta-block p {
+    margin: 0 0 16px;
+    color: var(--muted);
+    max-width: 480px;
   }
 
-  .cta-block p {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.6;
-    max-width: 400px;
-    margin: 0 0 8px;
-  }
-
-  /* ── Portable Text body (Sanity-authored) ─────────── */
-  .body-section .section-inner {
-    max-width: 680px;
-  }
-  .pt-body :global(h2) {
-    font-size: clamp(20px, 2.8vw, 26px);
-    font-weight: 700;
+  /* ── Lightbox (mirrors .csd-lightbox from case studies) ── */
+  .jr-lightbox {
+    border: 0;
+    padding: 0;
+    margin: auto;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
     color: var(--text);
-    letter-spacing: -0.01em;
-    margin: 32px 0 12px;
   }
-  .pt-body :global(h2:first-child) { margin-top: 0; }
-  .pt-body :global(h3) {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
-    margin: 24px 0 10px;
+  .jr-lightbox::backdrop {
+    background: rgba(8, 10, 16, 0.86);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
-  .pt-body :global(p) {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.7;
-    margin: 0 0 14px;
+  .jr-lightbox[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .pt-body :global(ul) {
-    list-style: none;
-    padding-left: 0;
-    margin: 0 0 14px;
+  .jr-lightbox-figure {
+    margin: 0;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 92vw;
+    max-height: 92vh;
   }
-  .pt-body :global(li) {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.65;
-    padding-left: 20px;
-    position: relative;
-    margin-bottom: 8px;
+  .jr-lightbox-figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
   }
-  .pt-body :global(li::before) {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--cyan);
-    font-size: 11px;
-    top: 3px;
+  .jr-lightbox-close {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(20, 22, 28, 0.65);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
   }
-  .pt-body :global(strong) { color: var(--text); font-weight: 600; }
-  .pt-body :global(a)      { color: var(--cyan); }
+  .jr-lightbox-close:hover {
+    background: rgba(40, 44, 56, 0.85);
+    border-color: rgba(255, 255, 255, 0.32);
+    transform: scale(1.05);
+  }
+  .jr-lightbox-close:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+  }
 
   /* ── Responsive ───────────────────────────────────── */
+  @media (max-width: 880px) {
+    .jr-chapter-inner,
+    .jr-chapter--reverse .jr-chapter-inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .jr-chapter--reverse .jr-chapter-text { order: 1; }
+    .jr-chapter--reverse .jr-chapter-image,
+    .jr-chapter--reverse .jr-chapter-gallery { order: 2; }
+
+    .jr-chapter-gallery {
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 140px;
+    }
+    .jr-gallery-item--1 { grid-column: span 2; grid-row: span 2; }
+    .jr-gallery-item--2 { grid-column: span 1; grid-row: span 1; }
+    .jr-gallery-item--3 { grid-column: span 1; grid-row: span 1; }
+    .jr-gallery-item--4 { grid-column: span 1; grid-row: span 1; }
+    .jr-gallery-item--5 { grid-column: span 1; grid-row: span 1; }
+  }
+
   @media (max-width: 640px) {
-    .hero {
-      padding-top: 112px;
-      padding-bottom: 48px;
-    }
+    .jr-hero { padding-top: 112px; padding-bottom: 56px; }
+  }
 
-    .chapter-card {
-      padding: var(--pad-md) 16px;
-    }
-
-    .cta-block {
-      padding: 32px 24px;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .jr-chapter-image img,
+    .jr-gallery-item img,
+    .jr-chapter-now::before { transition: none; animation: none; }
+    .jr-lightbox-close { transition: none; }
   }
 </style>
