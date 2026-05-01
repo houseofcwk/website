@@ -21,10 +21,12 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
 
     <!-- Desktop nav links (no icons) -->
     <div class="nav-links">
-      <a href="/product"     class:list={['nav-link', { active: isActive('/product') }]}>Product</a>
       <a href="/case-studies" class:list={['nav-link', { active: isActive('/case-studies') }]}>Case Studies</a>
-      <a href="/about"       class:list={['nav-link', { active: isActive('/about') }]}>About</a>
-      <a href="/side-quests" class:list={['nav-link', { active: isActive('/side-quests') }]}>Side Quests</a>
+      <a href="/about"        class:list={['nav-link', { active: isActive('/about') }]}>About</a>
+      <a href="/product"      class:list={['nav-link nav-link--soon', { active: isActive('/product') }]}>
+        PLOS
+        <span class="nav-soon-badge" aria-label="Coming soon">Soon</span>
+      </a>
     </div>
 
     <div class="nav-actions">
@@ -68,19 +70,6 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
 
   <!-- Nav items with icons -->
   <nav class="overlay-nav">
-    <a href="/product"     class:list={['overlay-link', { active: isActive('/product') }]}>
-      <span class="overlay-icon" aria-hidden="true">
-        <!-- Grid / dashboard icon -->
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="2" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
-          <rect x="12" y="2" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
-          <rect x="2" y="12" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
-          <rect x="12" y="12" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
-        </svg>
-      </span>
-      Product
-    </a>
-
     <a href="/case-studies" class:list={['overlay-link', { active: isActive('/case-studies') }]}>
       <span class="overlay-icon" aria-hidden="true">
         <!-- Briefcase icon -->
@@ -115,14 +104,18 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
       Brand Mirror
     </a>
 
-    <a href="/side-quests" class:list={['overlay-link', { active: isActive('/side-quests') }]}>
+    <a href="/product" class:list={['overlay-link', { active: isActive('/product') }]}>
       <span class="overlay-icon" aria-hidden="true">
-        <!-- Lightning bolt -->
+        <!-- Grid / dashboard icon -->
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 2L4 13h7l-2 7 9-11h-7l2-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <rect x="2" y="2" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="12" y="2" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="2" y="12" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="12" y="12" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>
         </svg>
       </span>
-      Side Quests
+      PLOS
+      <span class="overlay-soon-badge" aria-label="Coming soon">Soon</span>
     </a>
 
     {currentPath !== '/' && (
@@ -227,6 +220,37 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
   }
   .nav-link:hover,
   .nav-link.active { color: var(--text); }
+
+  .nav-link--soon {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-soon-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: #C9C2FF;
+    background: rgba(123, 97, 255, 0.14);
+    border: 1px solid rgba(123, 97, 255, 0.32);
+    padding: 3px 6px;
+    border-radius: 4px;
+  }
+  .overlay-soon-badge {
+    margin-left: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #C9C2FF;
+    background: rgba(123, 97, 255, 0.14);
+    border: 1px solid rgba(123, 97, 255, 0.32);
+    padding: 3px 7px;
+    border-radius: 5px;
+    line-height: 1;
+  }
 
   /* Right-side action buttons */
   .nav-actions {
