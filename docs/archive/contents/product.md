@@ -121,7 +121,7 @@ kaia is trained on the CWK. framework and your specific data. Ask about your nex
 
 **Key highlights:**
 - Real-time streaming responses
-- Grounded in CWK. PLOS framework
+- Grounded in CWK. PLOS methodology
 - Context-aware: knows your stage, tasks, and goals
 - Available 24/7 inside the dashboard
 
