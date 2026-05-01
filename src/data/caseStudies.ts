@@ -653,9 +653,22 @@ export const CASE_STUDIES: CaseStudy[] = [
 
       h2('Programs Built From Zero'),
       p('An education and internship program was co-built from scratch in collaboration with local universities including the University of Texas. Interns were placed into a live campaign environment with real responsibilities. The program proved DAWA could operate as a training and development platform, not just a non-profit.'),
+      {
+        _type: 'image',
+        src: '/images/case-studies/dawa/internship.webp',
+        alt: 'DAWA internship program cohort',
+      },
 
       h2('A Clean Close'),
       p('The chapter with DAWA ended after nearly two years of active building, following the 5-year anniversary. The handoff was clean. The narrative was anchored. Systems were in place. Leadership was stronger.'),
+      {
+        _type: 'gallery',
+        columns: 2,
+        images: [
+          { src: '/images/case-studies/dawa/closing-01.webp', alt: 'DAWA closing moment 01' },
+          { src: '/images/case-studies/dawa/closing-02.webp', alt: 'DAWA closing moment 02' },
+        ],
+      },
       yt('https://www.youtube.com/embed/WpHozkkSssE?rel=0', 'DAWA | Original Testimonials'),
       yt('https://www.youtube.com/embed/o5QB1gYgIgY?rel=0', 'DAWA Testimonial Trailer'),
     ],
