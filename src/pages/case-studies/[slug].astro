@@ -276,13 +276,14 @@ const pageDescription = cs.seo?.description ?? cs.cardDescription ?? '';
     border-radius: 18px;
     overflow: hidden;
     border: 1px solid var(--gb);
+    background: rgba(255, 255, 255, 0.02);
   }
   .csd-cover-inner img {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
+    max-height: 85vh;
+    object-fit: contain;
   }
 
   /* ── Stats ────────────────────────────────────────────────── */
