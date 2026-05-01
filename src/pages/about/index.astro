@@ -1,29 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PortableText from '../../components/PortableText.astro';
-import PillarsSection from '../../components/home/PillarsSection.astro';
 import { sanity } from '../../lib/sanity';
 import { ABOUT_QUERY } from '../../lib/queries';
 
 let s: any = null;
 try { s = await sanity.fetch(ABOUT_QUERY); } catch { s = null; }
 
-const HARDCODED_STATS: Array<{ value: string; label: string; note?: string }> = [
-  { value: '8+',    label: 'Brands Built' },
-  { value: '2.5yr', label: 'Avg Time Working Together', note: 'longest: 4 years' },
-  { value: '$5M+',  label: 'Revenue Growth Contributor' },
-  { value: '10x',   label: 'Content Output for Rob Dial' },
-];
-
-const PILLARS = [
-  { key: 'mind',   title: 'Mind',   body: 'Strategic clarity, decision frameworks, mental performance, and clearing psychological blockers that stop growth.' },
-  { key: 'body',   title: 'Body',   body: 'The operational systems required for the body to be nurtured through access to nutrition and regular fitness habits.' },
-  { key: 'soul',   title: 'Soul',   body: 'Legacy building, IP development, thought leadership positioning, and turning your expertise into community building.' },
-  { key: 'pocket', title: 'Pocket', body: 'Revenue systems, opportunity sourcing, deal structuring, and building the financial engine that funds your vision.' },
-];
-
 const heroHeadline = s?.heroHeadline ?? 'My Why.';
-const stats = s?.stats && s.stats.length ? s.stats : HARDCODED_STATS;
 
 const pageTitle = s?.seo?.title ?? 'About Kris San | CWK. Experience';
 const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. Experience, the sports agent for entrepreneurs. Long-term business management, not consulting.';
@@ -35,6 +19,21 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
 >
   <!-- ── Hero ─────────────────────────────────────────────── -->
   <section class="hero">
+    <video
+      class="hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="/videos/about-kris/poster.jpg"
+      aria-hidden="true"
+    >
+      <source src="/videos/about-kris/loop.webm" type="video/webm" />
+      <source src="/videos/about-kris/loop.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay" aria-hidden="true"></div>
+
     <div class="hero-inner">
       <span class="eyebrow fade-up">About Kris</span>
       <h1 class="hero-headline fade-up fade-up-delay-1">{heroHeadline}</h1>
@@ -48,7 +47,17 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
           <div class="hero-ctas fade-up fade-up-delay-3">
             <a href="/about/journey" class="btn btn-primary">Learn More About My Journey →</a>
             <a href="/case-studies" class="btn btn-secondary">See The Case Studies →</a>
+            <a href="/side-quests" class="btn btn-secondary">See Side Quests →</a>
           </div>
+          <img
+            class="hero-signature fade-up fade-up-delay-4"
+            src="/images/about-kris/kris-signature.webp"
+            alt="Kris San signature"
+            width="320"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
         </>
       )}
     </div>
@@ -63,29 +72,12 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
           <div class="bio-ctas">
             <a href="/about/journey" class="btn btn-primary">Learn More About My Journey →</a>
             <a href="/case-studies" class="btn btn-secondary">See The Case Studies →</a>
+            <a href="/side-quests" class="btn btn-secondary">See Side Quests →</a>
           </div>
         </div>
       </div>
     </section>
   )}
-
-  <!-- ── Stats Row ─────────────────────────────────────────── -->
-  <section class="section stats-section">
-    <div class="section-inner">
-      <div class="stats-bar glass-card">
-        {stats.map((stat: { value: string; label: string; note?: string }) => (
-          <div class="stat">
-            <span class="stat-number gradient-text">{stat.value}</span>
-            <span class="stat-label">{stat.label}</span>
-            {stat.note && <span class="stat-note">{stat.note}</span>}
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Four Pillars (PLOS Framework) ─────────────────────── -->
-  <PillarsSection pillars={PILLARS} />
 
   <!-- ── Closing CTA ───────────────────────────────────────── -->
   <section class="section about-cta-section">
@@ -98,16 +90,38 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
 </Base>
 
 <style>
-  /* ── Hero ─────────────────────────────────────────── */
+  /* ── Hero with background video ────────────────────── */
   .hero {
+    position: relative;
+    overflow: hidden;
     padding-top: 144px;
     padding-bottom: 80px;
     padding-left: 24px;
     padding-right: 24px;
     text-align: center;
+    isolation: isolate;
+  }
+
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, rgba(7, 9, 15, 0.55) 0%, rgba(7, 9, 15, 0.85) 70%, rgba(7, 9, 15, 0.95) 100%),
+      linear-gradient(180deg, rgba(7, 9, 15, 0.4) 0%, rgba(7, 9, 15, 0.7) 100%);
+    z-index: -1;
   }
 
   .hero-inner {
+    position: relative;
     max-width: 720px;
     margin: 0 auto;
     display: flex;
@@ -159,6 +173,14 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 40px;
+  }
+
+  .hero-signature {
+    margin-top: 40px;
+    width: clamp(180px, 22vw, 260px);
+    height: auto;
+    opacity: 0.92;
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5));
   }
 
   /* ── Bio Card ─────────────────────────────────────── */
@@ -234,53 +256,6 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
     margin-top: 8px;
   }
 
-  /* ── Stats (2×2 grid with internal dividers) ───────── */
-  .stats-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0;
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-    overflow: hidden;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-    padding: 36px 24px;
-  }
-
-  /* Internal "+" divider: bottom border on top row, right border on left col */
-  .stat:nth-child(-n+2) { border-bottom: 1px solid var(--gb); }
-  .stat:nth-child(odd)  { border-right: 1px solid var(--gb); }
-
-  .stat-number {
-    font-size: clamp(28px, 4vw, 38px);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    line-height: 1.4;
-    max-width: 22ch;
-  }
-
-  .stat-note {
-    font-size: 11px;
-    color: var(--dim);
-    font-style: italic;
-    letter-spacing: 0.02em;
-  }
-
   /* ── Closing CTA ──────────────────────────────────── */
   .about-cta-section {
     padding-top: 40px;
@@ -307,14 +282,14 @@ const pageDescription = s?.seo?.description ?? 'Kris San is the founder of CWK. 
       flex-direction: column;
       width: 100%;
     }
+  }
 
-    .stats-bar {
-      grid-template-columns: 1fr;
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video {
+      display: none;
     }
-    /* Single-column: horizontal divider between every stat */
-    .stat:nth-child(-n+2)  { border-bottom: 1px solid var(--gb); }
-    .stat:nth-child(3)     { border-bottom: 1px solid var(--gb); }
-    .stat:nth-child(odd)   { border-right: none; }
-    .stat { padding: 24px 20px; }
+    .hero-overlay {
+      background: rgba(7, 9, 15, 0.95);
+    }
   }
 </style>
