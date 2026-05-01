@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PortableText from '../../components/PortableText.astro';
-import WaitlistForm from '../../components/WaitlistForm';
 import { sanity, urlFor } from '../../lib/sanity';
 import { CASE_BY_SLUG_QUERY } from '../../lib/queries';
 import { CASE_STUDIES, CASE_STUDIES_BY_SLUG, type CaseStudy } from '../../data/caseStudies';
@@ -114,13 +113,28 @@ const pageDescription = cs.seo?.description ?? cs.cardDescription ?? '';
     </div>
   </section>
 
-  <!-- ── Waitlist CTA ───────────────────────────────────────── -->
-  <section id="waitlist" class="section csd-waitlist">
+  <!-- ── Player X-Ray CTA ───────────────────────────────────── -->
+  <section id="player-xray" class="section csd-waitlist csd-xray">
     <div class="section-inner">
-      <span class="eyebrow">Early Access</span>
-      <h2>Ready to build infrastructure like this for your business?</h2>
-      <p class="csd-waitlist-sub">Join the waitlist for CWK. Agent+, the operating system that manages your growth across Mind, Body, Soul, and Pocket.</p>
-      <WaitlistForm client:visible />
+      <span class="eyebrow">Player X-Ray</span>
+      <h2>The right infrastructure starts with knowing what kind of player you are.</h2>
+      <p class="csd-waitlist-sub">
+        Take the X-Ray. Five questions. Free. Walk away knowing exactly where you
+        are and the right level to start building from.
+      </p>
+
+      <ul class="csd-xray-pills" aria-label="What you get">
+        <li class="csd-xray-pill"><span class="csd-xray-pill-dot"></span>Free</li>
+        <li class="csd-xray-pill"><span class="csd-xray-pill-dot"></span>5 questions</li>
+        <li class="csd-xray-pill"><span class="csd-xray-pill-dot"></span>Long-term clarity</li>
+      </ul>
+
+      <a href="/brand-mirror" class="csd-xray-cta">
+        Take the X-Ray
+        <svg class="csd-xray-cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
     </div>
   </section>
 
@@ -512,6 +526,64 @@ const pageDescription = cs.seo?.description ?? cs.cardDescription ?? '';
     max-width: 560px;
     margin: 0 auto 24px;
   }
+
+  /* Player X-Ray pills */
+  .csd-xray-pills {
+    list-style: none;
+    margin: 0 auto 28px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 10px;
+  }
+  .csd-xray-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    background: rgba(0, 229, 255, 0.06);
+    border: 1px solid rgba(0, 229, 255, 0.22);
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--text);
+  }
+  .csd-xray-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.55);
+  }
+
+  /* Take the X-Ray button */
+  .csd-xray-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%);
+    color: #07090F;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.005em;
+    text-decoration: none;
+    box-shadow: 0 6px 28px rgba(0, 229, 255, 0.25);
+    transition: box-shadow 0.3s ease, transform 0.1s ease, filter 0.2s ease;
+  }
+  .csd-xray-cta:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 10px 36px rgba(123, 97, 255, 0.34);
+  }
+  .csd-xray-cta:active { transform: scale(0.985); }
+  .csd-xray-cta-arrow {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .csd-xray-cta:hover .csd-xray-cta-arrow { transform: translateX(3px); }
 
   /* ── Lightbox ─────────────────────────────────────────────── */
   .csd-lightbox {

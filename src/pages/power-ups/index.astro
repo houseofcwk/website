@@ -1,0 +1,903 @@
+---
+import Base from '../../layouts/Base.astro';
+import { POWER_UPS, BUNDLES, CATEGORY_META, COMPLETE_STACK_PRICE, type PowerUpCategory } from '../../data/powerUps';
+
+const pageTitle = 'Power Ups | CWK. Experience';
+const pageDescription = 'CWK. Power Ups: 21 single-focus transformation tools across Identity, Systems, and Presence. Done With You in 45 minutes or less. Three bundles. One complete business in 90 days.';
+
+const CATEGORIES: PowerUpCategory[] = ['identity', 'systems', 'presence'];
+const byCategory = (cat: PowerUpCategory) => POWER_UPS.filter((pu) => pu.category === cat);
+const bundleFor  = (cat: PowerUpCategory) => BUNDLES.find((b) => b.category === cat)!;
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <!-- ── Hero ────────────────────────────────────────────── -->
+  <section class="pu-hero">
+    <div class="pu-hero-inner">
+      <span class="pu-eyebrow fade-up">⚡ Power Ups</span>
+      <h1 class="pu-hero-headline fade-up fade-up-delay-1">
+        What used to take years <br />
+        <span class="pu-hero-accent">done in 45 minutes or less.</span>
+      </h1>
+      <p class="pu-hero-sub fade-up fade-up-delay-2">
+        21 single-focus transformation tools. Three bundles. One complete business in 90 days. Surgical. Fast. Done With You.
+      </p>
+
+      <ul class="pu-hero-stats fade-up fade-up-delay-3">
+        <li><strong>3</strong><span>Categories</span></li>
+        <li><strong>21</strong><span>Power Ups</span></li>
+        <li><strong>3</strong><span>Bundles</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── What is a Power Up ──────────────────────────────── -->
+  <section class="pu-model">
+    <div class="pu-model-inner">
+      <h2 class="pu-section-title">What Is a Power Up</h2>
+      <p class="pu-lede">
+        A Power Up is a <strong>single, focused transformation tool</strong>. One problem. One solution. One result.
+      </p>
+      <p class="pu-callout"><em>You look. You select. You pay. You get.</em></p>
+      <p>
+        Every Power Up is delivered <strong>DWY (Done With You)</strong>. Pre-work is assigned before the session so the time together is pure delivery, not discovery. You come prepared. We execute. You leave with the asset in your hands.
+      </p>
+
+      <div class="pu-format-grid">
+        <div><span class="pu-format-label">Format</span><strong>Done With You</strong></div>
+        <div><span class="pu-format-label">Session time</span><strong>≤ 45 minutes</strong></div>
+        <div><span class="pu-format-label">Delivery</span><strong>Same day to 30 days</strong></div>
+        <div><span class="pu-format-label">Accountability</span><strong>Bundles only</strong></div>
+      </div>
+
+      <div class="pu-compare">
+        <article>
+          <span class="pu-compare-tag">🎯 Individual Power Up</span>
+          <p>You know exactly what you need. You grab it and go. One session. One deliverable. Execution and accountability are yours.</p>
+          <p class="pu-compare-tail"><strong>Surgical. Fast. Independent.</strong></p>
+        </article>
+        <article>
+          <span class="pu-compare-tag">📦 The Bundle</span>
+          <p>You want the full transformation with someone guiding the sequence. 30 days. Concierge progression. Accountability baked in. Data collected. Real-time adjustments made.</p>
+          <p class="pu-compare-tail"><strong>Power Ups give you the tool. The bundle gives you the transformation.</strong></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Architecture (3 categories) ─────────────────────── -->
+  <section class="pu-arch">
+    <div class="pu-arch-inner">
+      <h2 class="pu-section-title">Three Categories. One Complete Business.</h2>
+      <p class="pu-lede">Every Power Up lives inside one named problem lane. You know immediately which lane you are in and what you need.</p>
+
+      <ul class="pu-arch-grid">
+        {CATEGORIES.map((cat) => {
+          const meta = CATEGORY_META[cat];
+          const bundle = bundleFor(cat);
+          return (
+            <li class={`pu-arch-card pu-arch-card--${cat}`} style={`--accent: ${meta.accent}`}>
+              <span class="pu-arch-num">0{meta.index}</span>
+              <h3 class="pu-arch-label">{meta.label}</h3>
+              <p class="pu-arch-blurb">{meta.blurb}</p>
+              <div class="pu-arch-meta">
+                <span>{meta.count}</span>
+                <span class="pu-dot" aria-hidden="true">·</span>
+                <span>{bundle.name}</span>
+                <span class="pu-dot" aria-hidden="true">·</span>
+                <strong>{bundle.price}</strong>
+              </div>
+              <a href={`#category-${cat}`} class="pu-arch-link">Explore {meta.label} →</a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <aside class="pu-arc">
+        <span class="pu-arc-label">🗓️ The 90-Day Arc</span>
+        <p>Each bundle is its own sovereign 30-day engagement. Run them sequentially and you build a complete business in 90 days.</p>
+        <ol class="pu-arc-list">
+          <li><strong>Days 1–30</strong> Brand in a Box. Identity built. <em>(30 days starts at onboarding.)</em></li>
+          <li><strong>Days 31–60</strong> Sales in a Box. Revenue system installed. <em>(30 days starts at first advertising execution or first booking attempt.)</em></li>
+          <li><strong>Days 61–90</strong> Presence in a Box. Market presence deployed. <em>(30 days starts at first post going live.)</em></li>
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ── Categories ─────────────────────────────────────── -->
+  {CATEGORIES.map((cat) => {
+    const meta = CATEGORY_META[cat];
+    const bundle = bundleFor(cat);
+    const items = byCategory(cat);
+    return (
+      <section
+        id={`category-${cat}`}
+        class={`pu-category pu-category--${cat}`}
+        style={`--accent: ${meta.accent}`}
+      >
+        <div class="pu-category-inner">
+          <header class="pu-category-header">
+            <span class="pu-category-num">0{meta.index}</span>
+            <h2 class="pu-category-title">⚡ {meta.label}</h2>
+            <p class="pu-category-blurb">{meta.blurb}</p>
+          </header>
+
+          <ul class="pu-list">
+            {items.map((pu) => (
+              <li class="pu-card">
+                <header class="pu-card-head">
+                  <span class="pu-card-id">⚡ {pu.id}</span>
+                  <h3 class="pu-card-name">{pu.name}</h3>
+                  {pu.prereq && pu.prereq.length > 0 && (
+                    <span class="pu-card-prereq">Requires: {pu.prereq.join(' + ')}</span>
+                  )}
+                </header>
+
+                <dl class="pu-card-dl">
+                  <div>
+                    <dt>The Fix</dt>
+                    <dd>{pu.fix}</dd>
+                  </div>
+                  <div>
+                    <dt>Who this is not for</dt>
+                    <dd>{pu.notFor}</dd>
+                  </div>
+                  <div>
+                    <dt>Best moment to buy</dt>
+                    <dd>{pu.bestMoment}</dd>
+                  </div>
+                </dl>
+
+                {pu.tiers && (
+                  <ul class="pu-tier-list">
+                    {pu.tiers.map((t) => (
+                      <li class="pu-tier">
+                        <header><strong>{t.name}</strong><span>{t.timeline}</span></header>
+                        <p>{t.description}</p>
+                        <span class="pu-tier-price">{t.price}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <footer class="pu-card-foot">
+                  <span class="pu-card-price">{pu.price}</span>
+                  <a href={`/contact?powerup=${pu.id}`} class="pu-buy-btn">Buy this Power Up →</a>
+                </footer>
+              </li>
+            ))}
+          </ul>
+
+          <article class={`pu-bundle pu-bundle--${cat}`}>
+            <header>
+              <span class="pu-bundle-tag">📦 The Bundle</span>
+              <h3 class="pu-bundle-name">⚡ {bundle.name}</h3>
+              <p class="pu-bundle-tagline">{bundle.tagline}</p>
+            </header>
+
+            <div class="pu-bundle-cols">
+              <div>
+                <h4>What is included</h4>
+                <ol>
+                  {bundle.includes.map((item) => <li>{item}</li>)}
+                </ol>
+              </div>
+              <div>
+                <h4>The bundle difference</h4>
+                <ul>
+                  {bundle.differences.map((d) => <li>{d}</li>)}
+                </ul>
+              </div>
+            </div>
+
+            <p class="pu-bundle-engagement"><strong>Engagement.</strong> {bundle.engagement}</p>
+
+            <footer class="pu-bundle-foot">
+              <div class="pu-bundle-price-block">
+                <span class="pu-bundle-price-label">Investment</span>
+                <span class="pu-bundle-price">{bundle.price}</span>
+                <span class="pu-bundle-individual">Individual Power Ups total: {bundle.individualTotal} · The bundle is not a discount, it is an upgrade in experience.</span>
+              </div>
+              <a href={`/contact?bundle=${cat}`} class="pu-bundle-cta">Buy {bundle.name} →</a>
+            </footer>
+          </article>
+        </div>
+      </section>
+    );
+  })}
+
+  <!-- ── Dependency map ─────────────────────────────────── -->
+  <section class="pu-deps">
+    <div class="pu-deps-inner">
+      <h2 class="pu-section-title">Dependency Map</h2>
+      <p class="pu-lede">Some Power Ups require others before purchase. This is not a restriction. It is integrity. The result will be wrong if the foundation is not in place.</p>
+
+      <ul class="pu-deps-list">
+        {POWER_UPS.filter((pu) => pu.prereq && pu.prereq.length > 0).map((pu) => (
+          <li>
+            <strong>{pu.name}</strong>
+            <span>requires {pu.prereq!.join(' + ')}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── The Complete Stack ──────────────────────────────── -->
+  <section class="pu-stack">
+    <div class="pu-stack-inner">
+      <span class="pu-stack-tag">🏆 The Complete Stack</span>
+      <h2 class="pu-stack-title">All three bundles. 90 days. Complete business.</h2>
+      <p class="pu-stack-sub">Identity. Sales. Presence. In that order. In 90 days.</p>
+
+      <div class="pu-stack-math">
+        <span>Brand in a Box <strong>$5,500</strong></span>
+        <span class="pu-stack-plus">+</span>
+        <span>Sales in a Box <strong>$16,500</strong></span>
+        <span class="pu-stack-plus">+</span>
+        <span>Presence in a Box <strong>$22,500</strong></span>
+      </div>
+
+      <div class="pu-stack-total">
+        <span>Total</span>
+        <span class="pu-stack-total-num">{COMPLETE_STACK_PRICE}</span>
+      </div>
+
+      <a href="/contact?bundle=complete-stack" class="pu-stack-cta">Buy The Complete Stack →</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ── Hero ──────────────────────────────────────────────── */
+  .pu-hero {
+    padding: 144px 24px 56px;
+    text-align: center;
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgba(0, 229, 255, 0.10), transparent 60%),
+      radial-gradient(50% 60% at 80% 30%, rgba(123, 97, 255, 0.10), transparent 60%),
+      radial-gradient(50% 60% at 20% 30%, rgba(251, 48, 121, 0.08), transparent 60%);
+  }
+  .pu-hero-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .pu-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .pu-hero-headline {
+    margin: 0;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .pu-hero-accent {
+    background: linear-gradient(90deg, #00E5FF, #7B61FF 60%, #FB3079);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .pu-hero-sub {
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(15px, 1.6vw, 18px);
+    line-height: 1.6;
+    max-width: 640px;
+  }
+  .pu-hero-stats {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+    gap: 14px;
+    width: 100%;
+    max-width: 560px;
+  }
+  .pu-hero-stats li {
+    padding: 18px 12px;
+    border: 1px solid var(--gb);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+  }
+  .pu-hero-stats strong {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF, #FB3079);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .pu-hero-stats span {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--dim);
+  }
+
+  /* ── Generic section helpers ─────────────────────────── */
+  .pu-section-title {
+    font-size: clamp(26px, 3.6vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    margin: 0 0 12px;
+  }
+  .pu-lede {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--muted);
+    margin: 0 0 16px;
+    max-width: 720px;
+  }
+
+  /* ── Model section ──────────────────────────────────── */
+  .pu-model { padding: 64px 24px; }
+  .pu-model-inner { max-width: 1080px; margin: 0 auto; }
+  .pu-callout {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: var(--text);
+  }
+  .pu-format-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 24px 0 32px;
+  }
+  .pu-format-grid > div {
+    padding: 16px 18px;
+    border: 1px solid var(--gb);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pu-format-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .pu-format-grid strong { color: var(--text); font-size: 15px; }
+  .pu-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .pu-compare article {
+    padding: 24px;
+    border: 1px solid var(--gb);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pu-compare-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .pu-compare p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 15px; }
+  .pu-compare-tail strong { color: var(--text); }
+
+  /* ── Architecture section ────────────────────────────── */
+  .pu-arch { padding: 56px 24px; }
+  .pu-arch-inner { max-width: 1200px; margin: 0 auto; }
+  .pu-arch-grid {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .pu-arch-card {
+    padding: 28px;
+    border: 1px solid var(--gb);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    background:
+      radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+    transition: border-color 0.3s ease, transform 0.4s ease;
+  }
+  .pu-arch-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--gb));
+    transform: translateY(-3px);
+  }
+  .pu-arch-num {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .pu-arch-label {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .pu-arch-blurb {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  .pu-arch-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    padding-top: 10px;
+    border-top: 1px solid var(--gb);
+  }
+  .pu-arch-meta strong { color: var(--accent); }
+  .pu-dot { color: var(--dim); }
+  .pu-arch-link {
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .pu-arch-link:hover { text-decoration: underline; }
+
+  .pu-arc {
+    margin-top: 36px;
+    padding: 24px 28px;
+    border: 1px solid var(--gb);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .pu-arc-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .pu-arc p { margin: 6px 0 12px; color: var(--muted); }
+  .pu-arc-list {
+    margin: 0;
+    padding: 0 0 0 18px;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .pu-arc-list strong { color: var(--text); }
+  .pu-arc-list em { color: var(--dim); font-style: italic; }
+
+  /* ── Category section ────────────────────────────────── */
+  .pu-category { padding: 64px 24px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+  .pu-category-inner { max-width: 1200px; margin: 0 auto; }
+  .pu-category-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .pu-category-num {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .pu-category-title {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text);
+  }
+  .pu-category-blurb {
+    margin: 0;
+    color: var(--muted);
+    max-width: 640px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Power Up cards */
+  .pu-list {
+    list-style: none;
+    margin: 0 0 36px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .pu-card {
+    padding: 26px;
+    border: 1px solid var(--gb);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: border-color 0.3s ease, transform 0.4s ease;
+  }
+  .pu-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--gb));
+    transform: translateY(-2px);
+  }
+  .pu-card-head { display: flex; flex-direction: column; gap: 6px; }
+  .pu-card-id {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .pu-card-name {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .pu-card-prereq {
+    font-size: 11px;
+    color: var(--dim);
+    font-style: italic;
+  }
+  .pu-card-dl {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .pu-card-dl > div { display: flex; flex-direction: column; gap: 4px; }
+  .pu-card-dl dt {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 0;
+  }
+  .pu-card-dl dd {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .pu-card-foot {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--gb);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .pu-card-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+  .pu-buy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    background: var(--accent);
+    color: #0a0e1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+  .pu-buy-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  /* Tiered cards (Digital Home) */
+  .pu-tier-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pu-tier {
+    padding: 14px 16px;
+    border: 1px solid var(--gb);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pu-tier header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .pu-tier header strong { color: var(--text); font-size: 14px; }
+  .pu-tier header span {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .pu-tier p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--muted); }
+  .pu-tier-price {
+    align-self: flex-start;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* Bundle */
+  .pu-bundle {
+    padding: 32px;
+    border-radius: 20px;
+    border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--gb));
+    background:
+      radial-gradient(80% 60% at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  }
+  .pu-bundle header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .pu-bundle-tag {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .pu-bundle-name {
+    margin: 0;
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .pu-bundle-tagline { margin: 0; color: var(--muted); }
+
+  .pu-bundle-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin: 12px 0 18px;
+  }
+  .pu-bundle-cols h4 {
+    margin: 0 0 8px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-weight: 700;
+  }
+  .pu-bundle-cols ol,
+  .pu-bundle-cols ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--muted);
+    line-height: 1.65;
+    font-size: 14px;
+  }
+  .pu-bundle-cols li { margin-bottom: 4px; }
+  .pu-bundle-engagement {
+    margin: 0 0 18px;
+    padding: 12px 14px;
+    border: 1px dashed var(--gb);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .pu-bundle-engagement strong { color: var(--text); }
+
+  .pu-bundle-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding-top: 16px;
+    border-top: 1px solid color-mix(in srgb, var(--accent) 25%, var(--gb));
+  }
+  .pu-bundle-price-block { display: flex; flex-direction: column; gap: 2px; }
+  .pu-bundle-price-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-weight: 700;
+  }
+  .pu-bundle-price {
+    font-size: clamp(28px, 3vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .pu-bundle-individual {
+    margin-top: 2px;
+    font-size: 11.5px;
+    color: var(--dim);
+  }
+  .pu-bundle-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: 100px;
+    background: var(--accent);
+    color: #0a0e1a;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+  .pu-bundle-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  /* ── Dependency map ─────────────────────────────────── */
+  .pu-deps {
+    padding: 64px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .pu-deps-inner { max-width: 880px; margin: 0 auto; }
+  .pu-deps-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pu-deps-list li {
+    padding: 14px 18px;
+    border: 1px solid var(--gb);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .pu-deps-list strong { color: var(--text); font-weight: 700; }
+
+  /* ── Complete Stack ─────────────────────────────────── */
+  .pu-stack {
+    padding: 96px 24px 120px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background:
+      radial-gradient(60% 60% at 50% 0%, rgba(0, 229, 255, 0.10), transparent 60%),
+      radial-gradient(50% 60% at 80% 50%, rgba(123, 97, 255, 0.10), transparent 60%),
+      radial-gradient(50% 60% at 20% 50%, rgba(251, 48, 121, 0.10), transparent 60%);
+  }
+  .pu-stack-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .pu-stack-tag {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    font-weight: 700;
+  }
+  .pu-stack-title {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text);
+  }
+  .pu-stack-sub {
+    margin: 0 0 24px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .pu-stack-math {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .pu-stack-math strong { color: var(--text); }
+  .pu-stack-plus { color: var(--dim); }
+  .pu-stack-total {
+    margin-top: 18px;
+    padding: 18px 32px;
+    border: 1px solid var(--gb);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .pu-stack-total > span:first-child {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-weight: 700;
+  }
+  .pu-stack-total-num {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF, #FB3079);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .pu-stack-cta {
+    margin-top: 10px;
+    padding: 16px 32px;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF, #FB3079);
+    color: #0a0e1a;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+  .pu-stack-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 880px) {
+    .pu-arch-grid,
+    .pu-list,
+    .pu-bundle-cols,
+    .pu-compare {
+      grid-template-columns: 1fr;
+    }
+    .pu-hero-stats {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pu-arch-card,
+    .pu-card,
+    .pu-buy-btn,
+    .pu-bundle-cta,
+    .pu-stack-cta { transition: none; }
+  }
+</style>
