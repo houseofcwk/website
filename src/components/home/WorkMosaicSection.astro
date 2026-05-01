@@ -1,68 +1,88 @@
 ---
-interface WorkItem {
-  href: string;
-  img: string;
-  alt: string;
-  width: number;
-  height: number;
-  tag: string;
-  title: string;
-  meta: string;
-  wide?: boolean;
-}
+import { CASE_STUDIES } from '../../data/caseStudies';
 
-const items: WorkItem[] = [
-  { href: '/case-studies/the-lab-miami', img: '/images/case-studies/lab-miami.webp', alt: 'The LAB Miami innovation campus', width: 1440, height: 804, tag: 'Builder Hub', title: 'The LAB Miami', meta: '20–30% faster sales cycles', wide: true },
-  { href: '/case-studies/rob-dial',      img: '/images/case-studies/rob-dial.webp',  alt: 'Rob Dial podcast studio',       width: 1200, height: 654, tag: 'Podcast',       title: 'Rob Dial',      meta: 'Revenue $1M → $5M' },
-  { href: '/case-studies/spraycation',   img: '/images/case-studies/spraycation.webp', alt: 'SPRAYCATION experiential art tour', width: 1000, height: 546, tag: 'Experiential', title: 'SPRAYCATION',   meta: '6-city tour executed' },
-  { href: '/case-studies/dawa',          img: '/images/case-studies/dawa.webp',       alt: 'DAWA non-profit education program', width: 1000, height: 546, tag: 'Non-Profit',   title: 'DAWA',          meta: 'A dignity project unveiled' },
-  { href: '/case-studies/stephy-lee',    img: '/images/case-studies/stephy-lee.webp', alt: 'Stephy Lee music artist',       width: 1000, height: 546, tag: 'Creative Founder', title: 'Stephy Lee', meta: 'SXSW stage secured' },
-];
+// Curate the home-page portfolio: pull canonical case studies, prefer those
+// with a cardImage, sort by editorial order, then take the first 6.
+const portfolio = CASE_STUDIES
+  .filter((c) => Boolean(c.cardImage))
+  .sort((a, b) => a.order - b.order)
+  .slice(0, 6);
 ---
 
-<section class="section work-mosaic">
+<section class="section portfolio-section" aria-labelledby="portfolio-heading">
   <div class="section-inner">
-    <div class="work-mosaic-header">
+    <header class="portfolio-header">
       <span class="pill-eyebrow reveal-up">
         <span class="pill-dot" aria-hidden="true"></span>
-        The Work
+        The Portfolio
       </span>
-      <h2 class="work-mosaic-title reveal-up reveal-delay-1">Real brands. Measurable results.</h2>
-      <p class="work-mosaic-sub reveal-up reveal-delay-2">From podcasters to non-profits to creative founders, CWK. builds the infrastructure that brings your vision to life.</p>
-    </div>
+      <h2 id="portfolio-heading" class="portfolio-title reveal-up reveal-delay-1">Real brands. Measurable results.</h2>
+      <p class="portfolio-sub reveal-up reveal-delay-2">
+        From podcasters to non-profits to creative founders, CWK. builds the infrastructure that brings your vision to life.
+      </p>
+    </header>
 
-    <div class="mosaic-grid">
-      {items.map((it, i) => (
-        <a href={it.href} class={`mosaic-card ${it.wide ? 'mosaic-card--wide' : ''} reveal-card`} style={`--reveal-i:${i}`}>
-          <img src={it.img} alt={it.alt} width={it.width} height={it.height} loading="lazy" decoding="async" />
-          <div class="mosaic-overlay">
-            <span class="mosaic-tag">{it.tag}</span>
-            <h3 class="mosaic-title">{it.title}</h3>
-            <p class="mosaic-meta">{it.meta}</p>
-            <span class="mosaic-arrow" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
-          </div>
-        </a>
+    <ul class="portfolio-grid">
+      {portfolio.map((c, i) => (
+        <li class="portfolio-card-item" style={`--reveal-i:${i}`}>
+          <a
+            href={`/case-studies/${c.slug}`}
+            class={`portfolio-card reveal-card`}
+            style={`--accent: ${c.cardAccent}`}
+            aria-label={`${c.client} — ${c.cardDescription}`}
+          >
+            <div class="portfolio-card-img">
+              <img
+                src={c.cardImage}
+                alt={c.cardImageAlt ?? c.client}
+                width="900"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="portfolio-card-stat" aria-hidden="true">
+                <span class="portfolio-card-stat-num">{c.cardStat.num}</span>
+                <span class="portfolio-card-stat-label">{c.cardStat.label}</span>
+              </span>
+            </div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-cat">{c.category}</span>
+              <h3 class="portfolio-card-title">{c.client}</h3>
+              <p class="portfolio-card-desc">{c.cardDescription}</p>
+              <span class="portfolio-card-cta">
+                Read the case study
+                <svg class="portfolio-card-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+        </li>
       ))}
-    </div>
+    </ul>
 
-    <div class="work-cta reveal-up reveal-delay-3">
+    <div class="portfolio-cta reveal-up reveal-delay-3">
       <a href="/case-studies" class="btn btn-ghost">See All Case Studies →</a>
     </div>
   </div>
 </section>
 
 <style>
-  .work-mosaic-header {
+  .portfolio-section {
+    position: relative;
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+
+  /* ── Header ───────────────────────────────────────────── */
+  .portfolio-header {
     text-align: left;
-    margin-bottom: 32px;
+    margin-bottom: 44px;
     display: flex;
     flex-direction: column;
     gap: 14px;
   }
-
-  .work-mosaic-title {
+  .portfolio-title {
     font-size: clamp(28px, 4.6vw, 44px);
     font-weight: 800;
     line-height: 1.1;
@@ -70,8 +90,7 @@ const items: WorkItem[] = [
     color: var(--text);
     margin: 0;
   }
-
-  .work-mosaic-sub {
+  .portfolio-sub {
     font-size: clamp(14px, 1.4vw, 16px);
     color: var(--muted);
     margin: 0;
@@ -79,239 +98,204 @@ const items: WorkItem[] = [
     line-height: 1.55;
   }
 
-  .mosaic-grid {
+  /* ── Grid ────────────────────────────────────────────── */
+  .portfolio-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: minmax(0, 380px) minmax(0, 280px);
-    grid-template-areas:
-      "a a a a b b"
-      "c c d d e e";
-    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
   }
-  .mosaic-card:nth-child(1) { grid-area: a; }
-  .mosaic-card:nth-child(2) { grid-area: b; }
-  .mosaic-card:nth-child(3) { grid-area: c; }
-  .mosaic-card:nth-child(4) { grid-area: d; }
-  .mosaic-card:nth-child(5) { grid-area: e; }
+  .portfolio-card-item { display: flex; }
 
-  .mosaic-card {
+  /* ── Card ────────────────────────────────────────────── */
+  .portfolio-card {
+    --accent: #00E5FF;
     position: relative;
-    overflow: hidden;
-    border-radius: var(--radius-card, 14px);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--glass);
     border: 1px solid var(--gb);
+    border-radius: 16px;
+    overflow: hidden;
     text-decoration: none;
     color: inherit;
-    background: rgba(255, 255, 255, 0.02);
     isolation: isolate;
-    transform: translateZ(0);
     transition:
-      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.4s ease;
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.35s ease,
+      box-shadow 0.4s ease;
   }
-  .mosaic-card img {
-    position: absolute;
-    inset: 0;
+
+  /* Image area */
+  .portfolio-card-img {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .portfolio-card-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
-    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
     filter: saturate(0.96);
   }
-  .mosaic-card::before {
+  .portfolio-card-img::after {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 1;
     background: linear-gradient(
       180deg,
-      rgba(7, 9, 15, 0) 0%,
-      rgba(7, 9, 15, 0) 30%,
-      rgba(7, 9, 15, 0.85) 100%
+      rgba(7, 9, 15, 0) 35%,
+      rgba(7, 9, 15, 0.55) 100%
     );
-    transition: opacity 0.4s ease;
     pointer-events: none;
+    transition: opacity 0.3s ease;
   }
-  .mosaic-card::after {
-    content: '';
+
+  /* Stat badge floating bottom-left of image */
+  .portfolio-card-stat {
     position: absolute;
-    inset: 0;
+    left: 14px;
+    bottom: 14px;
     z-index: 2;
-    background: radial-gradient(
-      ellipse at 50% 100%,
-      rgba(0, 229, 255, 0.18) 0%,
-      transparent 65%
-    );
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-  }
-
-  .mosaic-overlay {
-    position: relative;
-    z-index: 3;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
-    justify-content: flex-end;
-    height: 100%;
-    padding: 28px;
-    gap: 6px;
-  }
-
-  .mosaic-card:not(.mosaic-card--wide) .mosaic-overlay {
-    padding: 22px;
-  }
-
-  .mosaic-tag {
-    display: inline-block;
-    align-self: flex-start;
-    padding: 4px 10px;
-    border-radius: 100px;
-    background: rgba(255, 255, 255, 0.10);
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    align-items: flex-start;
+    gap: 1px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(7, 9, 15, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    font-size: 10px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+  .portfolio-card-stat-num {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    line-height: 1.05;
+  }
+  .portfolio-card-stat-label {
+    font-size: 9.5px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #fff;
-    margin-bottom: 6px;
-    transform: translateY(6px);
-    opacity: 0;
-    transition:
-      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.05s,
-      opacity 0.5s ease 0.05s;
+    color: rgba(255, 255, 255, 0.78);
   }
 
-  .mosaic-title {
-    font-size: clamp(20px, 2.4vw, 28px);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: #fff;
-    margin: 0;
-    transform: translateY(8px);
-    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Body */
+  .portfolio-card-body {
+    flex-grow: 1;
+    padding: 22px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
-
-  .mosaic-meta {
-    font-size: 13px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.72);
-    margin: 0;
+  .portfolio-card-cat {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
     opacity: 0.9;
-    transform: translateY(8px);
-    transition:
-      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.04s,
-      opacity 0.4s ease 0.04s;
   }
-
-  .mosaic-arrow {
-    position: absolute;
-    top: 22px;
-    right: 22px;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #fff;
+  .portfolio-card-title {
+    margin: 0;
+    font-size: clamp(20px, 2vw, 24px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.18;
+  }
+  .portfolio-card-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    flex-grow: 1;
+  }
+  .portfolio-card-cta {
+    margin-top: 6px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.005em;
+    color: var(--text);
+  }
+  .portfolio-card-arrow {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  /* Accent hairline along the top of each card, themed per study */
+  .portfolio-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
     opacity: 0;
-    transform: translate(-6px, 6px) rotate(-20deg);
-    transition:
-      opacity 0.4s ease,
-      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-      background 0.3s ease;
+    transition: opacity 0.4s ease;
+    z-index: 3;
   }
 
   @media (hover: hover) {
-    .mosaic-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 229, 255, 0.2);
-      border-color: rgba(0, 229, 255, 0.25);
+    .portfolio-card:hover {
+      transform: translateY(-6px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--gb));
+      box-shadow:
+        0 22px 60px rgba(0, 0, 0, 0.45),
+        0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
     }
-    .mosaic-card:hover img {
+    .portfolio-card:hover::before { opacity: 1; }
+    .portfolio-card:hover .portfolio-card-img img {
       transform: scale(1.06);
-      filter: saturate(1.08);
+      filter: saturate(1.05);
     }
-    .mosaic-card:hover::after { opacity: 1; }
-    .mosaic-card:hover .mosaic-title { transform: translateY(0); }
-    .mosaic-card:hover .mosaic-meta { transform: translateY(0); opacity: 1; }
-    .mosaic-card:hover .mosaic-arrow {
-      opacity: 1;
-      transform: translate(0, 0) rotate(0deg);
-      background: rgba(0, 229, 255, 0.85);
-      color: #07090F;
+    .portfolio-card:hover .portfolio-card-cta { color: var(--accent); }
+    .portfolio-card:hover .portfolio-card-arrow { transform: translateX(4px); }
+    .portfolio-card:hover .portfolio-card-stat {
+      border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+      background: rgba(7, 9, 15, 0.78);
     }
   }
-  .mosaic-card:focus-visible {
-    outline: 2px solid #00E5FF;
+
+  .portfolio-card:focus-visible {
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
 
-  .reveal-card.is-visible .mosaic-tag {
-    opacity: 1;
-    transform: translateY(0);
+  .portfolio-cta {
+    text-align: center;
+    margin-top: 44px;
   }
 
-  .work-cta {
-    text-align: center;
-    margin-top: 36px;
+  /* ── Responsive ──────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  }
+  @media (max-width: 640px) {
+    .portfolio-section { padding-top: 64px; padding-bottom: 64px; }
+    .portfolio-grid { grid-template-columns: 1fr; gap: 16px; }
+    .portfolio-card-body { padding: 18px 18px 20px; }
+    .portfolio-header { margin-bottom: 28px; }
+    .portfolio-cta { margin-top: 28px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .mosaic-card, .mosaic-card img, .mosaic-card .mosaic-title,
-    .mosaic-card .mosaic-meta, .mosaic-card .mosaic-tag, .mosaic-card .mosaic-arrow {
+    .portfolio-card,
+    .portfolio-card-img img,
+    .portfolio-card-arrow,
+    .portfolio-card::before {
       transition: none !important;
     }
-    .mosaic-tag, .mosaic-title, .mosaic-meta { opacity: 1 !important; transform: none !important; }
-    .mosaic-arrow { opacity: 1; transform: none; }
-  }
-
-  /* Responsive */
-  @media (max-width: 1024px) {
-    .mosaic-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "a a"
-        "b c"
-        "d e";
-      grid-template-rows: 320px 240px 240px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .mosaic-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        "a"
-        "b"
-        "c"
-        "d"
-        "e";
-      grid-template-rows: repeat(5, 220px);
-      gap: 12px;
-    }
-    .work-mosaic-header { margin-bottom: 24px; }
-    .mosaic-overlay,
-    .mosaic-card:not(.mosaic-card--wide) .mosaic-overlay { padding: 18px; }
-    .mosaic-arrow { top: 14px; right: 14px; width: 34px; height: 34px; }
-    .mosaic-meta { opacity: 1; transform: none; }
-    .mosaic-arrow { opacity: 1; transform: none; background: rgba(0, 229, 255, 0.85); color: #07090F; }
-    .mosaic-title { transform: none; }
-  }
-
-  /* Touch-only fallback (no hover): always reveal text + arrow */
-  @media (hover: none) {
-    .mosaic-meta { opacity: 1; transform: none; }
-    .mosaic-arrow { opacity: 1; transform: none; background: rgba(0, 229, 255, 0.85); color: #07090F; }
-    .mosaic-title { transform: none; }
   }
 </style>

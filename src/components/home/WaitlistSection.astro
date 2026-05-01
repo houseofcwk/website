@@ -11,15 +11,28 @@ import WaitlistForm from '../WaitlistForm';
           <span class="wl-eyebrow-dot"></span>
           COMING SOON
         </span>
-        <h2 class="wl-heading">Agent<span class="wl-plus">+</span></h2>
-        <p class="wl-tagline">
-          Your Personal Operating<br>System for Growth.
-        </p>
-        <p class="wl-desc">
-          Daily actions. Relationship tracking. AI strategy.<br>
-          Pipeline management. Goal sprints.<br>
-          Built for founders earning $150K–$5M.
-        </p>
+        <h2 class="wl-heading"><span class="wl-heading-grad">Command Center</span></h2>
+        <p class="wl-tagline">Your Personal Operating System for Growth.</p>
+
+        <div class="wl-body">
+          <p class="wl-body-lede">Three layers. One experience.</p>
+          <ul class="wl-layers">
+            <li>
+              <span class="wl-layer-name wl-layer-name--plos">PLOS</span>
+              <span class="wl-layer-text">, the data infrastructure that tracks everything.</span>
+            </li>
+            <li>
+              <span class="wl-layer-name wl-layer-name--kaia">Kaia</span>
+              <span class="wl-layer-text">, the AI agent that holds it all so you don't have to.</span>
+            </li>
+            <li>
+              <span class="wl-layer-name wl-layer-name--pod">Human Pod</span>
+              <span class="wl-layer-text">, the people who stay in it with you.</span>
+            </li>
+          </ul>
+          <p class="wl-body-coda">Built for the Operator ready to become Sovereign.</p>
+        </div>
+
         <WaitlistForm client:visible />
       </div>
 
@@ -102,32 +115,90 @@ import WaitlistForm from '../WaitlistForm';
   }
 
   .wl-heading {
-    font-size: clamp(40px, 5.5vw, 56px);
+    font-size: clamp(36px, 5vw, 52px);
     font-weight: 800;
-    line-height: 1;
+    line-height: 1.02;
     letter-spacing: -0.03em;
     margin: 0;
   }
-  .wl-plus {
-    background: linear-gradient(135deg, #00E5FF, #7B61FF);
+  .wl-heading-grad {
+    background: linear-gradient(135deg, #FFFFFF 0%, #C9C2FF 60%, #7B61FF 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .wl-tagline {
-    font-size: clamp(18px, 2.1vw, 22px);
-    font-weight: 500;
-    color: var(--muted);
+    font-size: clamp(17px, 1.9vw, 20px);
+    font-weight: 600;
+    color: var(--text);
     line-height: 1.4;
     margin: 0;
+    letter-spacing: -0.005em;
   }
 
-  .wl-desc {
+  /* ── Body: layered explainer ─────────────────────────── */
+  .wl-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px;
+    background: rgba(123, 97, 255, 0.04);
+    border: 1px solid rgba(123, 97, 255, 0.18);
+    border-radius: 12px;
+    width: 100%;
+  }
+  .wl-body-lede {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--purple);
+  }
+  .wl-layers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .wl-layers li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .wl-layers li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 12px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .wl-layer-name {
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.005em;
+  }
+  .wl-layer-name--plos { color: #00E5FF; }
+  .wl-layer-name--kaia { color: #7B61FF; }
+  .wl-layer-name--pod  { color: #FB3079; }
+  .wl-layer-text { color: var(--muted); }
+
+  .wl-body-coda {
+    margin: 4px 0 0;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
     font-size: 14px;
-    color: var(--dim);
-    line-height: 1.7;
-    margin: 0 0 4px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.45;
+    letter-spacing: -0.005em;
   }
 
   /* Right visual */
