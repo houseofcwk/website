@@ -306,9 +306,11 @@ export const CASE_STUDIES: CaseStudy[] = [
       h3('Colores de la Cultura'),
       p('A street mural celebrating Latina identity by two well-known Latina muralists.'),
       yt('https://www.youtube.com/embed/DIGzsqbQ2bk?rel=0', 'San Marcos Street Mural Promo'),
+      yt('https://www.youtube.com/embed/JEl_VcoLOiA?rel=0', 'The Making of the San Marcos Street Mural Project'),
 
       h3('Juneteenth with Rev. Dixon'),
       p('A mobile storytelling project documenting East Austin history.'),
+      yt('https://www.youtube.com/embed/sYyFhCRiDbs?rel=0', "Ridin' W/ Rev. Dixon in Honor of Juneteenth"),
 
       h3('Rise of Masontown'),
       p('A major mural and documentary on Black land ownership and industrial Austin.'),
@@ -316,6 +318,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
       h3('The Story Behind Six Square'),
       p("A documentary capturing the origin and mission of Six Square, a cultural organization preserving Black history in Central East Austin."),
+      yt('https://www.youtube.com/embed/M_iHJmAo3Q8?rel=0', 'The Story Behind Six Square: A Black Cultural Organization in East Austin'),
 
       h3('Be Well Murals'),
       p('A 2020 mural series that later won Best of Austin.'),
@@ -323,9 +326,11 @@ export const CASE_STUDIES: CaseStudy[] = [
 
       h3('Walls Unite'),
       p('A large-scale warehouse restoration and outdoor art gallery.'),
+      yt('https://www.youtube.com/embed/exzS8OMDNOs?rel=0', 'Walls Unite — Raasin in the Sun Phase I Programming Event'),
 
       h3('The Master Plan: Where It All Began'),
       p('Examining gentrification and environmental racism in East Austin since 1928.'),
+      yt('https://www.youtube.com/embed/or_Z2BwYl50?rel=0', 'The Master Plan: Where It All Began'),
 
       h2('Impact'),
       bullet('Helped secure multiple six-figure grants, including funding tied directly to documentary work.'),
