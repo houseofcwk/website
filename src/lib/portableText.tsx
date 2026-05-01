@@ -18,7 +18,7 @@ function imageSrc(value: any): string | null {
 function ytEmbedUrl(raw: string): string {
   const url = raw.trim();
   if (url.includes('/embed/')) return url;
-  const m = url.match(/(?:youtu\.be\/|v=)([\w-]{6,})/);
+  const m = url.match(/(?:youtu\.be\/|v=|\/shorts\/)([\w-]{6,})/);
   if (m) return `https://www.youtube.com/embed/${m[1]}?rel=0`;
   return url;
 }

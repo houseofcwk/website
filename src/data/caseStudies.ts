@@ -236,10 +236,17 @@ export const CASE_STUDIES: CaseStudy[] = [
       h2('Wynwood, Miami'),
       p('Builder Hub for founders, technologists, investors, and creators.'),
 
+      {
+        _type: 'image',
+        src: '/images/case-studies/the-lab-miami/hero-01.webp',
+        alt: 'The LAB Miami innovation campus',
+      },
+
       h2('More Than Just Content'),
       p('Over the past few months, The LAB Miami has been quietly doing the work most brands skip: building infrastructure before scaling visibility.'),
       p('What began as a fast-moving request to produce social media content turned into something more strategic. Instead of producing one-off videos, the focus shifted to clarity, systems, and long-term brand foundation.'),
       p('Our work together introduced a clear signal: this is a campus built for serious builders. Short scenes, real people, and the energy of the space were used to create familiarity and credibility, not just hype.'),
+      yt('https://www.youtube.com/embed/1aZxVWz4Whs?rel=0', 'The LAB Miami Campus Event Trailer'),
 
       h2('Clear Positioning'),
       p("Through synthesis and messaging work, the LAB's direction was sharpened into three defining pillars:"),
@@ -247,11 +254,15 @@ export const CASE_STUDIES: CaseStudy[] = [
       bullet('Rooted in Wynwood'),
       bullet('Built for founders, technologists, investors, and creators'),
       p('This clarity now guides future content, partnerships, and programming.'),
+      yt('https://www.youtube.com/embed/t6229C3Hp2Y?rel=0', "The LAB Miami: Elevating What's Possible"),
 
       h2('Content as Infrastructure'),
       p('Rather than scattered posts, the work focused on creating reusable, editorial-style content. Assets were built to support multiple campaigns, future announcements, and long-term visibility, reducing the need to constantly start from scratch.'),
 
       quote("We don't just produce content, events, and workshops. We orchestrate perception in alignment with your true impact."),
+
+      yt('https://www.youtube.com/embed/zEFW0QsgUgE?rel=0', 'The LAB Miami Short'),
+      yt('https://www.youtube.com/embed/Mb-dtTGdFBY?rel=0', 'Dax Interview at The LAB Miami'),
     ],
   },
 
