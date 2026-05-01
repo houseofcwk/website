@@ -33,7 +33,6 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
       {currentPath !== '/' && (
         <button class="btn btn-ghost nav-join" data-open-waitlist aria-label="Join the waitlist">Join Waitlist</button>
       )}
-      <a href="/brand-mirror" class="btn btn-primary nav-cta-btn">Brand Mirror →</a>
     </div>
 
     <!-- Hamburger (mobile only) -->
@@ -91,17 +90,6 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
         </svg>
       </span>
       About
-    </a>
-
-    <a href="/brand-mirror" class:list={['overlay-link', { active: isActive('/brand-mirror') }]}>
-      <span class="overlay-icon" aria-hidden="true">
-        <!-- Diamond / mirror icon -->
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 2L20 11L11 20L2 11L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M11 2v18M2 11h18" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" opacity="0.45"/>
-        </svg>
-      </span>
-      Brand Mirror
     </a>
 
     <a href="/product" class:list={['overlay-link', { active: isActive('/product') }]}>
