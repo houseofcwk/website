@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { sanity, urlFor } from '../../lib/sanity';
 import { CASE_LIST_QUERY } from '../../lib/queries';
-import { CASE_STUDIES, type CardSurface } from '../../data/caseStudies';
+import { CASE_STUDIES, isVisibleSlug, visibleOrderIndex, type CardSurface } from '../../data/caseStudies';
 
 let sanityCases: any[] | null = null;
 try {
@@ -48,7 +48,7 @@ function fromSanity(c: any): CardEntry {
   };
 }
 
-const cards: CardEntry[] = sanityCases
+const cards: CardEntry[] = (sanityCases
   ? sanityCases.map(fromSanity)
   : CASE_STUDIES.map((c) => ({
       slug: c.slug,
@@ -61,7 +61,10 @@ const cards: CardEntry[] = sanityCases
       cardImageAlt: c.cardImageAlt,
       cardDescription: c.cardDescription,
       cardStat: c.cardStat,
-    }));
+    }))
+)
+  .filter((c) => isVisibleSlug(c.slug))
+  .sort((a, b) => visibleOrderIndex(a.slug) - visibleOrderIndex(b.slug));
 
 const pageTitle = 'Case Studies | CWK. Experience';
 const pageDescription = 'Step into the worlds built by CWK. Real brands. Immersive impact. A portfolio of long-term partnerships across podcasts, non-profits, creative founders, and the CWK platform itself.';

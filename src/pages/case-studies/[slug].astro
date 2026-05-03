@@ -3,10 +3,12 @@ import Base from '../../layouts/Base.astro';
 import PortableText from '../../components/PortableText.astro';
 import { sanity, urlFor } from '../../lib/sanity';
 import { CASE_BY_SLUG_QUERY } from '../../lib/queries';
-import { CASE_STUDIES, CASE_STUDIES_BY_SLUG, type CaseStudy } from '../../data/caseStudies';
+import { CASE_STUDIES, CASE_STUDIES_BY_SLUG, isVisibleSlug, type CaseStudy } from '../../data/caseStudies';
 
 export async function getStaticPaths() {
-  return CASE_STUDIES.map((c) => ({ params: { slug: c.slug } }));
+  return CASE_STUDIES
+    .filter((c) => isVisibleSlug(c.slug))
+    .map((c) => ({ params: { slug: c.slug } }));
 }
 
 const { slug } = Astro.params;

@@ -70,6 +70,7 @@ export interface CaseStudy {
   cardDescription: string;
   cardStat: { num: string; label: string };
   order: number;
+  hidden?: boolean;
   headline: string;
   duration?: string;
   result?: string;
@@ -131,7 +132,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardImageAlt: 'Rob Dial — The Mindset Mentor podcast portrait',
     cardDescription: 'Scaled a one-person media role into a full content operation.',
     cardStat: { num: '10x', label: 'Content Output' },
-    order: 1,
+    order: 6,
     headline: 'How a One-Person Media Role Became a Scalable Content Operation',
     duration: '3.5 years · Aug 2019 – Jan 2023',
     result: '10x',
@@ -228,7 +229,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardImageAlt: 'The LAB Miami innovation campus',
     cardDescription: 'Content infrastructure and positioning clarity for an innovation campus.',
     cardStat: { num: '30%', label: 'Faster Sales Cycles' },
-    order: 2,
+    order: 7,
     headline: 'The LAB Miami Builds the Foundation for Its Next Chapter With CWK.',
     result: '30%',
     resultLabel: 'Faster sales cycles',
@@ -280,7 +281,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardAccent: '#FB3079',
     cardDescription: 'Documented public art, secured grants, and a placemaking movement.',
     cardStat: { num: '6-fig', label: 'Grants Secured' },
-    order: 3,
+    order: 8,
     headline: 'Building the Media Foundation of a Creative Placemaking Movement',
     duration: '2019–2022',
     result: '6-fig',
@@ -354,7 +355,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardImageAlt: 'Stephy Lee, creative founder and music artist',
     cardDescription: "Protected an artist's brand during crisis and secured strategic booking.",
     cardStat: { num: 'SXSW', label: 'Booking Secured' },
-    order: 4,
+    order: 3,
     headline: "How Stephy Lee's Career Moved Forward During the Hardest Time of Her Life",
     duration: '2021–2024',
     result: '$30K',
@@ -470,7 +471,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardImageAlt: 'Zuzu standing in front of the You Are Magic SPRAYCATION mural',
     cardDescription: 'Built brand foundation and operational backbone for a female-led art movement.',
     cardStat: { num: '6 Cities', label: 'Implemented' },
-    order: 5,
+    order: 1,
     headline: 'Building an Experiential Campaign While in Motion',
     duration: 'Jan–Nov 2025',
     result: '4 murals',
@@ -550,7 +551,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardAccent: '#7B61FF',
     cardDescription: "See what's inside CWK Agent+, the operating system we built for entrepreneurs.",
     cardStat: { num: '3', label: 'Key Dashboards' },
-    order: 6,
+    order: 99,
+    hidden: true,
     headline: 'The Operating System We Built To Manage Growth',
     result: '3',
     resultLabel: 'Key dashboards',
@@ -585,7 +587,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardImageAlt: "Titi Lee with Kris in front of CWK Consulting screen, sharing thanks for Life's Tapestry",
     cardDescription: "Launched a digital property for a 64-year-old first-time writer; 25+ editions and a growing audience.",
     cardStat: { num: '25+', label: 'Editions Published' },
-    order: 7,
+    order: 4,
     headline: "CWK. Builds a Digital Home for a Writer's Life's Work",
     result: '47',
     resultLabel: 'Real subscribers',
@@ -625,7 +627,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardAccent: '#FB3079',
     cardDescription: 'Renamed and repositioned a podcast to align with brand mission.',
     cardStat: { num: '1st', label: 'Identity Set Created' },
-    order: 8,
+    order: 5,
     headline: 'Naming the Anchor and Building the Podcast Foundation',
     result: '1',
     resultLabel: 'Costly mistake stopped',
@@ -715,7 +717,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardAccent: '#00E5FF',
     cardDescription: 'A deep dive into the CWK platform layer that gamifies the founder journey.',
     cardStat: { num: '4', label: 'Primary Actions' },
-    order: 9,
+    order: 100,
+    hidden: true,
     headline: 'Brand Destination: Gates, Checkpoints, and the Final Boss',
     result: '4',
     resultLabel: 'Primary actions',
@@ -751,7 +754,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     cardImageAlt: 'DAWA Diversity Awareness & Wellness in Action',
     cardDescription: "Found the organization's anchor phrase, built its content system, and co-built an education program from zero.",
     cardStat: { num: '100%', label: 'Messaging Clarity' },
-    order: 10,
+    order: 2,
     headline: 'How DAWA Found Its Anchor',
     duration: 'Nearly 2 years',
     result: '100%',
@@ -835,3 +838,24 @@ export const CASE_STUDIES: CaseStudy[] = [
 export const CASE_STUDIES_BY_SLUG: Record<string, CaseStudy> = Object.fromEntries(
   CASE_STUDIES.map((c) => [c.slug, c]),
 );
+
+// Source of truth for which case studies are published and in what order.
+// Both the listing page and the static detail routes filter through this list,
+// so a slug omitted here is hidden everywhere even if Sanity still has the row.
+export const VISIBLE_SLUGS_IN_ORDER: readonly string[] = [
+  'spraycation',
+  'dawa',
+  'stephy-lee',
+  'lifes-tapestry',
+  'pay-the-creators',
+  'rob-dial',
+  'the-lab-miami',
+  'raasin-in-the-sun',
+];
+
+const VISIBLE_INDEX = new Map(VISIBLE_SLUGS_IN_ORDER.map((slug, i) => [slug, i]));
+
+export const isVisibleSlug = (slug: string): boolean => VISIBLE_INDEX.has(slug);
+
+export const visibleOrderIndex = (slug: string): number =>
+  VISIBLE_INDEX.get(slug) ?? Number.MAX_SAFE_INTEGER;
