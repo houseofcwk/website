@@ -48,7 +48,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://houseofcwk.com',
+  site: 'https://cwkexperience.com',
   output: 'static',
   adapter: cloudflare(),
   integrations: [
@@ -100,7 +100,7 @@ npm run dev         # http://localhost:4321
 
 | Variable | Value |
 |----------|-------|
-| `PUBLIC_SITE_URL` | `https://houseofcwk.com` |
+| `PUBLIC_SITE_URL` | `https://cwkexperience.com` |
 | `PUBLIC_CF_ANALYTICS_TOKEN` | *(from Cloudflare Web Analytics)* |
 | `NODE_VERSION` | `20` |
 
@@ -119,20 +119,20 @@ npx wrangler pages deploy dist --project-name=cwk-plos-site
 
 ## Custom Domain Setup
 
-### Connect `houseofcwk.com`
+### Connect `cwkexperience.com`
 
 1. In Cloudflare Pages project settings → **Custom domains**
-2. Add `houseofcwk.com` and `www.houseofcwk.com`
+2. Add `cwkexperience.com` and `www.cwkexperience.com`
 3. If the domain's DNS is already on Cloudflare, CNAME records are auto-configured
 4. If not, add these DNS records:
 
 ```
-CNAME   houseofcwk.com       cwk-plos-site.pages.dev
+CNAME   cwkexperience.com       cwk-plos-site.pages.dev
 CNAME   www                  cwk-plos-site.pages.dev
 ```
 
 5. Enable **Always Use HTTPS** in Cloudflare dashboard
-6. Set up a page rule or redirect: `www.houseofcwk.com/*` → `https://houseofcwk.com/$1` (301)
+6. Set up a page rule or redirect: `www.cwkexperience.com/*` → `https://cwkexperience.com/$1` (301)
 
 ---
 
@@ -233,7 +233,7 @@ Before going live:
 Go to https://resend.com and create an account.
 
 ### 2. Verify your sending domain
-In Resend dashboard: Domains → Add domain → `houseofcwk.com`
+In Resend dashboard: Domains → Add domain → `cwkexperience.com`
 Add the DNS records Resend provides (SPF, DKIM, DMARC).
 
 ### 3. Create an API key
@@ -242,7 +242,7 @@ Save the key — you will only see it once.
 
 ### 4. Set secrets on the API Worker
 APIs now live in `workers/api/` (a single consolidated worker —
-`cwk-api-prod` — at `api.houseofcwk.com`). Only `RESEND_API` is a secret;
+`cwk-api-prod` — at `api.cwkexperience.com`). Only `RESEND_API` is a secret;
 the rest are plain vars in `workers/api/wrangler.toml`.
 
 ```bash

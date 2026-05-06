@@ -34,9 +34,9 @@ jobs:
       # reproducible if Cloudflare-injected Pages env is ever absent.
       PUBLIC_SANITY_PROJECT_ID: 3fsa3jok
       PUBLIC_SANITY_DATASET: production
-      PUBLIC_API_BASE_URL: https://api.houseofcwk.com
+      PUBLIC_API_BASE_URL: https://api.cwkexperience.com
       PUBLIC_GTM_ID: GTM-MVJ9VXS5
-      PUBLIC_SITE_URL: https://houseofcwk.com
+      PUBLIC_SITE_URL: https://cwkexperience.com
 
     steps:
       - name: Checkout

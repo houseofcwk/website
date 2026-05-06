@@ -2,8 +2,8 @@
 // is empty or unreachable. Every consumer reads from Sanity and falls through
 // to these values when fields are missing.
 
-export const SITE_URL = 'https://houseofcwk.com';
-export const TWITTER_HANDLE = '@houseofcwk';
+export const SITE_URL = 'https://cwkexperience.com';
+export const TWITTER_HANDLE = '@cwkexperience';
 export const DEFAULT_OG_IMAGE = '/og/cwk-default-1200x630.jpg';
 export const LEGACY_OG_IMAGE = '/og-image.png'; // pre-existing default; kept as final fallback
 

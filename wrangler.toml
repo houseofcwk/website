@@ -4,25 +4,29 @@ compatibility_date = "2025-01-01"
 
 # Cloudflare Pages serves pure static HTML. No _worker.js, no KV.
 # The APIs (waitlist + contact) live in a single consolidated Worker at
-# workers/api/ and deploy separately to api.houseofcwk.com. See
+# workers/api/ and deploy separately to api.cwkexperience.com. See
 # workers/api/wrangler.toml for the KV bindings and workers/api/README.md
 # for the endpoint map + deploy steps.
 #
 # Values below are public (PUBLIC_* or env labels) — they ship to the browser.
 # Sanity content is fetched at BUILD time in GitHub Actions, so the project
 # id / dataset are injected there as env on the build step (see deploy.yml).
+#
+# Internal CF resource names ("houseofcwk" project, "houseofcwk.pages.dev"
+# preview subdomain) are intentionally retained — only public-facing URLs
+# move to cwkexperience.com.
 
 [vars]
 ENVIRONMENT              = "preview"
 PUBLIC_SITE_URL          = "https://houseofcwk.pages.dev"
 PUBLIC_SANITY_PROJECT_ID = "3fsa3jok"
 PUBLIC_SANITY_DATASET    = "production"
-PUBLIC_API_BASE_URL      = "https://api.houseofcwk.com"
+PUBLIC_API_BASE_URL      = "https://api.cwkexperience.com"
 
 [env.production.vars]
 ENVIRONMENT              = "production"
-PUBLIC_SITE_URL          = "https://houseofcwk.com"
+PUBLIC_SITE_URL          = "https://cwkexperience.com"
 PUBLIC_GTM_ID            = "GTM-MVJ9VXS5"
 PUBLIC_SANITY_PROJECT_ID = "3fsa3jok"
 PUBLIC_SANITY_DATASET    = "production"
-PUBLIC_API_BASE_URL      = "https://api.houseofcwk.com"
+PUBLIC_API_BASE_URL      = "https://api.cwkexperience.com"

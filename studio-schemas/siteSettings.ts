@@ -92,7 +92,7 @@ export const siteSettings = defineType({
       title: 'Twitter / X Handle',
       type: 'string',
       description:
-        'Used for the twitter:site meta tag. Include the leading "@", e.g. @houseofcwk.',
+        'Used for the twitter:site meta tag. Include the leading "@", e.g. @cwkexperience.',
     }),
     defineField({
       name: 'organization',

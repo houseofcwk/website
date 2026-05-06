@@ -9,7 +9,7 @@ let data: any = null;
 try { data = await sanity.fetch(LEGAL_QUERY, { slug: 'terms' }); } catch { data = null; }
 
 const pageTitle = data?.seo?.title ?? 'Terms of Service | CWK. Experience';
-const pageDescription = data?.seo?.description ?? 'Terms governing use of houseofcwk.com and CWK. Experience services.';
+const pageDescription = data?.seo?.description ?? 'Terms governing use of cwkexperience.com and CWK. Experience services.';
 const heading = data?.title ?? 'Terms of Service';
 const updatedLabel = data?.updatedAt
   ? new Date(data.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
@@ -38,7 +38,7 @@ const updatedLabel = data?.updatedAt
         <div class="prose-section">
           <h2>Acceptance</h2>
           <p>
-            By accessing or using houseofcwk.com, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any part of these terms, you may not use this site.
+            By accessing or using cwkexperience.com, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any part of these terms, you may not use this site.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ const updatedLabel = data?.updatedAt
         <div class="prose-section">
           <h2>Contact</h2>
           <p>
-            Questions about these Terms of Service? Reach us at <a href="mailto:kris@houseofcwk.com">kris@houseofcwk.com</a>.
+            Questions about these Terms of Service? Reach us at <a href="mailto:kris@cwkexperience.com">kris@cwkexperience.com</a>.
           </p>
         </div>
         </>

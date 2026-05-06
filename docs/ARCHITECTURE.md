@@ -1,6 +1,6 @@
 # Architecture — CWK PLOS Site
 
-> `cwk-plos-site` · Astro 5 · Cloudflare Pages · houseofcwk.com
+> `cwk-plos-site` · Astro 5 · Cloudflare Pages · cwkexperience.com
 
 > **Note:** The diagrams below were drawn pre-Sanity (when the waitlist ran as
 > an Astro API route under `_worker.js` SSR). Current truth:
@@ -9,13 +9,13 @@
 >   (project `3fsa3jok`, dataset `production`).
 > - APIs live in a **single consolidated Cloudflare Worker** at
 >   [`workers/api/`](../workers/api/) (`cwk-api-prod`), bound to
->   `api.houseofcwk.com`. Handlers: `POST /waitlist`, `POST /contact`.
+>   `api.cwkexperience.com`. Handlers: `POST /waitlist`, `POST /contact`.
 > - The `KV: WAITLIST` namespace is reused byte-for-byte; `CONTACTS` +
 >   `RATE_LIMIT` KV are bound to the same worker.
 >
 > The sequence/structure diagrams below still capture the request shape
 > correctly, but paths/bindings should be read as
-> `api.houseofcwk.com/{waitlist,contact}` rather than `/api/waitlist`.
+> `api.cwkexperience.com/{waitlist,contact}` rather than `/api/waitlist`.
 
 ---
 
@@ -28,7 +28,7 @@ graph TB
     end
 
     subgraph CLOUDFLARE["Cloudflare Edge Network"]
-        DNS["DNS<br/>houseofcwk.com"]
+        DNS["DNS<br/>cwkexperience.com"]
         WAF["WAF / DDoS"]
         Pages["Cloudflare Pages<br/>project: houseofcwk"]
         Analytics["CF Web Analytics"]
@@ -37,7 +37,7 @@ graph TB
             MW["Middleware<br/>Basic Auth Gate"]
             Router["Astro Router"]
             SSR["SSR Pages"]
-            API["API Routes<br/>api.houseofcwk.com/{waitlist,contact}"]
+            API["API Routes<br/>api.cwkexperience.com/{waitlist,contact}"]
         end
 
         subgraph STORAGE["Cloudflare Storage"]
@@ -73,7 +73,7 @@ sequenceDiagram
     participant CF as Cloudflare Edge
     participant MW as Middleware
     participant R as Astro Router
-    participant API as api.houseofcwk.com/{waitlist,contact}
+    participant API as api.cwkexperience.com/{waitlist,contact}
     participant KV as KV Store
     participant RS as Resend
 
@@ -86,7 +86,7 @@ sequenceDiagram
     R->>B: SSR HTML response
 
     Note over B,RS: Waitlist Submission
-    B->>CF: POST api.houseofcwk.com/{waitlist,contact} {email}
+    B->>CF: POST api.cwkexperience.com/{waitlist,contact} {email}
     CF->>MW: Route request
     MW->>API: /api/* bypass auth
     API->>KV: WAITLIST.get(email)
@@ -135,7 +135,7 @@ graph LR
 
 ```mermaid
 graph TD
-    subgraph SITE["houseofcwk.com"]
+    subgraph SITE["cwkexperience.com"]
         HOME["/ <br/>Homepage"]
         ABOUT["About"]
         AB_IDX["/about"]
@@ -158,7 +158,7 @@ graph TD
         PRIVACY["/privacy"]
         TERMS["/terms"]
         ERR404["/404"]
-        API_WL["api.houseofcwk.com/{waitlist,contact}<br/>POST · OPTIONS"]
+        API_WL["api.cwkexperience.com/{waitlist,contact}<br/>POST · OPTIONS"]
     end
 
     HOME --- ABOUT
@@ -249,7 +249,7 @@ graph TB
 
     subgraph CF_ACCOUNT["Cloudflare Account<br/>ID: 1e48d0c..."]
         subgraph CF_PAGES["Cloudflare Pages<br/>project: houseofcwk"]
-            PROD_DEPLOY["Production<br/>main branch<br/>houseofcwk.com"]
+            PROD_DEPLOY["Production<br/>main branch<br/>cwkexperience.com"]
             PREVIEW_DEPLOY["Preview<br/>PR branches<br/>*.houseofcwk.pages.dev"]
         end
 
@@ -260,7 +260,7 @@ graph TB
             KV_SS_PREV["SESSION (preview)<br/>db599f73..."]
         end
 
-        CF_DNS["Cloudflare DNS<br/>houseofcwk.com"]
+        CF_DNS["Cloudflare DNS<br/>cwkexperience.com"]
         CF_WAF["WAF + DDoS Protection"]
         CF_ANA["Web Analytics"]
     end
@@ -275,12 +275,12 @@ graph TB
     subgraph ENV_VARS["Environment Variables"]
         direction LR
         EV_PREV["Preview<br/>ENVIRONMENT=preview<br/>PUBLIC_SITE_URL=*.pages.dev"]
-        EV_PROD["Production<br/>ENVIRONMENT=production<br/>PUBLIC_SITE_URL=houseofcwk.com"]
+        EV_PROD["Production<br/>ENVIRONMENT=production<br/>PUBLIC_SITE_URL=cwkexperience.com"]
     end
 
     subgraph EXTERNAL_SVC["External Services"]
         RESEND_SVC["Resend<br/>Transactional Email API"]
-        DOMAIN["houseofcwk.com<br/>Custom Domain"]
+        DOMAIN["cwkexperience.com<br/>Custom Domain"]
     end
 
     REPO -->|"push main"| GHA
@@ -357,8 +357,8 @@ graph LR
 | Variable | Preview | Production |
 |----------|---------|------------|
 | `ENVIRONMENT` | `preview` | `production` |
-| `PUBLIC_SITE_URL` | `https://houseofcwk.pages.dev` | `https://houseofcwk.com` |
-| `FROM_EMAIL` | `hello@houseofcwk.com` | `hello@houseofcwk.com` |
+| `PUBLIC_SITE_URL` | `https://houseofcwk.pages.dev` | `https://cwkexperience.com` |
+| `FROM_EMAIL` | `hello@cwkexperience.com` | `hello@cwkexperience.com` |
 | `FROM_NAME` | `CWK. Experience` | `CWK. Experience` |
 | `REPLY_TO_EMAIL` | `hello@cwkexperience.com` | `hello@cwkexperience.com` |
 | `REPLY_TO_NAME` | `Kris San, CWK.` | `Kris San, CWK.` |
@@ -378,7 +378,7 @@ graph LR
 ```mermaid
 graph TD
     subgraph PLATFORM["houseofcwk/platform (monorepo)"]
-        PLOS["projects/cwk-plos-site<br/>Astro · Cloudflare Pages<br/>houseofcwk.com"]
+        PLOS["projects/cwk-plos-site<br/>Astro · Cloudflare Pages<br/>cwkexperience.com"]
         EXP["projects/cwk-exp-main<br/>(submodule · read-only)<br/>Agent+ Dashboard · Vercel"]
         GH_CFG[".github/<br/>project-config.json"]
     end

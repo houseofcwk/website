@@ -1,6 +1,6 @@
 ---
 name: cwk-page-edit
-description: Standard workflow for editing pages on the CWK website (case studies, about, journey, etc.). Use when the user asks to update copy, swap an image, add/remove a section, change a stat, restructure a body, or apply edits annotated on a screenshot. Triggers: "edit page", "update case study", "let's work on /about", "let's edit /case-studies/<slug>", any annotated screenshot of a page on houseofcwk.com.
+description: Standard workflow for editing pages on the CWK website (case studies, about, journey, etc.). Use when the user asks to update copy, swap an image, add/remove a section, change a stat, restructure a body, or apply edits annotated on a screenshot. Triggers: "edit page", "update case study", "let's work on /about", "let's edit /case-studies/<slug>", any annotated screenshot of a page on cwkexperience.com.
 ---
 
 # CWK page-edit workflow

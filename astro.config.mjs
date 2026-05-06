@@ -3,7 +3,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://houseofcwk.com',
+  site: 'https://cwkexperience.com',
   output: 'static',
   integrations: [
     react(),

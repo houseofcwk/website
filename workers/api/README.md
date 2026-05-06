@@ -1,6 +1,6 @@
 # cwk-api (Cloudflare Worker)
 
-The single API worker for houseofcwk.com. Owns `api.houseofcwk.com` via a
+The single API worker for cwkexperience.com. Owns `api.cwkexperience.com` via a
 Custom Domain binding and dispatches to per-route handlers in
 [`src/handlers/`](./src/handlers/).
 
@@ -55,7 +55,7 @@ npm run typecheck
 wrangler deploy --env production
 ```
 
-If `cwk-waitlist-prod` still owns `api.houseofcwk.com` as a Custom Domain,
+If `cwk-waitlist-prod` still owns `api.cwkexperience.com` as a Custom Domain,
 wrangler will prompt for the reassignment on first deploy — accept it. After
 the new worker is live and verified (see root `workers/api/README.md`
 verification section of the consolidation PR), delete the two old workers:

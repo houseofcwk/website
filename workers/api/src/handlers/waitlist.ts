@@ -142,7 +142,7 @@ function buildConfirmationEmail(): string {
             </table>
 
             <!-- CTA button -->
-            <a href="https://houseofcwk.com/work"
+            <a href="https://cwkexperience.com/work"
                style="display:inline-block;background:#38B2F6;color:#0A0A0A;
                       font-size:14px;font-weight:700;text-decoration:none;
                       padding:14px 28px;border-radius:8px;letter-spacing:0.2px;
@@ -167,17 +167,17 @@ function buildConfirmationEmail(): string {
                       Helvetica,Arial,sans-serif;">
               &copy; 2026 CWK. LLC. All rights reserved.
               &nbsp;&middot;&nbsp;
-              <a href="https://houseofcwk.com"
-                 style="color:#38B2F6;text-decoration:none;">houseofcwk.com</a>
+              <a href="https://cwkexperience.com"
+                 style="color:#38B2F6;text-decoration:none;">cwkexperience.com</a>
               &nbsp;&middot;&nbsp;
-              <a href="https://houseofcwk.com/privacy"
+              <a href="https://cwkexperience.com/privacy"
                  style="color:#57534E;text-decoration:none;">Privacy</a>
             </p>
             <p style="margin:0 0 4px;font-size:11px;color:#292524;
                       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
                       Helvetica,Arial,sans-serif;">
               You received this email because you joined the PLOS waitlist at
-              <a href="https://houseofcwk.com" style="color:#292524;text-decoration:underline;">houseofcwk.com</a>.
+              <a href="https://cwkexperience.com" style="color:#292524;text-decoration:underline;">cwkexperience.com</a>.
             </p>
             <p style="margin:0;font-size:11px;color:#292524;
                       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
@@ -211,7 +211,7 @@ async function sendConfirmation(env: Env, recipientEmail: string): Promise<void>
       subject: "You're on the PLOS waitlist | CWK. Experience",
       html: buildConfirmationEmail(),
       headers: {
-        'List-Unsubscribe': '<mailto:unsubscribe@houseofcwk.com?subject=unsubscribe>',
+        'List-Unsubscribe': '<mailto:unsubscribe@cwkexperience.com?subject=unsubscribe>',
         'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
       },
       text: [
@@ -224,7 +224,7 @@ async function sendConfirmation(env: Env, recipientEmail: string): Promise<void>
         '',
         "In the meantime, take a look at the work. See what's possible when infrastructure stops leaking and your business actually scales.",
         '',
-        'See the work: https://houseofcwk.com/work',
+        'See the work: https://cwkexperience.com/work',
         '',
         '----',
         'PLOS · Personal Leverage OS',
@@ -232,9 +232,9 @@ async function sendConfirmation(env: Env, recipientEmail: string): Promise<void>
         '',
         'Build. Learn. Earn. Play.',
         '© 2026 CWK. LLC',
-        'houseofcwk.com',
+        'cwkexperience.com',
         '',
-        'You received this email because you joined the PLOS waitlist at houseofcwk.com.',
+        'You received this email because you joined the PLOS waitlist at cwkexperience.com.',
         'To unsubscribe, reply with "unsubscribe" in the subject line.',
         '',
         'CWK. LLC · 447 Broadway, 2nd FL #2056 · New York, NY 10013',
@@ -298,7 +298,7 @@ function buildTeamNotificationEmail(email: string, joinedAt: string, environment
     <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
       <tr><td style="padding:6px 0;font-size:12px;color:#A8A29E;width:110px;">Email</td><td style="padding:6px 0;font-size:13px;color:#EEF0FF;">${safeEmail}</td></tr>
       <tr><td style="padding:6px 0;font-size:12px;color:#A8A29E;">Joined</td><td style="padding:6px 0;font-size:13px;color:#EEF0FF;">${safeJoined}</td></tr>
-      <tr><td style="padding:6px 0;font-size:12px;color:#A8A29E;">Source</td><td style="padding:6px 0;font-size:13px;color:#EEF0FF;">houseofcwk.com</td></tr>
+      <tr><td style="padding:6px 0;font-size:12px;color:#A8A29E;">Source</td><td style="padding:6px 0;font-size:13px;color:#EEF0FF;">cwkexperience.com</td></tr>
       <tr><td style="padding:6px 0;font-size:12px;color:#A8A29E;">Env</td><td style="padding:6px 0;font-size:13px;color:#EEF0FF;">${environment}</td></tr>
     </table>
   </div>
@@ -309,7 +309,7 @@ function buildTeamNotificationEmail(email: string, joinedAt: string, environment
     '========================',
     `Email:  ${email}`,
     `Joined: ${joinedAt}`,
-    'Source: houseofcwk.com',
+    'Source: cwkexperience.com',
     `Env:    ${environment}`,
   ].join('\n');
 
