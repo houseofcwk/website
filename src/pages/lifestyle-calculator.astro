@@ -1800,24 +1800,24 @@ const pageDescription =
     font-style: italic; text-align: center;
   }
 
-  /* Phase roadmap — horizontal 4-step timeline */
+  /* Phase roadmap — horizontal 4-step grid that breaks out of the
+     760px content wrap so cards have room to breathe. The
+     numbered circles still anchor each phase; no connecting line. */
   .lc-phase-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
     position: relative;
     counter-reset: phase;
-  }
-  .lc-phase-grid::before {
-    content: ''; position: absolute;
-    top: 38px; left: 6%; right: 6%; height: 2px;
-    background: linear-gradient(90deg,
-      var(--cyan) 0%, var(--purple) 100%);
-    opacity: 0.32;
-    z-index: 0;
+    /* Break out of .lc-wrap (760px max) to ~1180px on wide screens.
+       Stays visually centered via translateX(-50%). */
+    width: min(1180px, calc(100vw - 32px));
+    left: 50%;
+    transform: translateX(-50%);
   }
   .lc-phase-card {
-    padding: 32px 18px 20px;
+    padding: 36px 22px 24px;
     position: relative; overflow: visible;
     counter-increment: phase;
+    text-align: left;
   }
   .lc-phase-card::before {
     content: counter(phase);
@@ -1831,31 +1831,35 @@ const pageDescription =
     z-index: 1;
   }
   .lc-phase-top {
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    margin-bottom: 12px;
-    text-align: center;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+    margin-bottom: 14px;
   }
   .lc-phase-badge {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.28em;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.24em;
     text-transform: uppercase; color: var(--pink);
     line-height: 1.4;
   }
   .lc-phase-time {
-    font-size: 9px; font-weight: 600; letter-spacing: 0.08em;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--gb);
     border-radius: 999px; padding: 3px 10px; color: var(--dim);
     white-space: nowrap;
   }
-  .lc-phase-focus { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 12px; text-align: center; }
-  .lc-phase-tasks { display: flex; flex-direction: column; gap: 6px; }
+  .lc-phase-focus { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.45; margin-bottom: 14px; letter-spacing: -0.005em; }
+  .lc-phase-tasks { display: flex; flex-direction: column; gap: 8px; }
   .lc-phase-task {
-    font-size: 11.5px; color: var(--muted); line-height: 1.55;
+    font-size: 12.5px; color: var(--muted); line-height: 1.6;
     padding-left: 14px; position: relative;
   }
   .lc-phase-task::before {
     content: '•'; position: absolute; left: 0; top: -2px;
     color: var(--cyan); font-size: 14px;
+  }
+
+  /* Intermediate widths (tablet): 2x2 grid so cards stay readable. */
+  @media (max-width: 1100px) {
+    .lc-phase-grid { grid-template-columns: 1fr 1fr; }
   }
 
   /* Mine result card */
