@@ -59,7 +59,7 @@ const SITE_SETTINGS = {
       { _key: 'f-terms', _type: 'footerLink', label: 'Terms', href: '/terms' },
     ],
   },
-  twitterHandle: '@houseofcwk',
+  twitterHandle: '@cwkexperience',
   defaultSeo: {
     title: 'CWK. Experience | The Sports Agent for Entrepreneurs',
     description: 'CWK. is the long-term partner for entrepreneurs. We rep your career, install the operations, and manage your growth, all under one house.',
@@ -292,7 +292,7 @@ const LEGAL_TERMS = {
   updatedAt: '2026-04-01',
   seo: {
     title: 'Terms of Service | CWK. Experience',
-    description: 'Terms governing use of houseofcwk.com and CWK. Experience services.',
+    description: 'Terms governing use of cwkexperience.com and CWK. Experience services.',
     ogType: 'website',
     twitterCard: 'summary_large_image',
     robots: 'index, follow, max-image-preview:large',

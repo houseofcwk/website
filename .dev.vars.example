@@ -4,7 +4,7 @@
 # Start local dev with: npx wrangler pages dev dist --kv WAITLIST
 
 RESEND_API=re_...
-FROM_EMAIL=waitlist@houseofcwk.com
+FROM_EMAIL=hello@cwkexperience.com
 FROM_NAME=CWK. Experience
-REPLY_TO_EMAIL=kris@houseofcwk.com
+REPLY_TO_EMAIL=hello@cwkexperience.com
 REPLY_TO_NAME=Kris San

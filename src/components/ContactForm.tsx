@@ -13,7 +13,7 @@ interface FieldErrors {
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const API_BASE = import.meta.env.PUBLIC_API_BASE_URL ?? 'https://api.houseofcwk.com';
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL ?? 'https://api.cwkexperience.com';
 const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
 
 const TOPIC_OPTIONS = [

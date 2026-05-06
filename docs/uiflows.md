@@ -79,7 +79,7 @@ The shared design system. Designer-owned. Deliverables: token set (colors, spaci
 
 ### #28 · [RFC-101] T-14 Deployment & DevOps — CI/CD, hosting, env config
 
-No direct UI. Designer impact: confirm any environment-specific UI affordances (e.g. a "preview / staging" banner, feature-flag indicator) and the basic-auth gate that wraps the houseofcwk.com staging domain. Make sure brand assets, favicons, OG images, and 404 / 500 / maintenance screens are designed and shipped as part of the deploy pipeline.
+No direct UI. Designer impact: confirm any environment-specific UI affordances (e.g. a "preview / staging" banner, feature-flag indicator) and the basic-auth gate that wraps the cwkexperience.com staging domain. Make sure brand assets, favicons, OG images, and 404 / 500 / maintenance screens are designed and shipped as part of the deploy pipeline.
 
 ---
 

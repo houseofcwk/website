@@ -1,4 +1,5 @@
-// cwk-api — single Cloudflare Worker serving api.houseofcwk.com.
+// cwk-api — single Cloudflare Worker serving api.cwkexperience.com
+// (api.houseofcwk.com kept as a transitional route during the domain migration).
 // Internally dispatches to per-route handlers in ./handlers/.
 
 import type { Env } from './env';

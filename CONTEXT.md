@@ -2,7 +2,7 @@
 
 ## What We're Building
 
-A production-grade marketing and product website for **CWK. Experience** — deployed to **houseofcwk.com** (Cloudflare Pages project: `houseofcwk`).
+A production-grade marketing and product website for **CWK. Experience** — deployed to **cwkexperience.com** (Cloudflare Pages project: `houseofcwk`).
 
 Replaces the old site hosted on a page builder at [cwkexperience.com](https://cwkexperience.com/) — that domain is used as a **content and design reference only**, not as the deploy target.
 

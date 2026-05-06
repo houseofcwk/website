@@ -181,15 +181,15 @@ function buildUserEmail(summary: ResultSummary): string {
 
         <p style="margin:0 0 18px;font-size:13px;color:#A8A29E;line-height:1.7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Want the full map with timeline, tools, skills, and phase roadmap? It is waiting on the calculator. We saved your progress.</p>
 
-        <a href="https://houseofcwk.com/lifestyle-calculator" style="display:inline-block;background:linear-gradient(90deg,#00E5FF,#7B61FF);color:#07090F;font-size:14px;font-weight:700;text-decoration:none;padding:13px 26px;border-radius:8px;letter-spacing:0.2px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Open my full map &rarr;</a>
+        <a href="https://cwkexperience.com/lifestyle-calculator" style="display:inline-block;background:linear-gradient(90deg,#00E5FF,#7B61FF);color:#07090F;font-size:14px;font-weight:700;text-decoration:none;padding:13px 26px;border-radius:8px;letter-spacing:0.2px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Open my full map &rarr;</a>
 
       </td></tr>
 
       <!-- Footer -->
       <tr><td style="padding-top:28px;">
         <p style="margin:0 0 6px;font-size:12px;color:#44403C;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Build. Learn. Earn. Play.</p>
-        <p style="margin:0 0 8px;font-size:12px;color:#44403C;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">&copy; 2026 CWK. LLC. &nbsp;&middot;&nbsp; <a href="https://houseofcwk.com" style="color:#00E5FF;text-decoration:none;">houseofcwk.com</a> &nbsp;&middot;&nbsp; <a href="https://houseofcwk.com/privacy" style="color:#57534E;text-decoration:none;">Privacy</a></p>
-        <p style="margin:0;font-size:11px;color:#292524;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">You received this because you used the Lifestyle Calculator at houseofcwk.com.</p>
+        <p style="margin:0 0 8px;font-size:12px;color:#44403C;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">&copy; 2026 CWK. LLC. &nbsp;&middot;&nbsp; <a href="https://cwkexperience.com" style="color:#00E5FF;text-decoration:none;">cwkexperience.com</a> &nbsp;&middot;&nbsp; <a href="https://cwkexperience.com/privacy" style="color:#57534E;text-decoration:none;">Privacy</a></p>
+        <p style="margin:0;font-size:11px;color:#292524;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">You received this because you used the Lifestyle Calculator at cwkexperience.com.</p>
       </td></tr>
 
     </table>
@@ -218,7 +218,7 @@ function buildUserText(summary: ResultSummary): string {
       ? `${summary.minesActive} active mind ${summary.minesActive === 1 ? 'mine' : 'mines'} flagged. Address the inner work first.`
       : '',
     '',
-    'Open my full map: https://houseofcwk.com/lifestyle-calculator',
+    'Open my full map: https://cwkexperience.com/lifestyle-calculator',
     '',
     '----',
     'Build. Learn. Earn. Play.',
@@ -241,7 +241,7 @@ async function sendUserEmail(env: Env, recipient: string, summary: ResultSummary
       html: buildUserEmail(summary),
       text: buildUserText(summary),
       headers: {
-        'List-Unsubscribe': '<mailto:unsubscribe@houseofcwk.com?subject=unsubscribe>',
+        'List-Unsubscribe': '<mailto:unsubscribe@cwkexperience.com?subject=unsubscribe>',
         'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
       },
     }),

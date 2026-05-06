@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare Pages](https://github.com/houseofcwk/cwk-plos-site/actions/workflows/deploy.yml/badge.svg)](https://github.com/houseofcwk/cwk-plos-site/actions/workflows/deploy.yml)
 [![Astro](https://img.shields.io/badge/Astro-5.6-FF5D01?logo=astro&logoColor=white)](https://astro.build)
-[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-live-F38020?logo=cloudflare&logoColor=white)](https://houseofcwk.com)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-live-F38020?logo=cloudflare&logoColor=white)](https://cwkexperience.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
 
@@ -10,7 +10,7 @@
 
 The official product website for **CWK. Experience** — long-term business management for high-performing entrepreneurs ($150K–$5M). Built on Astro, deployed globally via Cloudflare Pages.
 
-**Live site:** [houseofcwk.com](https://houseofcwk.com)
+**Live site:** [cwkexperience.com](https://cwkexperience.com)
 
 ---
 
@@ -18,7 +18,7 @@ The official product website for **CWK. Experience** — long-term business mana
 
 | Environment | URL | Trigger |
 |-------------|-----|---------|
-| Production | [houseofcwk.com](https://houseofcwk.com) | Push to `main` |
+| Production | [cwkexperience.com](https://cwkexperience.com) | Push to `main` |
 | Preview | `*.houseofcwk.pages.dev` | Pull request |
 
 Deploys are automatic via GitHub Actions → `cloudflare/wrangler-action@v3`. Build time is typically under 30 seconds.
@@ -99,15 +99,15 @@ docs/
 ## API
 
 All HTTP APIs are served by a single Cloudflare Worker (`cwk-api-prod`)
-bound to `api.houseofcwk.com`. Source lives at [`workers/api/`](./workers/api/);
+bound to `api.cwkexperience.com`. Source lives at [`workers/api/`](./workers/api/);
 see [`workers/api/README.md`](./workers/api/README.md) for the endpoint map,
 deploy steps, and secrets.
 
 | Endpoint                                | Handler                                              |
 |-----------------------------------------|------------------------------------------------------|
-| `POST https://api.houseofcwk.com/waitlist` | [handlers/waitlist.ts](./workers/api/src/handlers/waitlist.ts) |
-| `POST https://api.houseofcwk.com/contact`  | [handlers/contact.ts](./workers/api/src/handlers/contact.ts)   |
-| `GET  https://api.houseofcwk.com/healthz`  | `{ "ok": true }`                                     |
+| `POST https://api.cwkexperience.com/waitlist` | [handlers/waitlist.ts](./workers/api/src/handlers/waitlist.ts) |
+| `POST https://api.cwkexperience.com/contact`  | [handlers/contact.ts](./workers/api/src/handlers/contact.ts)   |
+| `GET  https://api.cwkexperience.com/healthz`  | `{ "ok": true }`                                     |
 
 ### Waitlist (`POST /waitlist`)
 
@@ -140,9 +140,9 @@ Copy `.env.example` → `.env` for public vars. Copy `.dev.vars.example` → `.d
 | `PUBLIC_SITE_URL` | `.env` / CF Pages | Canonical site URL |
 | `PUBLIC_CF_ANALYTICS_TOKEN` | `.env` / CF Pages | Web Analytics token |
 | `RESEND_API` | CF Pages secret | Resend API key |
-| `FROM_EMAIL` | CF Pages secret | `waitlist@houseofcwk.com` |
+| `FROM_EMAIL` | CF Pages secret | `waitlist@cwkexperience.com` |
 | `FROM_NAME` | CF Pages secret | Sender display name |
-| `REPLY_TO_EMAIL` | CF Pages secret | `kris@houseofcwk.com` |
+| `REPLY_TO_EMAIL` | CF Pages secret | `kris@cwkexperience.com` |
 | `REPLY_TO_NAME` | CF Pages secret | Reply-to display name |
 | `WAITLIST` | CF Pages KV binding | KV namespace (not an env var) |
 

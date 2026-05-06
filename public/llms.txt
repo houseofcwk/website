@@ -15,25 +15,25 @@ Pillars: Mind, Body, Soul, Pocket.
 
 ## Core pages
 
-- [Home](https://houseofcwk.com/): The Sports Agent for Entrepreneurs. The infrastructure layer for founders.
-- [About Kris](https://houseofcwk.com/about): Founder Kris San's why and origin story.
-- [Kris's Journey](https://houseofcwk.com/about/journey): Six-chapter picture story from Puerto Rico to Austin.
-- [Side Quests](https://houseofcwk.com/side-quests): Other body of work. Keep Austin Voting, Almost Real Things advisory, Experiential Vending Machine, Life Lessons of a Creative Entrepreneur podcast.
-- [What Player Are You?](https://houseofcwk.com/assessment): Free 2-minute founder archetype assessment.
+- [Home](https://cwkexperience.com/): The Sports Agent for Entrepreneurs. The infrastructure layer for founders.
+- [About Kris](https://cwkexperience.com/about): Founder Kris San's why and origin story.
+- [Kris's Journey](https://cwkexperience.com/about/journey): Six-chapter picture story from Puerto Rico to Austin.
+- [Side Quests](https://cwkexperience.com/side-quests): Other body of work. Keep Austin Voting, Almost Real Things advisory, Experiential Vending Machine, Life Lessons of a Creative Entrepreneur podcast.
+- [What Player Are You?](https://cwkexperience.com/assessment): Free 2-minute founder archetype assessment.
 
 ## The 3 Levels
 
-- [Level 2, Power Ups](https://houseofcwk.com/power-ups): The 21 Power Ups across Brand, Sales, and Presence.
-- [Product preview](https://houseofcwk.com/product): The Personal Leverage OS dashboard preview.
+- [Level 2, Power Ups](https://cwkexperience.com/power-ups): The 21 Power Ups across Brand, Sales, and Presence.
+- [Product preview](https://cwkexperience.com/product): The Personal Leverage OS dashboard preview.
 
 ## Case studies
 
-- [DAWA](https://houseofcwk.com/case-studies/dawa)
-- [Pay The Creators Podcast](https://houseofcwk.com/case-studies/pay-the-creators)
-- [Rob Dial](https://houseofcwk.com/case-studies/rob-dial)
-- [Spraycation](https://houseofcwk.com/case-studies/spraycation)
-- [Stephy Lee](https://houseofcwk.com/case-studies/stephy-lee)
-- [The LAB Miami](https://houseofcwk.com/case-studies/the-lab-miami)
+- [DAWA](https://cwkexperience.com/case-studies/dawa)
+- [Pay The Creators Podcast](https://cwkexperience.com/case-studies/pay-the-creators)
+- [Rob Dial](https://cwkexperience.com/case-studies/rob-dial)
+- [Spraycation](https://cwkexperience.com/case-studies/spraycation)
+- [Stephy Lee](https://cwkexperience.com/case-studies/stephy-lee)
+- [The LAB Miami](https://cwkexperience.com/case-studies/the-lab-miami)
 
 ## Contact
 

@@ -95,7 +95,7 @@
     font-weight="400"
     fill="rgba(238,240,255,0.38)"
     text-anchor="end"
-  >houseofcwk.com</text>
+  >cwkexperience.com</text>
 
   <!-- Bottom accent bar -->
   <rect x="0" y="626" width="1200" height="4" fill="url(#accentBar)"/>

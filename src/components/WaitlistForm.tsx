@@ -4,7 +4,7 @@ type FormState = 'idle' | 'loading' | 'success' | 'duplicate' | 'invalid' | 'ser
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const API_BASE = import.meta.env.PUBLIC_API_BASE_URL ?? 'https://api.houseofcwk.com';
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL ?? 'https://api.cwkexperience.com';
 
 const MESSAGES: Record<FormState, { text: string; color: string } | null> = {
   idle:          null,

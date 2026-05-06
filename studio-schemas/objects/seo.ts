@@ -37,7 +37,7 @@ export const seo = defineType({
       type: 'url',
       group: 'core',
       description:
-        'Optional. Leave blank to default to the page\'s own URL on houseofcwk.com.',
+        'Optional. Leave blank to default to the page\'s own URL on cwkexperience.com.',
     }),
     defineField({
       name: 'ogImage',
