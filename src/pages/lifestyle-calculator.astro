@@ -247,51 +247,69 @@ const pageDescription =
         <h1 class="lc-h1"><span class="lc-grad">Your complete<br>picture.</span></h1>
         <p class="lc-sub">Where you are. Where you want to be. What it actually takes to get there. Everything in one place so you can make a real decision.</p>
 
-        <!-- Identity Header -->
-        <div class="lc-player-header">
+        <!-- Hero stats card -->
+        <div class="lc-player-header lc-reveal">
           <div class="lc-player-badges" id="lcPlayerBadges"></div>
           <div class="lc-player-headline" id="lcPlayerHeadline"></div>
           <div class="lc-player-stats" id="lcPlayerStats"></div>
         </div>
 
-        <!-- Where you are now -->
-        <span class="lc-section-label">WHERE YOU ARE RIGHT NOW</span>
-        <div id="lcResArchetype"></div>
-
-        <!-- Where you want to be -->
-        <span class="lc-section-label">WHERE YOU WANT TO BE</span>
-        <div id="lcResDestination"></div>
+        <!-- Where you are now / Where you want to be — side-by-side -->
+        <div class="lc-now-goal lc-reveal">
+          <div class="lc-now-goal-col lc-now-goal-now">
+            <span class="lc-section-label">WHERE YOU ARE RIGHT NOW</span>
+            <div id="lcResArchetype"></div>
+          </div>
+          <div class="lc-now-goal-col lc-now-goal-goal">
+            <span class="lc-section-label">WHERE YOU WANT TO BE</span>
+            <div id="lcResDestination"></div>
+          </div>
+        </div>
 
         <!-- Timeline -->
-        <span class="lc-section-label">YOUR TIMELINE</span>
-        <div id="lcResTimeline"></div>
-
-        <!-- Tools -->
-        <span class="lc-section-label">RECOMMENDED TOOLS</span>
-        <div id="lcResTools"></div>
-
-        <!-- Skills -->
-        <span class="lc-section-label">SKILLS TO BUILD</span>
-        <div id="lcResSkills"></div>
-
-        <!-- People -->
-        <span class="lc-section-label">PEOPLE YOU NEED</span>
-        <div id="lcResPeople"></div>
-
-        <!-- Stress -->
-        <span class="lc-section-label">THE STRESS REALITY</span>
-        <div id="lcResStress"></div>
+        <div class="lc-reveal">
+          <span class="lc-section-label">YOUR TIMELINE</span>
+          <div id="lcResTimeline"></div>
+        </div>
 
         <!-- Phase roadmap -->
-        <span class="lc-section-label">YOUR PHASE ROADMAP</span>
-        <div class="lc-phase-grid" id="lcResPhases"></div>
+        <div class="lc-reveal">
+          <span class="lc-section-label">YOUR PHASE ROADMAP</span>
+          <div class="lc-phase-grid" id="lcResPhases"></div>
+        </div>
+
+        <!-- Tools -->
+        <div class="lc-reveal">
+          <span class="lc-section-label">RECOMMENDED TOOLS</span>
+          <div id="lcResTools"></div>
+        </div>
+
+        <!-- Skills -->
+        <div class="lc-reveal">
+          <span class="lc-section-label">SKILLS TO BUILD</span>
+          <div id="lcResSkills"></div>
+        </div>
+
+        <!-- People -->
+        <div class="lc-reveal">
+          <span class="lc-section-label">PEOPLE YOU NEED</span>
+          <div id="lcResPeople"></div>
+        </div>
+
+        <!-- Stress -->
+        <div class="lc-reveal">
+          <span class="lc-section-label">THE STRESS REALITY</span>
+          <div id="lcResStress"></div>
+        </div>
 
         <!-- Mind mines results -->
-        <div id="lcResMines"></div>
-        <div id="lcResWarning"></div>
+        <div class="lc-reveal">
+          <div id="lcResMines"></div>
+          <div id="lcResWarning"></div>
+        </div>
 
         <!-- Email me my map -->
-        <div class="lc-email-card" id="lcEmailCard">
+        <div class="lc-email-card lc-reveal" id="lcEmailCard">
           <span class="lc-email-eyebrow">EMAIL ME MY MAP</span>
           <h3 class="lc-email-title">Want this map in your inbox?</h3>
           <p class="lc-email-sub">We will send you a copy of your full lifestyle map so you can revisit it any time. No spam, ever.</p>
@@ -303,7 +321,7 @@ const pageDescription =
         </div>
 
         <!-- CTA -->
-        <div class="lc-cta-section">
+        <div class="lc-cta-section lc-reveal">
           <div class="lc-cta-intro">
             <span class="lc-cta-eyebrow">YOUR NEXT MOVE</span>
             <h2 class="lc-cta-title">You have the map.<br>Now choose your path.</h2>
@@ -424,6 +442,25 @@ const pageDescription =
   }
 
   // ── Navigation ──────────────────────────────────────────
+  function triggerResultReveals(): void {
+    const targets = document.querySelectorAll<HTMLElement>('#lc-step-6 .lc-reveal');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced || typeof IntersectionObserver === 'undefined') {
+      targets.forEach((el) => el.classList.add('is-revealed'));
+      return;
+    }
+    targets.forEach((el) => el.classList.remove('is-revealed'));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).classList.add('is-revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+    targets.forEach((el) => io.observe(el));
+  }
+
   function showStep(n: number): void {
     document.querySelectorAll<HTMLElement>('.lc-step').forEach((el) => {
       el.classList.remove('is-active');
@@ -435,7 +472,10 @@ const pageDescription =
     saveState();
 
     if (n === 4) renderFunnel();
-    if (n === 6) buildResults();
+    if (n === 6) {
+      buildResults();
+      triggerResultReveals();
+    }
 
     const wrap = document.querySelector<HTMLElement>('.lc-page');
     if (wrap) {
@@ -1155,10 +1195,10 @@ const pageDescription =
   }
 
   /* Step container */
-  .lc-step { display: none; animation: lc-fade 0.4s both; }
+  .lc-step { display: none; animation: lc-fade 0.42s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .lc-step.is-active { display: block; }
   @keyframes lc-fade {
-    from { opacity: 0; transform: translateY(14px); }
+    from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
@@ -1546,70 +1586,129 @@ const pageDescription =
   /* ── Section labels in results ─────────────────────── */
   .lc-section-label {
     display: block;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.4em;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.32em;
     text-transform: uppercase; color: var(--cyan);
-    margin: 36px 0 12px;
+    margin: 0 0 14px;
+  }
+  /* Reveal direct sections of the result step uniformly. The first
+     direct child after the heading gets reduced top-margin so the
+     hero card sits closer to the title. */
+  #lc-step-6 .lc-reveal { margin-top: 44px; }
+  #lc-step-6 .lc-reveal:first-of-type { margin-top: 0; }
+
+  /* Reveal-on-enter animation — staggered by IntersectionObserver. */
+  #lc-step-6 .lc-reveal {
+    opacity: 0; transform: translateY(14px);
+    transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  #lc-step-6 .lc-reveal.is-revealed {
+    opacity: 1; transform: none;
   }
 
-  /* ── Player header ─────────────────────────────────── */
+  /* ── Hero stats card (player header) ───────────────── */
   .lc-player-header {
-    background: linear-gradient(135deg, rgba(0, 229, 255, 0.07), rgba(123, 97, 255, 0.07));
-    border: 1px solid rgba(0, 229, 255, 0.22);
-    border-radius: 16px; padding: 30px;
+    background: linear-gradient(180deg, rgba(0, 229, 255, 0.06) 0%, rgba(123, 97, 255, 0.04) 100%), rgba(11, 14, 24, 0.85);
+    border: 1px solid rgba(0, 229, 255, 0.24);
+    border-radius: 22px;
+    padding: 36px 36px 32px;
     position: relative; overflow: hidden;
-    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
   .lc-player-header::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 380px 180px at 50% 0%, rgba(0, 229, 255, 0.08), transparent 70%);
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+  }
+  .lc-player-header::after {
+    content: ''; position: absolute; right: -120px; top: -80px;
+    width: 320px; height: 320px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(123, 97, 255, 0.18), transparent 60%);
     pointer-events: none;
   }
-  .lc-player-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; position: relative; }
+  .lc-player-badges {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 18px; position: relative;
+  }
   .lc-player-badge {
     font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
-    text-transform: uppercase; border-radius: 100px;
+    text-transform: uppercase; border-radius: 999px;
     padding: 5px 12px; border: 1px solid;
   }
   .lc-badge-mind   { color: var(--cyan);   background: rgba(0, 229, 255, 0.1);   border-color: rgba(0, 229, 255, 0.25); }
   .lc-badge-body   { color: #00E396;       background: rgba(0, 227, 150, 0.1);   border-color: rgba(0, 227, 150, 0.25); }
   .lc-badge-soul   { color: var(--purple); background: rgba(123, 97, 255, 0.1);  border-color: rgba(123, 97, 255, 0.25); }
   .lc-badge-pocket { color: var(--pink);   background: rgba(251, 48, 121, 0.1);  border-color: rgba(251, 48, 121, 0.25); }
-  .lc-badge-stage  { color: var(--pink);   background: rgba(251, 48, 121, 0.08); border-color: rgba(251, 48, 121, 0.2); }
+  .lc-badge-stage  { color: var(--cyan);   background: rgba(0, 229, 255, 0.06);  border-color: rgba(0, 229, 255, 0.28); }
   .lc-player-headline {
-    font-size: 17px; font-weight: 700; color: var(--text);
-    margin-bottom: 20px; line-height: 1.5; position: relative;
+    font-size: 22px; font-weight: 700; color: var(--text);
+    margin-bottom: 28px; line-height: 1.35; letter-spacing: -0.012em;
+    position: relative;
+    overflow-wrap: break-word;
   }
-  .lc-player-headline span { color: var(--cyan); }
-  .lc-player-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; position: relative; }
-  .lc-stat-cell { background: rgba(0, 0, 0, 0.25); border-radius: 8px; padding: 12px 14px; }
-  .lc-stat-val { font-size: 20px; font-weight: 800; color: var(--cyan); letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; }
-  .lc-stat-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); }
+  .lc-player-headline span { color: var(--cyan); font-weight: 800; }
+  .lc-player-stats {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; position: relative;
+  }
+  .lc-stat-cell {
+    padding: 8px 24px 8px 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    background: transparent; border-radius: 0;
+  }
+  .lc-stat-cell:last-child { border-right: none; padding-right: 0; }
+  .lc-player-stats .lc-stat-cell + .lc-stat-cell { padding-left: 24px; }
+  .lc-stat-val {
+    font-size: 44px; font-weight: 800; color: var(--text);
+    letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px;
+    font-feature-settings: "tnum" 1;
+  }
+  .lc-stat-lbl {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ── Now-vs-Goal 2-col compare ─────────────────────── */
+  .lc-now-goal {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .lc-now-goal-col { display: flex; flex-direction: column; }
+  .lc-now-goal-col .lc-section-label { color: var(--pink); }
+  .lc-now-goal-goal .lc-section-label { color: #00E396; }
+  .lc-now-goal-col > div { flex: 1; }
 
   /* ── Result cards ──────────────────────────────────── */
-  .lc-res-card { padding: 20px 22px; }
+  .lc-res-card {
+    padding: 24px 24px;
+    border-radius: 14px;
+    height: 100%;
+    border-left: 3px solid #00E396;
+  }
   .lc-res-badge {
     display: block;
-    font-size: 9px; font-weight: 700; letter-spacing: 0.36em;
-    text-transform: uppercase; color: var(--pink); margin-bottom: 10px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
+    text-transform: uppercase; color: #00E396; margin-bottom: 12px;
   }
-  .lc-res-val { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.3; }
-  .lc-res-desc { font-size: 13px; color: var(--muted); line-height: 1.75; }
+  .lc-res-val { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 10px; line-height: 1.2; letter-spacing: -0.015em; }
+  .lc-res-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
 
-  /* Archetype snapshot */
+  /* Archetype snapshot — sits in the now column */
   .lc-arch-snapshot {
     background: rgba(251, 48, 121, 0.04);
     border: 1px solid rgba(251, 48, 121, 0.18);
     border-left: 3px solid var(--pink);
-    border-radius: 12px;
-    padding: 20px 22px;
+    border-radius: 14px;
+    padding: 24px 24px;
+    height: 100%;
   }
   .lc-arch-snap-tag {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.36em;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
     text-transform: uppercase; color: var(--pink);
-    display: block; margin-bottom: 8px;
+    display: block; margin-bottom: 12px;
   }
-  .lc-arch-snap-name { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.01em; }
-  .lc-arch-snap-feel { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .lc-arch-snap-name { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 10px; letter-spacing: -0.015em; line-height: 1.2; }
+  .lc-arch-snap-feel { font-size: 14px; color: var(--muted); line-height: 1.7; }
 
   /* Timeline */
   .lc-timeline-card { padding: 20px 22px; }
@@ -1701,29 +1800,57 @@ const pageDescription =
     font-style: italic; text-align: center;
   }
 
-  /* Phase grid */
-  .lc-phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .lc-phase-card { padding: 20px 18px; position: relative; overflow: hidden; }
-  .lc-phase-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+  /* Phase roadmap — horizontal 4-step timeline */
+  .lc-phase-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    position: relative;
+    counter-reset: phase;
   }
-  .lc-phase-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
+  .lc-phase-grid::before {
+    content: ''; position: absolute;
+    top: 38px; left: 6%; right: 6%; height: 2px;
+    background: linear-gradient(90deg,
+      var(--cyan) 0%, var(--purple) 100%);
+    opacity: 0.32;
+    z-index: 0;
+  }
+  .lc-phase-card {
+    padding: 32px 18px 20px;
+    position: relative; overflow: visible;
+    counter-increment: phase;
+  }
+  .lc-phase-card::before {
+    content: counter(phase);
+    position: absolute; top: -2px; left: 50%; transform: translate(-50%, -50%);
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--purple));
+    color: var(--bg);
+    font-size: 14px; font-weight: 800; letter-spacing: -0.02em;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 4px var(--bg), 0 6px 18px rgba(0, 229, 255, 0.28);
+    z-index: 1;
+  }
+  .lc-phase-top {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
   .lc-phase-badge {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.32em;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.28em;
     text-transform: uppercase; color: var(--pink);
+    line-height: 1.4;
   }
   .lc-phase-time {
     font-size: 9px; font-weight: 600; letter-spacing: 0.08em;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--gb);
-    border-radius: 100px; padding: 3px 9px; color: var(--dim);
+    border-radius: 999px; padding: 3px 10px; color: var(--dim);
     white-space: nowrap;
   }
-  .lc-phase-focus { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 12px; }
+  .lc-phase-focus { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 12px; text-align: center; }
   .lc-phase-tasks { display: flex; flex-direction: column; gap: 6px; }
   .lc-phase-task {
-    font-size: 11px; color: var(--muted); line-height: 1.55;
+    font-size: 11.5px; color: var(--muted); line-height: 1.55;
     padding-left: 14px; position: relative;
   }
   .lc-phase-task::before {
@@ -1759,8 +1886,7 @@ const pageDescription =
 
   /* Email card */
   .lc-email-card {
-    margin-top: 36px;
-    padding: 26px 28px;
+    padding: 28px 28px;
     background: linear-gradient(135deg, rgba(0, 229, 255, 0.05), rgba(123, 97, 255, 0.05));
     border: 1px solid rgba(0, 229, 255, 0.22);
     border-radius: 16px;
@@ -1802,7 +1928,7 @@ const pageDescription =
   .lc-email-msg[data-tone="error"]   { color: #FF7A30; }
 
   /* CTA */
-  .lc-cta-section { margin-top: 56px; }
+  .lc-cta-section { padding-top: 8px; }
   .lc-cta-intro { text-align: center; margin-bottom: 24px; }
   .lc-cta-eyebrow {
     display: block;
@@ -1871,7 +1997,7 @@ const pageDescription =
     .lc-speed-grid,
     .lc-cta-paths,
     .lc-adjust-grid,
-    .lc-phase-grid,
+    .lc-now-goal,
     .lc-stress-cols,
     .lc-funnel-top,
     .lc-player-stats,
@@ -1883,11 +2009,40 @@ const pageDescription =
     .lc-email-form { flex-direction: column; }
     .lc-email-form input { width: 100%; }
     .lc-email-btn { width: 100%; }
+
+    /* Hero card mobile */
+    .lc-player-header { padding: 26px 22px 24px; border-radius: 18px; }
+    .lc-player-header::after { right: -160px; top: -100px; width: 240px; height: 240px; }
+    .lc-player-headline { font-size: 18px; margin-bottom: 22px; line-height: 1.4; }
+    .lc-player-stats { gap: 0; }
+    .lc-stat-cell {
+      padding: 16px 0; border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .lc-stat-cell:last-child { border-bottom: none; padding-bottom: 0; }
+    .lc-stat-cell:first-child { padding-top: 0; }
+    .lc-player-stats .lc-stat-cell + .lc-stat-cell { padding-left: 0; }
+    .lc-stat-val { font-size: 36px; }
+
+    /* Now/Goal mobile */
+    .lc-now-goal { gap: 24px; }
+
+    /* Phase roadmap → vertical stack */
+    .lc-phase-grid {
+      grid-template-columns: 1fr; gap: 24px;
+    }
+    .lc-phase-grid::before { display: none; }
+    .lc-phase-card { padding: 30px 20px 20px; }
+    .lc-phase-card::before { width: 36px; height: 36px; font-size: 13px; }
+
+    /* Section labels: tighter top margin since reveals already space them */
+    #lc-step-6 .lc-reveal { margin-top: 36px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .lc-step,
     .lc-board-sq.is-active::before,
     .lc-stress-bar-fill { animation: none; transition: none; }
+    #lc-step-6 .lc-reveal { transition: none; opacity: 1; transform: none; }
   }
 </style>
