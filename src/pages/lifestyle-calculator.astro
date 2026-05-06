@@ -121,7 +121,7 @@ const pageDescription =
           </div>
         </div>
 
-        <div class="lc-field-grid" style="margin-top:2px;">
+        <div class="lc-field-grid">
           <div class="lc-field-group">
             <label class="lc-field-label" for="lc-hours-week">Hours a week you can invest</label>
             <input type="number" id="lc-hours-week" placeholder="15" min="1" max="168" inputmode="numeric" />
@@ -1157,18 +1157,19 @@ const pageDescription =
   }
 
   /* Board indicator */
-  .lc-board-wrap { padding: 4px 0 36px; }
+  .lc-board-wrap { padding: 36px 0 44px; }
   .lc-board { display: flex; align-items: center; }
   .lc-board-sq {
-    width: 38px; height: 38px; flex-shrink: 0;
+    width: 52px; height: 52px; flex-shrink: 0;
     background: var(--glass);
     border: 1px solid var(--gb);
-    border-radius: 8px;
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700; color: var(--dim);
+    font-size: 14px; font-weight: 700; color: var(--dim);
+    letter-spacing: -0.01em;
     position: relative; transition: all 0.4s ease;
   }
-  .lc-board-conn { height: 1px; flex: 1; background: var(--gb); min-width: 6px; }
+  .lc-board-conn { height: 1px; flex: 1; background: var(--gb); min-width: 8px; }
   .lc-board-sq.is-done {
     background: rgba(0, 229, 255, 0.06);
     border-color: rgba(0, 229, 255, 0.3);
@@ -1188,7 +1189,7 @@ const pageDescription =
     box-shadow: 0 0 8px var(--cyan), 0 0 18px rgba(0, 229, 255, 0.5);
     animation: lc-pulse 2s ease-in-out infinite;
   }
-  .lc-board-sq.is-goal { background: rgba(123, 97, 255, 0.06); border-color: rgba(123, 97, 255, 0.3); color: var(--purple); font-size: 14px; }
+  .lc-board-sq.is-goal { background: rgba(123, 97, 255, 0.06); border-color: rgba(123, 97, 255, 0.3); color: var(--purple); font-size: 18px; }
   @keyframes lc-pulse {
     0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
     50%      { transform: translateX(-50%) scale(1.5); opacity: 0.6; }
@@ -1390,7 +1391,8 @@ const pageDescription =
   .lc-arch-card.is-selected .lc-arch-check { opacity: 1; transform: scale(1); }
 
   /* ── Step 2: Fields ─────────────────────────────────── */
-  .lc-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .lc-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .lc-field-grid:last-of-type { margin-bottom: 0; }
   .lc-field-group {
     padding: 16px 18px;
     display: flex; flex-direction: column; gap: 8px;
@@ -2007,7 +2009,11 @@ const pageDescription =
     .lc-player-stats,
     .lc-sub-grid,
     .lc-field-grid { grid-template-columns: 1fr; }
-    .lc-board-sq { width: 32px; height: 32px; font-size: 9px; }
+    .lc-board-wrap { padding: 16px 0 32px; }
+    .lc-board-sq { width: 32px; height: 32px; font-size: 10px; border-radius: 8px; }
+    .lc-board-sq.is-goal { font-size: 13px; }
+    .lc-board-conn { min-width: 4px; }
+    .lc-field-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
     .lc-funnel-total { flex-direction: column; align-items: flex-start; gap: 12px; }
     .lc-funnel-total-num { font-size: 36px; }
     .lc-email-form { flex-direction: column; }
