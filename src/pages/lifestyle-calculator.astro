@@ -475,6 +475,11 @@ const pageDescription =
     if (n === 6) {
       buildResults();
       triggerResultReveals();
+      // The user has completed the flow. Drop the persisted state so a
+      // refresh restarts from step 0 rather than reopening the result
+      // page with stale inputs. State is held in memory until the user
+      // clicks "Run a new idea" (resetAll) or navigates away.
+      clearState();
     }
 
     const wrap = document.querySelector<HTMLElement>('.lc-page');
