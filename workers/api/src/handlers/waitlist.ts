@@ -366,11 +366,19 @@ export async function handleWaitlistPost(request: Request, env: Env, ctx: Execut
     // Fire-and-forget side effects — don't block the response on delivery.
     // Each call swallows its own failure so one outage doesn't kill the rest.
     if (env.RESEND_API) {
-      ctx.waitUntil(sendConfirmation(env, rawEmail).catch(() => {}));
-      ctx.waitUntil(sendTeamNotification(env, rawEmail, entry.joinedAt).catch(() => {}));
+      ctx.waitUntil(sendConfirmation(env, rawEmail).catch((e) => {
+        console.error('[waitlist] sendConfirmation failed:', e instanceof Error ? e.message : e);
+      }));
+      ctx.waitUntil(sendTeamNotification(env, rawEmail, entry.joinedAt).catch((e) => {
+        console.error('[waitlist] sendTeamNotification failed:', e instanceof Error ? e.message : e);
+      }));
+    } else {
+      console.warn('[waitlist] RESEND_API not set — skipping confirmation + team-copy emails');
     }
     if (env.SLACK_WEBHOOK_URL) {
-      ctx.waitUntil(sendSlackNotification(env, rawEmail).catch(() => {}));
+      ctx.waitUntil(sendSlackNotification(env, rawEmail).catch((e) => {
+        console.error('[waitlist] sendSlackNotification failed:', e instanceof Error ? e.message : e);
+      }));
     }
 
     return json({ success: true }, 200, env);

@@ -390,11 +390,19 @@ export async function handleLifestyleCalculatorPost(
   }
 
   if (env.RESEND_API) {
-    ctx.waitUntil(sendUserEmail(env, rawEmail, summary).catch(() => {}));
-    ctx.waitUntil(sendTeamEmail(env, rawEmail, summary, state).catch(() => {}));
+    ctx.waitUntil(sendUserEmail(env, rawEmail, summary).catch((e) => {
+      console.error('[lifestyleCalculator] sendUserEmail failed:', e instanceof Error ? e.message : e);
+    }));
+    ctx.waitUntil(sendTeamEmail(env, rawEmail, summary, state).catch((e) => {
+      console.error('[lifestyleCalculator] sendTeamEmail failed:', e instanceof Error ? e.message : e);
+    }));
+  } else {
+    console.warn('[lifestyleCalculator] RESEND_API not set — skipping email sends. Set the secret with: wrangler secret put RESEND_API --env production');
   }
   if (env.SLACK_WEBHOOK_URL) {
-    ctx.waitUntil(sendSlackNotification(env, rawEmail, summary, state).catch(() => {}));
+    ctx.waitUntil(sendSlackNotification(env, rawEmail, summary, state).catch((e) => {
+      console.error('[lifestyleCalculator] sendSlackNotification failed:', e instanceof Error ? e.message : e);
+    }));
   }
 
   return json({ success: true }, 200, env);
