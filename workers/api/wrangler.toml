@@ -9,9 +9,7 @@ compatibility_flags = ["nodejs_compat_v2"]
 #   GET  /google-reviews     -> handlers/googleReviews.ts (Places API + 6h cache)
 #   GET  /healthz            -> { ok: true }
 #   GET  /contact/healthz    -> { ok: true }          (kept for backward compat)
-# Owns api.cwkexperience.com as the primary Custom Domain in env.production,
-# with api.houseofcwk.com kept as a transitional route until 301 redirects
-# fully replace any cached references.
+# Owns api.cwkexperience.com as the primary Custom Domain in env.production.
 
 [vars]
 ENVIRONMENT       = "preview"
@@ -46,7 +44,6 @@ preview_id = "3b1956ad390e44409ad62d6fbadf329d"
 name = "cwk-api-prod"
 routes = [
   { pattern = "api.cwkexperience.com", custom_domain = true },
-  { pattern = "api.houseofcwk.com",   custom_domain = true },
 ]
 
 [env.production.vars]
