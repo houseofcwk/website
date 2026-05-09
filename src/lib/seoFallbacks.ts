@@ -5,7 +5,7 @@
 export const SITE_URL = 'https://cwkexperience.com';
 export const TWITTER_HANDLE = '@cwkexperience';
 export const DEFAULT_OG_IMAGE = '/og/cwk-default-1200x630.jpg';
-export const LEGACY_OG_IMAGE = '/og-image.png'; // pre-existing default; kept as final fallback
+export const LEGACY_OG_IMAGE = '/og-image.jpg'; // pre-existing default; kept as final fallback
 
 export const DEFAULT_OG_TYPE = 'website';
 export const DEFAULT_TWITTER_CARD = 'summary_large_image';
