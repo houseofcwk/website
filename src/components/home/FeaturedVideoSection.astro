@@ -1,9 +1,9 @@
 ---
 // Featured video block on the home page. Sits between the product preview
-// and the Player X-Ray CTA. Uses youtube-nocookie + lazy iframe for a calm,
-// privacy-friendly embed.
+// and the Player X-Ray CTA. Uses a click-to-play facade so the YouTube
+// custom thumbnail never renders — the iframe only mounts on activation.
 const videoId = 'S5t5Z9uobOc';
-const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
+const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
 ---
 
 <section class="fv-section">
@@ -22,15 +22,16 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
     </header>
 
     <figure class="fv-figure reveal-card">
-      <div class="fv-frame">
-        <iframe
-          src={videoSrc}
-          title="CWK feature video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
+      <div
+        class="fv-frame"
+        data-fv-frame
+        data-fv-src={videoSrc}
+      >
+        <button type="button" class="fv-play" aria-label="Play video">
+          <svg class="fv-play-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M8 5.14v13.72a1 1 0 0 0 1.55.83l10.79-6.86a1 1 0 0 0 0-1.66L9.55 4.31A1 1 0 0 0 8 5.14Z"/>
+          </svg>
+        </button>
       </div>
       <figcaption class="fv-caption">
         Kris on building CWK, the players we rep, and what long-term partnership actually looks like.
@@ -38,6 +39,24 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
     </figure>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-fv-frame]').forEach((frame) => {
+    const button = frame.querySelector<HTMLButtonElement>('.fv-play');
+    const src = frame.dataset.fvSrc;
+    if (!button || !src) return;
+
+    button.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.title = 'CWK feature video';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      frame.replaceChildren(iframe);
+    }, { once: true });
+  });
+</script>
 
 <style>
   .fv-section {
@@ -135,7 +154,9 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
   .fv-frame {
     position: relative;
     aspect-ratio: 16 / 9;
-    background: #000;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(123, 97, 255, 0.10) 0%, transparent 60%),
+      #000;
   }
   .fv-frame iframe {
     position: absolute;
@@ -144,6 +165,45 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
     height: 100%;
     border: 0;
     display: block;
+  }
+
+  .fv-play {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 84px;
+    height: 84px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%);
+    color: #07090F;
+    cursor: pointer;
+    box-shadow:
+      0 12px 40px rgba(0, 229, 255, 0.30),
+      0 0 0 1px rgba(255, 255, 255, 0.10) inset;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, filter 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .fv-play-icon {
+    margin-left: 4px;
+  }
+  @media (hover: hover) {
+    .fv-play:hover {
+      transform: scale(1.06);
+      filter: brightness(1.06);
+      box-shadow:
+        0 18px 52px rgba(123, 97, 255, 0.40),
+        0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+    }
+  }
+  .fv-play:active { transform: scale(0.97); }
+  .fv-play:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 4px;
   }
 
   .fv-caption {
@@ -168,9 +228,12 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
     .fv-section { padding: 64px 18px 56px; }
     .fv-figure { border-radius: 12px; }
     .fv-caption { padding: 12px 14px; font-size: 12.5px; }
+    .fv-play { width: 68px; height: 68px; }
+    .fv-play-icon { width: 24px; height: 24px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fv-figure { transition: none; }
+    .fv-figure,
+    .fv-play { transition: none; }
   }
 </style>
