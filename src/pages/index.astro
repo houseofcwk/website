@@ -8,6 +8,7 @@ import PillarsSection from '../components/home/PillarsSection.astro';
 import WorkMosaicSection from '../components/home/WorkMosaicSection.astro';
 import ProductPreviewSection from '../components/home/ProductPreviewSection.astro';
 import GoogleReviewsSection from '../components/home/GoogleReviewsSection.astro';
+import FeaturedVideoSection from '../components/home/FeaturedVideoSection.astro';
 import PlayerXRaySection from '../components/PlayerXRaySection.astro';
 import { sanity, getSiteSettings } from '../lib/sanity';
 import { HOME_QUERY } from '../lib/queries';
@@ -89,5 +90,6 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
     totalCount={googleReviewsTotalCount}
   />
   <ProductPreviewSection />
+  <FeaturedVideoSection />
   <PlayerXRaySection />
 </Base>

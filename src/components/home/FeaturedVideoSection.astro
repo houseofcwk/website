@@ -1,0 +1,176 @@
+---
+// Featured video block on the home page. Sits between the product preview
+// and the Player X-Ray CTA. Uses youtube-nocookie + lazy iframe for a calm,
+// privacy-friendly embed.
+const videoId = 'S5t5Z9uobOc';
+const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
+---
+
+<section class="fv-section">
+  <span class="fv-glow" aria-hidden="true"></span>
+
+  <div class="fv-inner">
+    <header class="fv-head reveal-up">
+      <span class="fv-eyebrow">
+        <span class="fv-eyebrow-dot" aria-hidden="true"></span>
+        Watch
+      </span>
+      <h2 class="fv-headline">Hear it straight from Kris.</h2>
+      <p class="fv-sub">
+        A short look at how CWK shows up for the people we represent, in Kris's own words.
+      </p>
+    </header>
+
+    <figure class="fv-figure reveal-card">
+      <div class="fv-frame">
+        <iframe
+          src={videoSrc}
+          title="CWK feature video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+      <figcaption class="fv-caption">
+        Kris on building CWK, the players we rep, and what long-term partnership actually looks like.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .fv-section {
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+    padding: 96px 24px 80px;
+  }
+
+  .fv-glow {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    width: 900px;
+    height: 460px;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      ellipse,
+      rgba(123, 97, 255, 0.06) 0%,
+      rgba(0, 229, 255, 0.035) 55%,
+      transparent 75%
+    );
+    filter: blur(8px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .fv-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1040px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    align-items: center;
+  }
+
+  .fv-head {
+    text-align: center;
+    max-width: 720px;
+  }
+
+  .fv-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(123, 97, 255, 0.08);
+    border: 1px solid rgba(123, 97, 255, 0.22);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 18px;
+  }
+  .fv-eyebrow-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--purple);
+    box-shadow: 0 0 8px rgba(123, 97, 255, 0.55);
+  }
+
+  .fv-headline {
+    margin: 0 0 14px;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .fv-sub {
+    color: var(--muted);
+    max-width: 580px;
+    margin: 0 auto;
+    font-size: clamp(14.5px, 1.5vw, 16px);
+    line-height: 1.6;
+  }
+
+  .fv-figure {
+    width: 100%;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--gb);
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.45),
+      0 0 0 1px rgba(123, 97, 255, 0.08);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease;
+  }
+
+  .fv-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  .fv-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .fv-caption {
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--dim);
+    border-top: 1px solid var(--gb);
+    background: var(--bg2);
+    line-height: 1.55;
+  }
+
+  @media (hover: hover) {
+    .fv-figure:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(123, 97, 255, 0.16);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .fv-section { padding: 64px 18px 56px; }
+    .fv-figure { border-radius: 12px; }
+    .fv-caption { padding: 12px 14px; font-size: 12.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fv-figure { transition: none; }
+  }
+</style>
