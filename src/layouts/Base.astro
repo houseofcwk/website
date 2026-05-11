@@ -34,6 +34,7 @@ const {
 
 const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
+const firebaseMeasurementId = import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID;
 
 // Site settings drive twitter handle, default OG image, and Organization JSON-LD.
 // getSiteSettings is memoized + crash-safe; null when Sanity is empty/down.
@@ -149,6 +150,13 @@ const extraBlocks = extraJsonLd
     </main>
     <Footer />
     <WaitlistModal client:load />
+
+    {firebaseMeasurementId && (
+      <script>
+        import { initFirebaseAnalytics } from '../lib/firebase';
+        initFirebaseAnalytics().catch(() => {});
+      </script>
+    )}
 
     <script>
       /* Reveal-on-scroll: toggles .is-visible on any .reveal-card / .reveal-up */
