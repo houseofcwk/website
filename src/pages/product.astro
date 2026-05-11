@@ -93,10 +93,10 @@ const features = s?.features && s.features.length
 
 const heroEyebrow  = s?.heroEyebrow  ?? 'The Platform';
 const heroHeadline = s?.heroHeadline ?? null; // null -> render hardcoded headline w/ gradient span
-const heroSubtext  = s?.heroSubtext  ?? "CWK. Agent+ is the command center that manages your entrepreneurial career across Mind, Body, Soul, and Pocket. One dashboard. Every system. Nothing falls through.";
+const heroSubtext  = s?.heroSubtext  ?? "CWK. Command Center manages your entrepreneurial career across Mind, Body, Soul, and Pocket. One dashboard. Every system. Nothing falls through.";
 
-const pageTitle = s?.seo?.title ?? 'CWK. Agent+ | The Operating System for Entrepreneurs';
-const pageDescription = s?.seo?.description ?? 'See inside the Agent+ dashboard: daily actions, relationship tracking, AI strategy, pipeline management, and goal sprints. Built on the PLOS framework.';
+const pageTitle = s?.seo?.title ?? 'CWK. Command Center | The Operating System for Entrepreneurs';
+const pageDescription = s?.seo?.description ?? 'See inside the Command Center dashboard: daily actions, relationship tracking, AI strategy, pipeline management, and goal sprints. Built on the PLOS framework.';
 ---
 
 <Base title={pageTitle} description={pageDescription} {...seoBaseProps(s?.seo)}>
@@ -248,7 +248,7 @@ const pageDescription = s?.seo?.description ?? 'See inside the Agent+ dashboard:
       <span class="eyebrow">Ready?</span>
       <h2>This is the infrastructure your business has been missing.</h2>
       <p class="waitlist-sub">
-        CWK. Agent+ is currently in private beta. Join the waitlist to be first in line.
+        CWK. Command Center is currently in private beta. Join the waitlist to be first in line.
       </p>
       <WaitlistForm client:visible />
     </div>

@@ -49,7 +49,7 @@ const SITE_SETTINGS = {
     tagline: 'CWK. gamifies your growth across Mind, Body, Soul, and Pocket.',
     socialProofCount: 0,
     links: [
-      { _key: 'f-product', _type: 'footerLink', label: 'Agent+', href: '/product' },
+      { _key: 'f-product', _type: 'footerLink', label: 'Command Center', href: '/product' },
       { _key: 'f-quiz', _type: 'footerLink', label: 'What Player Are You?', href: '/assessment' },
       { _key: 'f-cs', _type: 'footerLink', label: 'Case Studies', href: '/case-studies' },
       { _key: 'f-sq', _type: 'footerLink', label: 'Side Quests', href: '/side-quests' },
@@ -145,7 +145,7 @@ const HOME_PAGE = {
 const PRODUCT_PAGE = {
   _id: 'productPage',
   _type: 'productPage',
-  heroEyebrow: 'Agent+ Dashboard',
+  heroEyebrow: 'Command Center',
   heroHeadline: 'Your Personal Operating System for Growth.',
   features: [
     {
@@ -216,8 +216,8 @@ const PRODUCT_PAGE = {
     },
   ],
   seo: {
-    title: 'CWK. Agent+ | The Operating System for Entrepreneurs',
-    description: 'See inside the Agent+ dashboard: daily actions, relationship tracking, AI strategy, pipeline management, and goal sprints. Built on the PLOS framework.',
+    title: 'CWK. Command Center | The Operating System for Entrepreneurs',
+    description: 'See inside the Command Center dashboard: daily actions, relationship tracking, AI strategy, pipeline management, and goal sprints. Built on the PLOS framework.',
     ogType: 'website',
     twitterCard: 'summary_large_image',
     robots: 'index, follow, max-image-preview:large',
@@ -410,10 +410,10 @@ const CASE_STUDIES = [
     ],
   },
   {
-    slug: 'agent-plus', client: 'CWK. Agent+', tagline: null,
-    category: 'AGENT+ INTERFACE', medium: 'PLATFORM',
+    slug: 'agent-plus', client: 'CWK. Command Center', tagline: null,
+    category: 'COMMAND CENTER INTERFACE', medium: 'PLATFORM',
     cardSurface: 'holographic', cardAccent: '#7B61FF',
-    cardDescription: "See what's inside CWK Agent+, the operating system we built for entrepreneurs.",
+    cardDescription: "See what's inside CWK Command Center, the operating system we built for entrepreneurs.",
     cardStat: { num: '3', label: 'Key Dashboards' }, order: 99,
     headline: 'The Operating System We Built To Manage Growth',
     stats: [

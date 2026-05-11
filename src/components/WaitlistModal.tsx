@@ -83,7 +83,7 @@ export default function WaitlistModal() {
             We're building something for builders &amp; creators who are done going at it alone.
           </h2>
           <p className="wl-sub">
-            CWK. Agent+ is the operating system that manages your growth across Mind, Body, Soul, and Pocket. Join the waitlist to get early access when we launch.
+            CWK. Command Center is the operating system that manages your growth across Mind, Body, Soul, and Pocket. Join the waitlist to get early access when we launch.
           </p>
           <WaitlistForm surface="modal" triggerSource={triggerSource} />
           <p className="wl-footnote">

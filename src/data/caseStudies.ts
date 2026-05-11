@@ -554,12 +554,12 @@ export const CASE_STUDIES: CaseStudy[] = [
 
   {
     slug: 'agent-plus',
-    client: 'CWK. Agent+',
-    category: 'AGENT+ INTERFACE',
+    client: 'CWK. Command Center',
+    category: 'COMMAND CENTER INTERFACE',
     medium: 'PLATFORM',
     cardSurface: 'holographic',
     cardAccent: '#7B61FF',
-    cardDescription: "See what's inside CWK Agent+, the operating system we built for entrepreneurs.",
+    cardDescription: "See what's inside CWK Command Center, the operating system we built for entrepreneurs.",
     cardStat: { num: '3', label: 'Key Dashboards' },
     order: 99,
     hidden: true,
@@ -573,7 +573,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     ],
     body: [
       h2('Why we built it'),
-      p('Every entrepreneur we worked with hit the same wall: scattered tools, fragmented authority, deals leaking because nothing tied the work together. Agent+ is the system that catches everything in one place.'),
+      p('Every entrepreneur we worked with hit the same wall: scattered tools, fragmented authority, deals leaking because nothing tied the work together. Command Center is the system that catches everything in one place.'),
 
       h2('What it does'),
       bullet('Player Dashboard: greeting, top actions, relationships, brand destination at a glance.'),
@@ -582,7 +582,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       bullet('Priority Actions: the next move, surfaced based on commitments and momentum.'),
 
       h2('Where to see it'),
-      p('Agent+ ships as the platform behind CWK. A live preview is on the product page; full access opens with the PLOS waitlist.'),
+      p('Command Center ships as the platform behind CWK. A live preview is on the product page; full access opens with the PLOS waitlist.'),
     ],
   },
 
