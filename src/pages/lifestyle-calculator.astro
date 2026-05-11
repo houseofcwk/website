@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import FeaturedVideoSection from '../components/FeaturedVideoSection.astro';
 import {
   CATEGORIES,
   ARCHETYPES,
@@ -351,6 +352,10 @@ const pageDescription =
 
     </div>
   </section>
+
+  <div data-lc-featured-video>
+    <FeaturedVideoSection />
+  </div>
 </Base>
 
 <script>
@@ -480,6 +485,9 @@ const pageDescription =
     currentStep = n;
     renderBoard(n);
     saveState();
+
+    const fv = document.querySelector<HTMLElement>('[data-lc-featured-video]');
+    if (fv) fv.hidden = n !== 0;
 
     if (n === 4) renderFunnel();
     if (n === 6) {
