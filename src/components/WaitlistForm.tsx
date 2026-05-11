@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+import { track, conversion, identify, emailHash } from '../lib/analytics';
 
 type FormState = 'idle' | 'loading' | 'success' | 'duplicate' | 'invalid' | 'server-error';
+
+interface WaitlistFormProps {
+  surface?: string;
+  triggerSource?: string;
+}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -15,10 +21,17 @@ const MESSAGES: Record<FormState, { text: string; color: string } | null> = {
   'server-error': { text: 'Something went wrong. Try again in a moment.', color: '#FF7A30' },
 };
 
-export default function WaitlistForm() {
+export default function WaitlistForm({ surface = 'inline', triggerSource }: WaitlistFormProps = {}) {
   const [state, setState] = useState<FormState>('idle');
   const emailRef = useRef<HTMLInputElement>(null);
   const honeypotRef = useRef<HTMLInputElement>(null);
+  const viewedRef = useRef(false);
+
+  useEffect(() => {
+    if (viewedRef.current) return;
+    viewedRef.current = true;
+    track('waitlist_form_viewed', { surface, trigger_source: triggerSource ?? '' });
+  }, [surface, triggerSource]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,15 +39,14 @@ export default function WaitlistForm() {
     const email = emailRef.current?.value.trim() ?? '';
     const honeypot = honeypotRef.current?.value ?? '';
 
-    // Honeypot: silently succeed to fool bots
     if (honeypot.length > 0) {
       setState('success');
       return;
     }
 
-    // Client-side email validation
     if (!EMAIL_REGEX.test(email)) {
       setState('invalid');
+      track('waitlist_form_invalid', { surface, error_fields: ['email'] });
       return;
     }
 
@@ -49,16 +61,27 @@ export default function WaitlistForm() {
 
       if (res.status === 409) {
         setState('duplicate');
+        track('waitlist_already_subscribed', { surface, trigger_source: triggerSource ?? '' });
       } else if (res.status === 422) {
         setState('invalid');
+        track('waitlist_failed', { surface, error_code: '422' });
       } else if (!res.ok) {
         setState('server-error');
+        track('waitlist_failed', { surface, error_code: String(res.status) });
       } else {
         setState('success');
         if (emailRef.current) emailRef.current.value = '';
+        const hash = await emailHash(email);
+        if (hash) identify(hash, { source: surface });
+        conversion('waitlist_submitted', {
+          surface,
+          trigger_source: triggerSource ?? '',
+          email_hash: hash,
+        });
       }
     } catch {
       setState('server-error');
+      track('waitlist_failed', { surface, error_code: 'network' });
     }
   }
 

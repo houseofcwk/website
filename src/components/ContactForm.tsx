@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { track, conversion, identify, emailHash } from '../lib/analytics';
 
 type FormState = 'idle' | 'loading' | 'success' | 'error';
 
@@ -43,6 +44,10 @@ export default function ContactForm() {
   const turnstileContainerRef = useRef<HTMLDivElement>(null);
   const turnstileIdRef = useRef<string | null>(null);
   const loadedAtRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    track('contact_form_viewed', {});
+  }, []);
 
   // Load Turnstile when a site key is configured.
   useEffect(() => {
@@ -112,6 +117,10 @@ export default function ContactForm() {
     const errors = validateClient(data, consent);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
+      track('contact_form_invalid', {
+        topic: data.topic,
+        error_fields: Object.keys(errors),
+      });
       return;
     }
 
@@ -135,6 +144,14 @@ export default function ContactForm() {
 
       if (res.status === 200) {
         setState('success');
+        const hash = await emailHash(data.email);
+        if (hash) identify(hash, { source: 'contact' });
+        conversion('contact_submitted', {
+          topic: data.topic,
+          has_company: data.company.trim().length > 0,
+          has_role: data.role.trim().length > 0,
+          email_hash: hash,
+        });
         return;
       }
 
@@ -147,12 +164,14 @@ export default function ContactForm() {
         setFieldErrors(payload.fieldErrors);
         setState('idle');
         setFormError('Please fix the highlighted fields and try again.');
+        track('contact_failed', { topic: data.topic, error_code: 'server_validation' });
         return;
       }
 
       if (res.status === 429) {
         setState('error');
         setFormError('Too many submissions. Please try again later.');
+        track('contact_failed', { topic: data.topic, error_code: '429' });
         return;
       }
 
@@ -162,14 +181,17 @@ export default function ContactForm() {
         if (TURNSTILE_SITE_KEY && window.turnstile) {
           window.turnstile.reset(turnstileIdRef.current ?? undefined);
         }
+        track('contact_failed', { topic: data.topic, error_code: 'spam_rejected' });
         return;
       }
 
       setState('error');
       setFormError('Something went wrong. Please try again in a moment.');
+      track('contact_failed', { topic: data.topic, error_code: String(res.status) });
     } catch {
       setState('error');
       setFormError('Network error. Please check your connection and try again.');
+      track('contact_failed', { topic: data.topic, error_code: 'network' });
     }
   }
 
@@ -267,7 +289,14 @@ export default function ContactForm() {
         htmlFor="contact-topic"
         error={fieldErrors.topic}
       >
-        <select id="contact-topic" name="topic" required defaultValue="" aria-invalid={!!fieldErrors.topic}>
+        <select
+          id="contact-topic"
+          name="topic"
+          required
+          defaultValue=""
+          aria-invalid={!!fieldErrors.topic}
+          onChange={(e) => track('contact_topic_selected', { topic: e.currentTarget.value })}
+        >
           <option value="" disabled>
             Choose one…
           </option>

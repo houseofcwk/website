@@ -37,3 +37,10 @@ PUBLIC_FIREBASE_STORAGE_BUCKET      = "cwk-experience.firebasestorage.app"
 PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "84456779392"
 PUBLIC_FIREBASE_APP_ID              = "1:84456779392:web:f141d2bbf9917cfe69c065"
 PUBLIC_FIREBASE_MEASUREMENT_ID      = "G-7FMTX4XYZC"
+# Universal event tracker (#197). Each adapter is inert when its env var is
+# blank, so leave them empty here until the corresponding pixel/SDK is
+# provisioned. Set in CF Pages dashboard or uncomment below when ready.
+# PUBLIC_MIXPANEL_TOKEN              = ""
+# PUBLIC_META_PIXEL_ID               = ""
+# PUBLIC_TIKTOK_PIXEL_ID             = ""
+# PUBLIC_LINKEDIN_PARTNER_ID         = ""

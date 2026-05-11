@@ -16,11 +16,13 @@
     "@portabletext/react": "^6.0.3",
     "@sanity/client": "^7.21.0",
     "@sanity/image-url": "^2.1.1",
+    "@types/mixpanel-browser": "^2.60.0",
     "@types/react": "^19.1.1",
     "@types/react-dom": "^19.1.1",
     "astro": "^5.6.0",
     "firebase": "^12.13.0",
     "groq": "^5.20.0",
+    "mixpanel-browser": "^2.78.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

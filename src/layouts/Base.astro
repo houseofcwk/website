@@ -151,12 +151,15 @@ const extraBlocks = extraJsonLd
     <Footer />
     <WaitlistModal client:load />
 
-    {firebaseMeasurementId && (
-      <script>
-        import { initFirebaseAnalytics } from '../lib/firebase';
-        initFirebaseAnalytics().catch(() => {});
-      </script>
-    )}
+    <script>
+      import { init as analyticsInit, page as analyticsPage } from '../lib/analytics';
+      import { bindUniversal } from '../lib/analytics/auto-binders';
+      (async () => {
+        await analyticsInit();
+        analyticsPage();
+        bindUniversal();
+      })().catch(() => {});
+    </script>
 
     <script>
       /* Reveal-on-scroll: toggles .is-visible on any .reveal-card / .reveal-up */

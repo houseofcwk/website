@@ -144,6 +144,7 @@ const CALENDLY_URL = 'https://calendly.com/cwk-experience/intro';
 
 <script>
   import { QUESTIONS, ARCHETYPES, score, type Letter, type ArchetypeKey } from '../data/assessment';
+  import { track, conversion } from '../lib/analytics';
 
   type Step = 'intro' | 'questions' | 'result';
   type Answers = (Letter | null)[];
@@ -210,14 +211,22 @@ const CALENDLY_URL = 'https://calendly.com/cwk-experience/intro';
 
   function chooseAnswer(qIndex: number, letter: Letter) {
     state.answers[qIndex] = letter;
+    track('assessment_question_answered', {
+      question_index: qIndex + 1,
+      question_id: QUESTIONS[qIndex].id,
+      answer_value: letter,
+    });
     if (qIndex < QUESTIONS.length - 1) {
       showQuestion(qIndex + 1);
     } else {
-      // All five answered; render result.
       const tuple = state.answers as [Letter, Letter, Letter, Letter, Letter];
       const result = score(tuple);
       renderResult(result.final, result.mindsetGap);
       show('result');
+      track('assessment_result_revealed', {
+        archetype_key: result.final,
+        mindset_gap: result.mindsetGap,
+      });
     }
   }
 
@@ -285,8 +294,29 @@ const CALENDLY_URL = 'https://calendly.com/cwk-experience/intro';
 
   // Wire up
   document.querySelector<HTMLButtonElement>('[data-start]')!.addEventListener('click', () => {
+    track('assessment_started', {});
     showQuestion(0);
     show('questions');
+  });
+
+  document.querySelector<HTMLAnchorElement>('[data-result-calendly]')?.addEventListener('click', () => {
+    const archetype_key = sections.result?.getAttribute('data-archetype') ?? '';
+    const destination = (document.querySelector<HTMLAnchorElement>('[data-result-calendly]')?.href) ?? '';
+    conversion('assessment_calendly_clicked', { archetype_key, destination });
+  });
+
+  document.querySelector<HTMLAnchorElement>('[data-result-cta]')?.addEventListener('click', () => {
+    const archetype_key = sections.result?.getAttribute('data-archetype') ?? '';
+    const href = (document.querySelector<HTMLAnchorElement>('[data-result-cta]')?.href) ?? '';
+    if (href.includes('#waitlist') || href.includes('/#waitlist')) {
+      conversion('assessment_waitlist_clicked', { archetype_key });
+    } else {
+      track('assessment_cta_clicked', { archetype_key, destination: href });
+    }
+  });
+
+  document.querySelector<HTMLButtonElement>('[data-restart]')?.addEventListener('click', () => {
+    track('assessment_restarted', {});
   });
 
   document.querySelectorAll<HTMLButtonElement>('[data-pick]').forEach((btn) => {

@@ -1,26 +1,41 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import WaitlistForm from './WaitlistForm';
+import { track } from '../lib/analytics';
 
 export default function WaitlistModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [triggerSource, setTriggerSource] = useState<string>('');
+  const openedAtRef = useRef<number>(0);
 
   useEffect(() => { setMounted(true); }, []);
 
-  const open = useCallback(() => {
+  const open = useCallback((source: string) => {
+    setTriggerSource(source);
     setIsOpen(true);
+    openedAtRef.current = Date.now();
     document.body.style.overflow = 'hidden';
+    track('waitlist_modal_opened', { trigger_source: source });
   }, []);
 
   const close = useCallback(() => {
+    if (isOpen) {
+      track('waitlist_modal_dismissed', {
+        trigger_source: triggerSource,
+        time_open_ms: Date.now() - openedAtRef.current,
+      });
+    }
     setIsOpen(false);
     document.body.style.overflow = '';
-  }, []);
+  }, [isOpen, triggerSource]);
 
   // Listen for custom event from Astro components
   useEffect(() => {
-    const eventHandler = () => open();
+    const eventHandler = (e: Event) => {
+      const detail = (e as CustomEvent<{ source?: string }>).detail;
+      open(detail?.source ?? 'event_dispatch');
+    };
     window.addEventListener('cwk:open-waitlist', eventHandler);
     return () => window.removeEventListener('cwk:open-waitlist', eventHandler);
   }, [open]);
@@ -28,7 +43,10 @@ export default function WaitlistModal() {
   // Delegate clicks on any [data-open-waitlist] element anywhere in the DOM
   useEffect(() => {
     const clickHandler = (e: Event) => {
-      if ((e.target as HTMLElement).closest('[data-open-waitlist]')) open();
+      const trigger = (e.target as HTMLElement).closest('[data-open-waitlist]') as HTMLElement | null;
+      if (!trigger) return;
+      const source = trigger.dataset.source || trigger.getAttribute('data-open-waitlist') || 'unknown';
+      open(source);
     };
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
@@ -67,7 +85,7 @@ export default function WaitlistModal() {
           <p className="wl-sub">
             CWK. Agent+ is the operating system that manages your growth across Mind, Body, Soul, and Pocket. Join the waitlist to get early access when we launch.
           </p>
-          <WaitlistForm />
+          <WaitlistForm surface="modal" triggerSource={triggerSource} />
           <p className="wl-footnote">
             🔑 This grants you exclusive access to the House of CWK. world.
           </p>

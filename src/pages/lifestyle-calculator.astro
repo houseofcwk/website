@@ -332,7 +332,7 @@ const pageDescription =
               <span class="lc-path-label lc-path-a-label">PATH A</span>
               <div class="lc-cta-path-title">Tour CWK.<br>Online HQ</div>
               <p class="lc-cta-path-desc">See the full operating system. Community, frameworks, done-for-you infrastructure, and execution support built for founders who are ready to stop figuring it out alone. No pitch. Just a real look inside.</p>
-              <a class="lc-btn-path-a" href="https://calendly.com/cwkexperience/experience-tour" target="_blank" rel="noopener">Tour CWK HQ →</a>
+              <a class="lc-btn-path-a" id="lcPathABtn" href="https://calendly.com/cwkexperience/experience-tour" target="_blank" rel="noopener">Tour CWK HQ →</a>
             </div>
             <div class="lc-cta-path lc-cta-path-b">
               <span class="lc-path-label lc-path-b-label">PATH B / FOR NEXT TIME</span>
@@ -371,6 +371,16 @@ const pageDescription =
     type MineKey,
     type CalculatorState,
   } from '../data/lifestyleCalculator';
+  import { track, conversion, identify, emailHash } from '../lib/analytics';
+
+  function bucketCurrency(n: number): string {
+    if (!n || n < 5000) return '<5k';
+    if (n < 10000) return '5-10k';
+    if (n < 25000) return '10-25k';
+    if (n < 50000) return '25-50k';
+    return '50k+';
+  }
+  let stepEnteredAt = Date.now();
 
   // ── State ───────────────────────────────────────────────
   const STORAGE_KEY = 'cwk:lifestyle-calculator:v1';
@@ -506,6 +516,7 @@ const pageDescription =
     state.ideaType = '';
     renderSubOptions(key);
     saveState();
+    track('lc_category_selected', { category: key });
   }
 
   function renderSubOptions(key: CategoryKey): void {
@@ -529,10 +540,8 @@ const pageDescription =
         grid.querySelectorAll('.lc-sub-opt').forEach((el) => el.classList.remove('is-selected'));
         btn.classList.add('is-selected');
         state.ideaType = btn.dataset.sub ?? '';
-        if (state.ideaType === btn.dataset.sub) {
-          // re-mark from saved state
-        }
         saveState();
+        track('lc_subtype_selected', { category: state.ideaCategory, subtype: state.ideaType });
       });
       if (btn.dataset.sub === state.ideaType) btn.classList.add('is-selected');
     });
@@ -546,6 +555,11 @@ const pageDescription =
         btn.classList.add('is-selected');
         state.archetype = (btn.dataset.arch as ArchetypeKey) ?? '';
         saveState();
+        const archMeta = ARCHETYPES.find((a) => a.key === state.archetype);
+        track('lc_archetype_selected', {
+          archetype_key: state.archetype,
+          archetype_stage: archMeta?.stage ?? 0,
+        });
       });
     });
   }
@@ -558,6 +572,7 @@ const pageDescription =
         btn.classList.add('is-selected');
         state.speed = (btn.dataset.speed as SpeedKey) ?? '';
         saveState();
+        track('lc_speed_selected', { speed: state.speed });
       });
     });
   }
@@ -1059,17 +1074,29 @@ const pageDescription =
         msg.textContent = 'Sent. Check your inbox in the next minute.';
         msg.dataset.tone = 'success';
         btn.textContent = 'Sent ✓';
+        const hash = await emailHash(email);
+        if (hash) identify(hash, { source: 'lifestyle_calculator' });
+        conversion('lc_email_submitted', {
+          category: state.ideaCategory,
+          archetype_key: state.archetype,
+          speed: state.speed,
+          monthly_goal_bucket: bucketCurrency(state.monthlyGoal),
+          mines_active: state.mines.length,
+          email_hash: hash,
+        });
       } else {
         msg.textContent = 'Something went wrong. Try again in a moment.';
         msg.dataset.tone = 'error';
         btn.disabled = false;
         btn.textContent = 'Send my map →';
+        track('lc_email_failed', { error_code: String(res.status) });
       }
     } catch {
       msg.textContent = 'Network error. Please try again.';
       msg.dataset.tone = 'error';
       btn.disabled = false;
       btn.textContent = 'Send my map →';
+      track('lc_email_failed', { error_code: 'network' });
     }
   }
 
@@ -1100,7 +1127,30 @@ const pageDescription =
   }
 
   // ── Wire it all up ─────────────────────────────────────
+  const stateExisted = (() => {
+    try { return Boolean(localStorage.getItem(STORAGE_KEY)); } catch { return false; }
+  })();
   loadState();
+  track('lc_started', {
+    resumed: stateExisted,
+    entry_step: currentStep,
+  });
+  if (typeof document !== 'undefined') {
+    const lcEmailCard = document.getElementById('lcEmailCard');
+    if (lcEmailCard && 'IntersectionObserver' in window) {
+      let fired = false;
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting && !fired) {
+            fired = true;
+            track('lc_email_form_viewed', {});
+            io.disconnect();
+          }
+        }
+      }, { threshold: 0.5 });
+      io.observe(lcEmailCard);
+    }
+  }
 
   document.querySelectorAll<HTMLButtonElement>('.lc-cat-tile').forEach((btn) => {
     btn.addEventListener('click', () => selectCat(btn.dataset.cat as CategoryKey, btn));
@@ -1110,10 +1160,48 @@ const pageDescription =
   wireSpeeds();
   wireMines();
 
+  const STEP_NAMES = ['category', 'archetype', 'prize', 'speed', 'bridges', 'mines'];
+
   document.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const step = parseInt(btn.dataset.next ?? '0', 10);
-      if (validateStep(step)) showStep(step + 1);
+      if (!validateStep(step)) return;
+      const props: Record<string, string | number | boolean> = {
+        step,
+        step_name: STEP_NAMES[step] ?? `step_${step}`,
+        time_on_step_ms: Date.now() - stepEnteredAt,
+      };
+      if (step === 2) {
+        props.monthly_goal_bucket = bucketCurrency(state.monthlyGoal);
+        props.offer_price_bucket = bucketCurrency(state.offerPrice);
+        props.hours_per_week = state.hoursWeek;
+        props.time_months = state.timeMonths;
+      }
+      if (step === 4) {
+        props.s2l_pct = state.s2l;
+        props.l2s_pct = state.l2s;
+        props.defaults_changed = state.s2l !== 1 || state.l2s !== 20;
+      }
+      if (step === 5) {
+        track('lc_mines_selected', {
+          mines_active: state.mines.length,
+          mine_keys: state.mines.slice(),
+          none_selected: state.mines.length === 0,
+        });
+        props.mines_active = state.mines.length;
+      }
+      track('lc_step_completed', props);
+      if (step + 1 === 6) {
+        track('lc_map_revealed', {
+          category: state.ideaCategory,
+          archetype_key: state.archetype,
+          speed: state.speed,
+          monthly_goal_bucket: bucketCurrency(state.monthlyGoal),
+          mines_active: state.mines.length,
+        });
+      }
+      stepEnteredAt = Date.now();
+      showStep(step + 1);
     });
   });
 
@@ -1135,7 +1223,20 @@ const pageDescription =
     });
   });
 
-  document.getElementById('lcResetBtn')?.addEventListener('click', resetAll);
+  document.getElementById('lcResetBtn')?.addEventListener('click', () => {
+    track('lc_path_b_clicked', {
+      archetype_key: state.archetype,
+      category: state.ideaCategory,
+    });
+    resetAll();
+  });
+  document.getElementById('lcPathABtn')?.addEventListener('click', () => {
+    conversion('lc_path_a_clicked', {
+      archetype_key: state.archetype,
+      category: state.ideaCategory,
+      speed: state.speed,
+    });
+  });
   document.getElementById('lcEmailForm')?.addEventListener('submit', handleEmailSubmit);
 
   // Restore UI from saved state, then jump to the saved step

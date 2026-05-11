@@ -385,7 +385,11 @@ const QUIZ = [
 </Base>
 
 <script>
+  import { track as analyticsTrack, conversion } from '../../lib/analytics';
+
   type Track = 'identity' | 'systems' | 'presence';
+  let quizStartedFired = false;
+  let lastCartTotal = 0;
 
   // Mirror data from src/data/powerUps.ts so the tray can total without a fetch.
   const PRICE: Record<string, number> = {
@@ -488,19 +492,31 @@ const QUIZ = [
 
   stage.querySelectorAll<HTMLButtonElement>('[data-quiz-pick]').forEach((b) => {
     b.addEventListener('click', () => {
-      state.quiz.answers.push(b.dataset.quizPick as Track);
+      if (!quizStartedFired) {
+        quizStartedFired = true;
+        analyticsTrack('powerups_quiz_started', {});
+      }
+      const t = b.dataset.quizPick as Track;
+      state.quiz.answers.push(t);
       state.quiz.step++;
+      analyticsTrack('powerups_quiz_answered', { track: t, step: state.quiz.step });
       renderStep();
+      if (state.quiz.step >= steps.length - 1) {
+        analyticsTrack('powerups_quiz_completed', { recommended_track: pickWinner(state.quiz.answers) });
+      }
     });
   });
 
   stage.querySelector<HTMLButtonElement>('[data-quiz-restart]')!.addEventListener('click', () => {
     state.quiz = { step: 0, answers: [] };
+    quizStartedFired = false;
+    analyticsTrack('powerups_quiz_restarted', {});
     renderStep();
   });
 
   stage.querySelector<HTMLButtonElement>('[data-quiz-go]')!.addEventListener('click', (e) => {
     const target = (e.currentTarget as HTMLButtonElement).dataset.target as Track;
+    analyticsTrack('powerups_quiz_recommendation_clicked', { recommended_track: target });
     setTrack(target);
     document.getElementById('tracks')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
@@ -522,8 +538,13 @@ const QUIZ = [
     selectBtn.addEventListener('click', () => {
       const track = row.dataset.track as Track;
       if (state.bundles.has(track) || state.stack) return; // gated
-      if (state.selected.has(id)) state.selected.delete(id);
-      else state.selected.add(id);
+      if (state.selected.has(id)) {
+        state.selected.delete(id);
+        analyticsTrack('powerups_skill_removed', { skill_id: id, track });
+      } else {
+        state.selected.add(id);
+        analyticsTrack('powerups_skill_added', { skill_id: id, track });
+      }
       row.classList.toggle('is-selected', state.selected.has(id));
       renderTray();
     });
@@ -533,6 +554,7 @@ const QUIZ = [
   document.querySelectorAll<HTMLButtonElement>('[data-bundle-toggle]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const track = btn.dataset.bundleToggle as Track;
+      analyticsTrack('powerups_bundle_expanded', { bundle_id: track, track });
       if (state.bundles.has(track)) {
         state.bundles.delete(track);
       } else {
@@ -552,6 +574,7 @@ const QUIZ = [
 
   document.querySelector<HTMLButtonElement>('[data-stack-toggle]')!.addEventListener('click', () => {
     state.stack = !state.stack;
+    analyticsTrack('powerups_stack_toggled', { enabled: state.stack, cart_total_cents: lastCartTotal * 100 });
     if (state.stack) {
       state.bundles.clear();
       state.selected.clear();
@@ -602,7 +625,13 @@ const QUIZ = [
     cartDialog.close();
   }
 
-  cartBar.addEventListener('click', openCart);
+  cartBar.addEventListener('click', () => {
+    analyticsTrack('powerups_cart_opened', {
+      cart_total_cents: lastCartTotal * 100,
+      cart_size: state.selected.size + state.bundles.size + (state.stack ? 1 : 0),
+    });
+    openCart();
+  });
   cartClose.addEventListener('click', closeCart);
   // Click backdrop (clicks land on the dialog itself, not its inner content) to close.
   cartDialog.addEventListener('click', (e) => {
@@ -682,6 +711,7 @@ const QUIZ = [
     });
 
     const total = items.reduce((sum, it) => sum + it.price, 0);
+    lastCartTotal = total;
     trayTotal.textContent = fmt(total);
     barTotal.textContent = fmt(total);
 
@@ -702,6 +732,17 @@ const QUIZ = [
     if (state.selected.size) params.set('powerups', Array.from(state.selected).join(','));
     trayCheckout.href = `/contact?${params.toString()}`;
   }
+
+  trayCheckout.addEventListener('click', () => {
+    const skillIds = Array.from(state.selected);
+    conversion('powerups_checkout_clicked', {
+      cart_size: skillIds.length + state.bundles.size + (state.stack ? 1 : 0),
+      cart_total_cents: lastCartTotal * 100,
+      skill_ids: skillIds,
+      bundles: Array.from(state.bundles),
+      stack: state.stack,
+    });
+  });
 
   trayClear.addEventListener('click', () => {
     state.selected.clear();

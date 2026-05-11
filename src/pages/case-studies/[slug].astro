@@ -152,6 +152,15 @@ const articleJsonLd = {
   <!-- ── Player X-Ray CTA ───────────────────────────────────── -->
   <PlayerXRaySection />
 
+  <!-- Analytics context (read by the bundled script below) -->
+  <span
+    id="csd-analytics-context"
+    hidden
+    data-case-slug={slug}
+    data-case-client={cs.client}
+    data-case-category={cs.category}
+  ></span>
+
   <!-- ── Image lightbox ─────────────────────────────────────── -->
   <dialog id="csd-lightbox" class="csd-lightbox" aria-label="Image viewer">
     <button type="button" class="csd-lightbox-close" aria-label="Close image">
@@ -166,6 +175,55 @@ const articleJsonLd = {
   </dialog>
 
   <script>
+    import { track } from '../../lib/analytics';
+
+    const ctx = document.getElementById('csd-analytics-context') as HTMLElement | null;
+    const caseSlug = ctx?.dataset.caseSlug ?? '';
+    const caseClient = ctx?.dataset.caseClient ?? '';
+    const caseCategory = ctx?.dataset.caseCategory ?? '';
+
+    track('case_study_viewed', {
+      case_slug: caseSlug,
+      case_client: caseClient,
+      case_category: caseCategory,
+    });
+
+    // YouTube embed play tracking. The yt() helper emits iframes with src
+    // pointing at youtube.com/embed/<id>. We rewrite the src to add enablejsapi=1
+    // and listen for postMessage 'onStateChange' events to fire video_played once.
+    (() => {
+      const iframes = document.querySelectorAll<HTMLIFrameElement>('iframe[src*="youtube.com/embed/"]');
+      if (iframes.length === 0) return;
+      const playedIds = new Set<string>();
+      iframes.forEach((iframe) => {
+        const sep = iframe.src.includes('?') ? '&' : '?';
+        if (!iframe.src.includes('enablejsapi=1')) iframe.src += `${sep}enablejsapi=1`;
+      });
+      window.addEventListener('message', (event) => {
+        if (typeof event.data !== 'string') return;
+        try {
+          const data = JSON.parse(event.data);
+          if (data.event !== 'onStateChange' || data.info !== 1) return;
+          for (const iframe of iframes) {
+            if (iframe.contentWindow === event.source) {
+              const m = iframe.src.match(/\/embed\/([A-Za-z0-9_-]+)/);
+              const videoId = m ? m[1] : '';
+              if (videoId && !playedIds.has(videoId)) {
+                playedIds.add(videoId);
+                track('case_study_video_played', {
+                  case_slug: caseSlug,
+                  video_id: videoId,
+                  video_title: iframe.title || '',
+                });
+              }
+            }
+          }
+        } catch {
+          /* not a YouTube postMessage */
+        }
+      });
+    })();
+
     const dialog = document.getElementById('csd-lightbox') as HTMLDialogElement | null;
     if (dialog) {
       const fig = dialog.querySelector('figure') as HTMLElement;
@@ -174,6 +232,10 @@ const articleJsonLd = {
       const closeBtn = dialog.querySelector('.csd-lightbox-close') as HTMLButtonElement;
 
       const open = (img: HTMLImageElement) => {
+        track('case_study_image_lightbox_opened', {
+          case_slug: caseSlug,
+          image_src: img.currentSrc || img.src,
+        });
         dialogImg.src = img.currentSrc || img.src;
         dialogImg.alt = img.alt || '';
         const sourceFig = img.closest('figure');

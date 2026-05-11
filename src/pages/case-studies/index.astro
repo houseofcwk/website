@@ -107,6 +107,9 @@ const pageDescription = 'Step into the worlds built by CWK. Real brands. Immersi
             href={`/case-studies/${c.slug}`}
             class="cs-card reveal-card"
             style={`--reveal-i:${i}`}
+            data-track-event="case_study_index_card_clicked"
+            data-evt-case-slug={c.slug}
+            data-evt-position={String(i)}
           >
             <span class="cs-card-eyebrow">{c.category}</span>
             <h2 class="cs-card-title">{c.client}</h2>
