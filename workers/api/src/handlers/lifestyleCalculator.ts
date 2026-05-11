@@ -179,9 +179,9 @@ function buildUserEmail(summary: ResultSummary): string {
             : ''
         }
 
-        <p style="margin:0 0 18px;font-size:13px;color:#A8A29E;line-height:1.7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Want the full map with timeline, tools, skills, and phase roadmap? It is waiting on the calculator. We saved your progress.</p>
+        <p style="margin:0 0 18px;font-size:13px;color:#A8A29E;line-height:1.7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Ready to see the operating system behind these numbers? Take a free tour of CWK. HQ and meet the team that helps people execute on maps like this.</p>
 
-        <a href="https://cwkexperience.com/lifestyle-calculator" style="display:inline-block;background:linear-gradient(90deg,#00E5FF,#7B61FF);color:#07090F;font-size:14px;font-weight:700;text-decoration:none;padding:13px 26px;border-radius:8px;letter-spacing:0.2px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Open my full map &rarr;</a>
+        <a href="https://calendly.com/cwkexperience/experience-tour" style="display:inline-block;background:linear-gradient(90deg,#00E5FF,#7B61FF);color:#07090F;font-size:14px;font-weight:700;text-decoration:none;padding:13px 26px;border-radius:8px;letter-spacing:0.2px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">Tour CWK. HQ (Online) &rarr;</a>
 
       </td></tr>
 
@@ -218,7 +218,7 @@ function buildUserText(summary: ResultSummary): string {
       ? `${summary.minesActive} active mind ${summary.minesActive === 1 ? 'mine' : 'mines'} flagged. Address the inner work first.`
       : '',
     '',
-    'Open my full map: https://cwkexperience.com/lifestyle-calculator',
+    'Tour CWK. HQ (Online): https://calendly.com/cwkexperience/experience-tour',
     '',
     '----',
     'Build. Learn. Earn. Play.',

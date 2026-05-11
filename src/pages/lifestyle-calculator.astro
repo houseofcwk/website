@@ -83,11 +83,8 @@ const pageDescription =
                   ))}
                 </div>
               </div>
+              <div class="lc-arch-tagline">{a.cost}</div>
               <div class="lc-arch-feeling">{a.feeling}</div>
-              <div class="lc-arch-cost-row">
-                <span class="lc-arch-cost-tag">THE COST</span>
-                <span class="lc-arch-cost-val">{a.cost}</span>
-              </div>
             </button>
           ))}
         </div>
@@ -103,6 +100,7 @@ const pageDescription =
         <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 03 / THE PRIZE</span>
         <h1 class="lc-h1">Where do you<br><span class="lc-grad">want to be?</span></h1>
         <p class="lc-sub">Let's calculate what it would take to bring this to life.</p>
+        <p class="lc-helper">If you don't know, just make one up. This is just for fun.</p>
         <p class="lc-section-tag">The real numbers to get to where you want to be.</p>
 
         <div class="lc-field-grid">
@@ -139,11 +137,11 @@ const pageDescription =
         </div>
       </div>
 
-      <!-- ── SECTION 04: GAME SPEED ────────────────────────── -->
+      <!-- ── SECTION 04: PROGRESS SPEED ────────────────────── -->
       <div id="lc-step-3" class="lc-step">
-        <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 04 / GAME SPEED</span>
+        <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 04 / PROGRESS SPEED</span>
         <h1 class="lc-h1">How fast are<br><span class="lc-grad">you willing to move?</span></h1>
-        <p class="lc-sub">Every speed is real. Every speed has a real cost. Pick the one you will actually show up at, not the one that sounds like the right answer.</p>
+        <p class="lc-sub">Pick the one you will actually show up at. There are no wrong answers.</p>
 
         <div class="lc-speed-grid">
           {SPEEDS.map((s) => (
@@ -177,7 +175,8 @@ const pageDescription =
       <div id="lc-step-4" class="lc-step">
         <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 05 / THE TWO BRIDGES</span>
         <h1 class="lc-h1">Here's what<br><span class="lc-grad">the numbers say.</span></h1>
-        <p class="lc-sub">Two bridges sit between your idea and your income. Bridge one: strangers to interested leads. Bridge two: leads to buyers. Defaults below assume 1% and 20%, honest baselines for someone with no existing audience. Adjust if you have real data.</p>
+        <p class="lc-sub">There are 2 bridges people need to cross in order to make money. Bridge 1: from strangers to interested. Bridge 2: from interested to buyer. These numbers show the path to your destination.</p>
+        <p class="lc-helper">Defaults below assume 1% and 20%, honest baselines for someone with no existing audience. Adjust if you have real data.</p>
 
         <div class="lc-funnel-top" id="lcFunnelTop"></div>
         <div class="lc-funnel-arrows" id="lcFunnelArrows"></div>
@@ -186,7 +185,10 @@ const pageDescription =
         <hr class="lc-divider" />
 
         <div class="lc-adjust-block">
-          <div class="lc-adjust-title">Adjust for your real conversion rates</div>
+          <div class="lc-adjust-title">
+            <span class="lc-adjust-optional">Optional</span>
+            Adjust for your real conversion rates
+          </div>
           <div class="lc-adjust-grid">
             <div class="lc-adjust-field">
               <label for="lc-s2l-rate">Stranger → Lead (%)</label>
@@ -255,7 +257,7 @@ const pageDescription =
           <div class="lc-player-stats" id="lcPlayerStats"></div>
         </div>
 
-        <!-- Where you are now / Where you want to be — side-by-side -->
+        <!-- Where you are now / Where you want to be, side-by-side -->
         <div class="lc-now-goal lc-reveal">
           <div class="lc-now-goal-col lc-now-goal-now">
             <span class="lc-section-label">WHERE YOU ARE RIGHT NOW</span>
@@ -331,9 +333,9 @@ const pageDescription =
           <div class="lc-cta-paths">
             <div class="lc-cta-path lc-cta-path-a">
               <span class="lc-path-label lc-path-a-label">PATH A</span>
-              <div class="lc-cta-path-title">Tour CWK.<br>Online HQ</div>
-              <p class="lc-cta-path-desc">See the full operating system. Community, frameworks, done-for-you infrastructure, and execution support built for founders who are ready to stop figuring it out alone. No pitch. Just a real look inside.</p>
-              <a class="lc-btn-path-a" id="lcPathABtn" href="https://calendly.com/cwkexperience/experience-tour" target="_blank" rel="noopener">Tour CWK HQ →</a>
+              <div class="lc-cta-path-title">Tour CWK.<br>HQ (Online)</div>
+              <p class="lc-cta-path-desc">See the full world we've built to build, learn, earn, and play.</p>
+              <a class="lc-btn-path-a" id="lcPathABtn" href="https://calendly.com/cwkexperience/experience-tour" target="_blank" rel="noopener">Tour CWK. HQ →</a>
             </div>
             <div class="lc-cta-path lc-cta-path-b">
               <span class="lc-path-label lc-path-b-label">PATH B / FOR NEXT TIME</span>
@@ -1347,6 +1349,14 @@ const pageDescription =
     margin: 0 0 28px;
     max-width: 600px;
   }
+  .lc-helper {
+    font-size: 13.5px;
+    color: var(--dim);
+    line-height: 1.6;
+    font-style: italic;
+    margin: -18px 0 24px;
+    max-width: 600px;
+  }
   .lc-section-tag {
     font-size: 11px; font-weight: 700; letter-spacing: 0.25em;
     text-transform: uppercase; color: var(--dim);
@@ -1470,30 +1480,16 @@ const pageDescription =
     background: var(--gb2);
   }
   .lc-arch-dot.is-active { background: var(--cyan); box-shadow: 0 0 6px rgba(0, 229, 255, 0.5); }
-  .lc-arch-feeling { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
-  .lc-arch-cost-row {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 10px 12px;
-    background: rgba(251, 48, 121, 0.05);
-    border: 1px solid rgba(251, 48, 121, 0.18);
-    border-left: 2px solid var(--pink);
-    border-radius: 8px;
+  .lc-arch-tagline {
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--cyan);
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+    margin: 6px 0 14px;
   }
-  .lc-arch-cost-tag {
-    flex-shrink: 0;
-    font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--pink);
-    background: rgba(251, 48, 121, 0.12);
-    border-radius: 4px;
-    padding: 3px 7px;
-    line-height: 1.2;
-    margin-top: 1px;
-  }
-  .lc-arch-cost-val {
-    font-size: 12.5px; font-weight: 500;
-    color: rgba(238, 240, 255, 0.78);
-    line-height: 1.55;
-  }
+  .lc-arch-feeling { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 0; }
   .lc-arch-check {
     position: absolute; top: 12px; right: 12px;
     width: 18px; height: 18px; background: var(--cyan); color: var(--bg);
@@ -1612,8 +1608,19 @@ const pageDescription =
 
   .lc-adjust-block { padding: 20px 22px; }
   .lc-adjust-title {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
     font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
     text-transform: uppercase; color: var(--dim); margin-bottom: 16px;
+  }
+  .lc-adjust-optional {
+    display: inline-block;
+    padding: 3px 8px;
+    background: rgba(0, 229, 255, 0.10);
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    border-radius: 4px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.22em;
+    color: var(--cyan);
+    line-height: 1;
   }
   .lc-adjust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .lc-adjust-field { display: flex; flex-direction: column; gap: 7px; }
