@@ -10,7 +10,6 @@ const SINGLETONS = [
   'productPage',
   'aboutPage',
   'journeyPage',
-  'brandMirrorPage',
   'sideQuestsPage',
 ] as const;
 
@@ -63,13 +62,6 @@ export default defineConfig({
                 S.document()
                   .schemaType('journeyPage')
                   .documentId('journeyPage'),
-              ),
-            S.listItem()
-              .title('Brand Mirror')
-              .child(
-                S.document()
-                  .schemaType('brandMirrorPage')
-                  .documentId('brandMirrorPage'),
               ),
             S.listItem()
               .title('Side Quests')

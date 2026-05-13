@@ -100,17 +100,6 @@ export const JOURNEY_QUERY = groq`
   }
 `;
 
-export const BRAND_MIRROR_QUERY = groq`
-  *[_type == "brandMirrorPage"][0]{
-    heroEyebrow,
-    heroHeadline,
-    heroSubtext,
-    body,
-    quizCta,
-    ${SEO_PROJECTION}
-  }
-`;
-
 export const SIDE_QUESTS_QUERY = groq`
   *[_type == "sideQuestsPage"][0]{
     heroEyebrow,

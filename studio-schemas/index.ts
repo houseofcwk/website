@@ -4,7 +4,6 @@ import { homePage } from './homePage';
 import { productPage } from './productPage';
 import { aboutPage } from './aboutPage';
 import { journeyPage } from './journeyPage';
-import { brandMirrorPage } from './brandMirrorPage';
 import { sideQuestsPage } from './sideQuestsPage';
 import { caseStudy } from './caseStudy';
 import { legalPage } from './legalPage';
@@ -26,7 +25,6 @@ export {
   productPage,
   aboutPage,
   journeyPage,
-  brandMirrorPage,
   sideQuestsPage,
   caseStudy,
   legalPage,
@@ -48,7 +46,6 @@ export const schemaTypes = [
   productPage,
   aboutPage,
   journeyPage,
-  brandMirrorPage,
   sideQuestsPage,
   caseStudy,
   legalPage,

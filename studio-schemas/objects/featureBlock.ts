@@ -8,10 +8,9 @@ export const featureBlock = defineType({
     defineField({
       name: 'id',
       title: 'Anchor ID',
-      type: 'slug',
+      type: 'string',
       description:
-        'Used as an anchor link and a stable reference. Generated from the headline.',
-      options: { source: 'headline', maxLength: 96 },
+        'Stable reference / anchor link. Short lowercase token (e.g. "dashboard").',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
