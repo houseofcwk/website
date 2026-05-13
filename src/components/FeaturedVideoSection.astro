@@ -4,6 +4,7 @@
 // custom thumbnail never renders — the iframe only mounts on activation.
 const videoId = 'S5t5Z9uobOc';
 const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
+const coverSrc = '/images/home/featured-video-cover.webp';
 ---
 
 <section class="fv-section">
@@ -27,6 +28,16 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modest
         data-fv-frame
         data-fv-src={videoSrc}
       >
+        <img
+          src={coverSrc}
+          alt=""
+          aria-hidden="true"
+          class="fv-cover"
+          loading="lazy"
+          decoding="async"
+          width="1280"
+          height="720"
+        />
         <button type="button" class="fv-play" aria-label="Play video">
           <svg class="fv-play-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M8 5.14v13.72a1 1 0 0 0 1.55.83l10.79-6.86a1 1 0 0 0 0-1.66L9.55 4.31A1 1 0 0 0 8 5.14Z"/>
@@ -53,6 +64,10 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modest
       iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
       iframe.referrerPolicy = 'strict-origin-when-cross-origin';
       iframe.allowFullscreen = true;
+      // Sizing inline — Astro's scoped `.fv-frame iframe` rule won't match
+      // an element created at runtime (no data-astro-cid-* attribute).
+      iframe.style.cssText =
+        'position:absolute;inset:0;width:100%;height:100%;border:0;display:block;';
       frame.replaceChildren(iframe);
     }, { once: true });
   });
@@ -165,6 +180,17 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modest
     height: 100%;
     border: 0;
     display: block;
+  }
+
+  .fv-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+    pointer-events: none;
   }
 
   .fv-play {
