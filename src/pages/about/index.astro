@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PortableText from '../../components/PortableText.astro';
-import PlayerXRaySection from '../../components/PlayerXRaySection.astro';
+import ExperienceTourSection from '../../components/ExperienceTourSection.astro';
 import { sanity } from '../../lib/sanity';
 import { ABOUT_QUERY } from '../../lib/queries';
 import { seoBaseProps } from '../../lib/seoProps';
@@ -80,7 +80,7 @@ const pageOgType = s?.seo?.ogType ?? 'profile';
   )}
 
   <!-- ── Closing CTA ───────────────────────────────────────── -->
-  <PlayerXRaySection />
+  <ExperienceTourSection />
 </Base>
 
 <style>

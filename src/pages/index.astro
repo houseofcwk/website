@@ -9,7 +9,7 @@ import WorkMosaicSection from '../components/home/WorkMosaicSection.astro';
 import ProductPreviewSection from '../components/home/ProductPreviewSection.astro';
 import GoogleReviewsSection from '../components/home/GoogleReviewsSection.astro';
 import FeaturedVideoSection from '../components/FeaturedVideoSection.astro';
-import PlayerXRaySection from '../components/PlayerXRaySection.astro';
+import ExperienceTourSection from '../components/ExperienceTourSection.astro';
 import { sanity, getSiteSettings } from '../lib/sanity';
 import { HOME_QUERY } from '../lib/queries';
 import { FAQS_FALLBACK } from '../lib/seoFallbacks';
@@ -52,7 +52,7 @@ const heroEyebrow     = s?.heroEyebrow      ?? 'Welcome to the Jungle';
 const heroHeadline    = s?.heroHeadline     ?? 'Guiding founders through the jungle from $0 to $1M.';
 const heroSubheadline = s?.heroSubheadline  ?? 'CWK. installs the system that makes good months repeat.';
 const heroCtaLabel    = s?.heroCta?.label   ?? 'See where you are in the jungle';
-const heroCtaHref     = s?.heroCta?.href    ?? '#player-xray';
+const heroCtaHref     = s?.heroCta?.href    ?? '/assessment';
 const pillars = (Array.isArray(s?.pillars) && s.pillars.length > 0) ? s.pillars : HARDCODED_PILLARS;
 const googleReviews = Array.isArray(s?.googleReviews) ? s.googleReviews : null;
 const googleReviewsAggregateRating = typeof s?.googleReviewsAggregateRating === 'number' ? s.googleReviewsAggregateRating : null;
@@ -90,5 +90,5 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
   />
   <ProductPreviewSection />
   <FeaturedVideoSection />
-  <PlayerXRaySection />
+  <ExperienceTourSection />
 </Base>

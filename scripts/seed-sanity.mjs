@@ -126,7 +126,7 @@ const HOME_PAGE = {
   heroEyebrow: 'Welcome to the Jungle',
   heroHeadline: 'Guiding founders through the jungle from $0 to $1M.',
   heroSubheadline: 'CWK. installs the system that makes good months repeat.',
-  heroCta: { label: 'See where you are in the jungle', href: '#player-xray' },
+  heroCta: { label: 'See where you are in the jungle', href: '/assessment' },
   pillars: [
     { _key: 'p-mind', _type: 'pillarBlock', key: 'mind', title: 'Mind', body: 'Strategic clarity, decision frameworks, mental performance, and clearing psychological blockers that stop growth.' },
     { _key: 'p-body', _type: 'pillarBlock', key: 'body', title: 'Body', body: 'The operational systems required for the body to be nurtured through access to nutrition and regular fitness habits.' },

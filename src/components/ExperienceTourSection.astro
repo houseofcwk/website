@@ -1,0 +1,146 @@
+---
+// Canonical Experience Tour CTA section. Replaces the Player X-Ray block
+// on Homepage, About, and Case Studies. Routes to the Calendly tour.
+const CALENDLY_URL = 'https://calendly.com/cwkexperience/experience-tour';
+---
+
+<section id="experience-tour" class="et-section">
+  <div class="et-inner">
+    <span class="et-eyebrow">Experience Tour</span>
+    <h2 class="et-headline">See the jungle. Before you enter it.</h2>
+    <p class="et-sub">
+      Book a free walkthrough with the CWK. team. See how we install systems,
+      AI, and people across your business before you commit.
+    </p>
+
+    <ul class="et-pills" aria-label="What you get">
+      <li class="et-pill"><span class="et-pill-dot" aria-hidden="true"></span>Free</li>
+      <li class="et-pill"><span class="et-pill-dot" aria-hidden="true"></span>45 minutes</li>
+      <li class="et-pill"><span class="et-pill-dot" aria-hidden="true"></span>No commitment</li>
+    </ul>
+
+    <a href={CALENDLY_URL} class="et-cta" target="_blank" rel="noopener">
+      Book a Free Experience Tour Today
+      <svg class="et-cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  .et-section {
+    padding: 96px 24px 96px;
+    text-align: center;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .et-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(700px 360px at 50% 0%, rgba(0, 229, 255, 0.06) 0%, transparent 60%),
+      radial-gradient(600px 320px at 50% 100%, rgba(123, 97, 255, 0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .et-inner {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .et-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid rgba(0, 229, 255, 0.22);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  .et-headline {
+    margin: 4px 0 0;
+    font-size: clamp(30px, 4.4vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text);
+  }
+
+  .et-sub {
+    margin: 0;
+    max-width: 580px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .et-pills {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .et-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  .et-pill-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+  }
+
+  .et-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%);
+    color: #07090F;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-primary);
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 6px 28px rgba(0, 229, 255, 0.28);
+    transition: box-shadow 0.3s ease, filter 0.2s ease, transform 0.1s ease;
+  }
+  .et-cta:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 10px 36px rgba(123, 97, 255, 0.36);
+  }
+  .et-cta:active { transform: scale(0.98); }
+  .et-cta-arrow { flex-shrink: 0; transition: transform 0.25s ease; }
+  .et-cta:hover .et-cta-arrow { transform: translateX(3px); }
+
+  @media (max-width: 640px) {
+    .et-section { padding: 64px 20px; }
+    .et-cta { width: 100%; max-width: 360px; justify-content: center; }
+  }
+</style>
