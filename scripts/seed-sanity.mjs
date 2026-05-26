@@ -124,6 +124,8 @@ const HOME_PAGE = {
   _id: 'homePage',
   _type: 'homePage',
   heroEyebrow: 'Welcome to the Jungle',
+  heroTopline: 'CWK. is like a',
+  wordFlipPhrases: ['partner', 'operator', 'architect', 'co-founder', 'infrastructure'],
   heroHeadline: 'Guiding founders through the jungle from $0 to $1M.',
   heroSubheadline: 'CWK. installs the system that makes good months repeat.',
   heroCta: { label: 'See where you are in the jungle', href: '/assessment' },

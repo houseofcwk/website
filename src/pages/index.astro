@@ -19,6 +19,9 @@ let s: any = null;
 try { s = await sanity.fetch(HOME_QUERY); } catch { s = null; }
 const siteSettings = await getSiteSettings();
 
+const HARDCODED_PHRASES = [
+  'partner', 'operator', 'architect', 'co-founder', 'infrastructure',
+];
 const HARDCODED_PILLARS = [
   { key: 'mind',   title: 'Mind',   body: 'Strategic clarity, decision frameworks, mental performance, and clearing psychological blockers that stop growth.' },
   { key: 'body',   title: 'Body',   body: 'The operational systems required for the body to be nurtured through access to nutrition and regular fitness habits.' },
@@ -49,6 +52,9 @@ const faqJsonLd = {
   })),
 };
 const heroEyebrow     = s?.heroEyebrow      ?? 'Welcome to the Jungle';
+const heroTopline     = s?.heroTopline      ?? 'CWK. is like a';
+const wordPhrases: string[] = (Array.isArray(s?.wordFlipPhrases) && s.wordFlipPhrases.length > 0)
+  ? s.wordFlipPhrases : HARDCODED_PHRASES;
 const heroHeadline    = s?.heroHeadline     ?? 'Guiding founders through the jungle from $0 to $1M.';
 const heroSubheadline = s?.heroSubheadline  ?? 'CWK. installs the system that makes good months repeat.';
 const heroCtaLabel    = s?.heroCta?.label   ?? 'See where you are in the jungle';
@@ -72,6 +78,8 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
 >
   <HeroSection
     eyebrow={heroEyebrow}
+    topline={heroTopline}
+    phrases={wordPhrases}
     headline={heroHeadline}
     subheadline={heroSubheadline}
     ctaLabel={heroCtaLabel}

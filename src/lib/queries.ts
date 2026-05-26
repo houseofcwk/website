@@ -52,6 +52,8 @@ export const SITE_SETTINGS_QUERY = groq`
 export const HOME_QUERY = groq`
   *[_type == "homePage"][0]{
     heroEyebrow,
+    heroTopline,
+    wordFlipPhrases,
     heroHeadline,
     heroSubheadline,
     heroSubtext,

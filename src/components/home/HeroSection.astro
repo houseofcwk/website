@@ -3,6 +3,8 @@ import PortableText from '../PortableText.astro';
 
 interface Props {
   eyebrow: string;
+  topline: string;
+  phrases: string[];
   headline: string;
   subheadline?: string;
   ctaLabel: string;
@@ -12,12 +14,16 @@ interface Props {
 
 const {
   eyebrow,
+  topline,
+  phrases,
   headline,
   subheadline,
   ctaLabel,
   ctaHref = '/assessment',
   subtext,
 } = Astro.props;
+
+const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
 ---
 
 <section class="hero">
@@ -105,15 +111,32 @@ const {
   <!-- Hero content -->
   <div class="hero-inner">
     <span class="hero-eyebrow fade-up">{eyebrow}</span>
+
+    <!-- Top headline: static topline + flip-word -->
     <h1 class="hero-headline fade-up fade-up-delay-1">
-      <span class="hl-line hl-white">{headline}</span>
-      {subheadline && (
-        <span class="hl-line hl-cyan hl-sub">{subheadline}</span>
+      <span class="hl-line hl-white">{topline}</span>
+      {flipPhrases.length > 0 && (
+        <span class="hl-line hl-cyan word-flip-wrap" aria-live="polite" aria-atomic="true">
+          <span class="word-flip-track" id="word-flip-track">
+            {flipPhrases.map((phrase, i) => (
+              <span class="word-flip-item" aria-hidden={i !== 0}>{phrase}</span>
+            ))}
+            <!-- duplicate of first item — enables seamless infinite loop -->
+            <span class="word-flip-item word-flip-sentinel" aria-hidden="true">{flipPhrases[0]}</span>
+          </span>
+        </span>
       )}
     </h1>
+
+    <!-- Lower block: title + subtitle (new jungle copy) -->
+    <h2 class="hero-title fade-up fade-up-delay-2">{headline}</h2>
+    {subheadline && (
+      <p class="hero-subtitle fade-up fade-up-delay-2">{subheadline}</p>
+    )}
     {subtext && (
       <div class="hero-sub fade-up fade-up-delay-2 pt-hero-sub"><PortableText value={subtext} /></div>
     )}
+
     <div class="hero-ctas fade-up fade-up-delay-3">
       <a href={ctaHref} class="btn-hero-primary">
         {ctaLabel}
@@ -373,14 +396,57 @@ const {
   .hl-line  { display: block; }
   .hl-white { color: var(--text); }
   .hl-cyan  { color: #00E5FF; }
-  .hl-sub {
-    margin-top: 0.18em;
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+
+  /* ── Word-flip slot machine ────────────────────────── */
+  .word-flip-wrap {
+    display: inline-block;
+    overflow: hidden;
+    height: 1.2em;
+    clip-path: inset(0 0 0 0);
+    vertical-align: bottom;
+    position: relative;
+    padding: 0.05em 0;
+    margin: 0.06em 0;
+  }
+  .word-flip-track {
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+  }
+  .word-flip-item {
+    display: block;
+    line-height: 1.2em;
+    height: 1.2em;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .word-flip-track.is-animating {
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .word-flip-track.no-transition {
+    transition: none;
   }
 
-  /* Subtext */
+  /* Lower block — secondary title + subtitle */
+  .hero-title {
+    margin: 36px 0 12px;
+    max-width: 760px;
+    font-size: clamp(22px, 2.6vw, 30px);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--text);
+  }
+  .hero-subtitle {
+    margin: 0 0 32px;
+    max-width: 640px;
+    font-size: clamp(15px, 1.6vw, 18px);
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  /* Optional rich-text subtext (Sanity-driven) */
   .hero-sub {
     max-width: 640px;
     margin: 0 0 36px;
@@ -441,6 +507,46 @@ const {
     .btn-hero-primary { width: 100%; max-width: 360px; justify-content: center; }
   }
 </style>
+
+<script>
+  // Word-flip slot machine — cycles the cyan word in the top headline.
+  (() => {
+    const INTERVAL = 2800; // ms between flips
+    const track = document.getElementById('word-flip-track') as HTMLElement | null;
+    if (!track) return;
+
+    const allItems = Array.from(track.querySelectorAll<HTMLElement>('.word-flip-item'));
+    const real  = allItems.filter(el => !el.classList.contains('word-flip-sentinel'));
+    const total = real.length;
+    if (total < 2) return;
+
+    let current = 0;
+    track.style.transform = 'translateY(0)';
+
+    function advance() {
+      const visualNext = current + 1;
+      track!.classList.add('is-animating');
+      track!.style.transform = `translateY(-${visualNext * 1.2}em)`;
+      real[current % total].setAttribute('aria-hidden', 'true');
+      real[visualNext % total].setAttribute('aria-hidden', 'false');
+
+      if (visualNext === total) {
+        track!.addEventListener('transitionend', () => {
+          track!.classList.remove('is-animating');
+          track!.classList.add('no-transition');
+          track!.style.transform = 'translateY(0)';
+          void (track!.offsetHeight);
+          track!.classList.remove('no-transition');
+          current = 0;
+        }, { once: true });
+      } else {
+        current = visualNext;
+      }
+    }
+
+    setTimeout(() => { setInterval(advance, INTERVAL); }, INTERVAL);
+  })();
+</script>
 
 <script>
   // Lazy-load the abstract Lottie in the hero background.
