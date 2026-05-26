@@ -17,24 +17,20 @@ export const homePage = defineType({
       name: 'heroHeadline',
       title: 'Hero Headline',
       type: 'string',
-      description: 'Main hero headline. Supports the word-flip phrase slot.',
+      description: 'Main hero headline (line 1).',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'wordFlipPhrases',
-      title: 'Word-Flip Phrases',
-      type: 'array',
-      description:
-        'Rotating phrases used inside the hero headline (e.g. "sports agent", "brand architect").',
-      of: [{ type: 'string' }],
-      validation: (Rule) =>
-        Rule.required().min(2).error('Add at least two phrases to rotate.'),
+      name: 'heroSubheadline',
+      title: 'Hero Subheadline',
+      type: 'string',
+      description: 'Second headline line (rendered in cyan beneath the headline).',
     }),
     defineField({
       name: 'heroSubtext',
       title: 'Hero Subtext',
       type: 'blockContent',
-      description: 'Rich-text paragraph under the headline.',
+      description: 'Optional rich-text paragraph under the headline.',
     }),
     defineField({
       name: 'heroCta',

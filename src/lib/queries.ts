@@ -53,7 +53,7 @@ export const HOME_QUERY = groq`
   *[_type == "homePage"][0]{
     heroEyebrow,
     heroHeadline,
-    wordFlipPhrases,
+    heroSubheadline,
     heroSubtext,
     heroCta,
     pillars[]{ key, title, body },

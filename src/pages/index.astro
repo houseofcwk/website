@@ -19,9 +19,6 @@ let s: any = null;
 try { s = await sanity.fetch(HOME_QUERY); } catch { s = null; }
 const siteSettings = await getSiteSettings();
 
-const HARDCODED_PHRASES = [
-  'partner', 'operator', 'architect', 'co-founder', 'infrastructure',
-];
 const HARDCODED_PILLARS = [
   { key: 'mind',   title: 'Mind',   body: 'Strategic clarity, decision frameworks, mental performance, and clearing psychological blockers that stop growth.' },
   { key: 'body',   title: 'Body',   body: 'The operational systems required for the body to be nurtured through access to nutrition and regular fitness habits.' },
@@ -51,11 +48,11 @@ const faqJsonLd = {
     acceptedAnswer: { '@type': 'Answer', text: f.answer },
   })),
 };
-const heroEyebrow     = s?.heroEyebrow      ?? 'Personal Leverage OS';
-const heroHeadline    = s?.heroHeadline     ?? 'CWK. is like a';
-const wordPhrases: string[] = (Array.isArray(s?.wordFlipPhrases) && s.wordFlipPhrases.length > 0)
-  ? s.wordFlipPhrases : HARDCODED_PHRASES;
-const heroCtaLabel    = s?.heroCta?.label   ?? 'Join Waitlist';
+const heroEyebrow     = s?.heroEyebrow      ?? 'Welcome to the Jungle';
+const heroHeadline    = s?.heroHeadline     ?? 'Guiding founders through the jungle from $0 to $1M.';
+const heroSubheadline = s?.heroSubheadline  ?? 'CWK. installs the system that makes good months repeat.';
+const heroCtaLabel    = s?.heroCta?.label   ?? 'See where you are in the jungle';
+const heroCtaHref     = s?.heroCta?.href    ?? '#player-xray';
 const pillars = (Array.isArray(s?.pillars) && s.pillars.length > 0) ? s.pillars : HARDCODED_PILLARS;
 const googleReviews = Array.isArray(s?.googleReviews) ? s.googleReviews : null;
 const googleReviewsAggregateRating = typeof s?.googleReviewsAggregateRating === 'number' ? s.googleReviewsAggregateRating : null;
@@ -76,8 +73,10 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
   <HeroSection
     eyebrow={heroEyebrow}
     headline={heroHeadline}
-    phrases={wordPhrases}
+    subheadline={heroSubheadline}
     ctaLabel={heroCtaLabel}
+    ctaHref={heroCtaHref}
+    subtext={s?.heroSubtext}
   />
   <MissionSection />
   <WhatCwkDoesSection />

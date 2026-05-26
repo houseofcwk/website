@@ -4,12 +4,20 @@ import PortableText from '../PortableText.astro';
 interface Props {
   eyebrow: string;
   headline: string;
-  phrases: string[];
+  subheadline?: string;
   ctaLabel: string;
+  ctaHref?: string;
   subtext?: any;
 }
 
-const { eyebrow, headline, phrases, ctaLabel, subtext } = Astro.props;
+const {
+  eyebrow,
+  headline,
+  subheadline,
+  ctaLabel,
+  ctaHref = '#player-xray',
+  subtext,
+} = Astro.props;
 ---
 
 <section class="hero">
@@ -99,36 +107,16 @@ const { eyebrow, headline, phrases, ctaLabel, subtext } = Astro.props;
     <span class="hero-eyebrow fade-up">{eyebrow}</span>
     <h1 class="hero-headline fade-up fade-up-delay-1">
       <span class="hl-line hl-white">{headline}</span>
-      <span class="hl-line hl-cyan word-flip-wrap" aria-live="polite" aria-atomic="true">
-        <span class="word-flip-track" id="word-flip-track">
-          {phrases.map((phrase, i) => (
-            <span class="word-flip-item" aria-hidden={i !== 0}>{phrase}</span>
-          ))}
-          <!-- duplicate of first item — enables seamless infinite loop -->
-          <span class="word-flip-item word-flip-sentinel" aria-hidden="true">{phrases[0]}</span>
-        </span>
-      </span>
-      <span class="hl-line hl-white">for entrepreneurs.</span>
+      {subheadline && (
+        <span class="hl-line hl-cyan hl-sub">{subheadline}</span>
+      )}
     </h1>
-    {subtext ? (
+    {subtext && (
       <div class="hero-sub fade-up fade-up-delay-2 pt-hero-sub"><PortableText value={subtext} /></div>
-    ) : (
-      <div class="hero-sub fade-up fade-up-delay-2">
-        <p class="hero-sub-lead">
-          We rep your career, install the operations, and manage your growth.
-          <span class="hero-sub-lead-strong">All under one house.</span>
-        </p>
-        <p class="hero-sub-tag">
-          Everyone is building at a different level.
-          <span class="hero-sub-em">Find yours.</span>
-        </p>
-      </div>
     )}
     <div class="hero-ctas fade-up fade-up-delay-3">
-      <a href="/lifestyle-calculator" class="btn-hero-primary">
-        <span class="btn-emoji" aria-hidden="true">🗺️</span>
-        Lifestyle Calculator
-        <em class="btn-badge">Free · 3 min</em>
+      <a href={ctaHref} class="btn-hero-primary">
+        {ctaLabel}
         <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
         </svg>
@@ -385,37 +373,11 @@ const { eyebrow, headline, phrases, ctaLabel, subtext } = Astro.props;
   .hl-line  { display: block; }
   .hl-white { color: var(--text); }
   .hl-cyan  { color: #00E5FF; }
-
-  /* ── Word-flip slot machine ────────────────────────── */
-  .word-flip-wrap {
-    display: inline-block;
-    overflow: hidden;
-    height: 1.2em;
-    clip-path: inset(0 0 0 0);
-    vertical-align: bottom;
-    position: relative;
-    padding: 0.05em 0;
-    margin: 0.06em 0;
-  }
-  .word-flip-track {
-    display: flex;
-    flex-direction: column;
-    will-change: transform;
-  }
-  .word-flip-item {
-    display: block;
-    line-height: 1.2em;
-    height: 1.2em;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .word-flip-track.is-animating {
-    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .word-flip-track.no-transition {
-    transition: none;
+  .hl-sub {
+    margin-top: 0.18em;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   /* Subtext */
@@ -427,39 +389,9 @@ const { eyebrow, headline, phrases, ctaLabel, subtext } = Astro.props;
     gap: 14px;
     align-items: center;
     text-align: center;
-  }
-  .hero-sub-lead,
-  .hero-sub-tag {
-    margin: 0;
-    line-height: 1.5;
-  }
-  .hero-sub-lead {
     font-size: clamp(17px, 1.8vw, 20px);
     color: rgba(255, 255, 255, 0.86);
-    font-weight: 500;
-    letter-spacing: -0.005em;
-  }
-  .hero-sub-lead-strong {
-    color: var(--text);
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .hero-sub-tag {
-    font-size: clamp(16px, 1.6vw, 18px);
-    color: var(--muted);
-    padding-top: 4px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    width: 100%;
-    max-width: 520px;
-  }
-  .hero-sub-em {
-    font-weight: 700;
-    background: linear-gradient(90deg, #00E5FF, #7B61FF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.005em;
-    margin-left: 4px;
+    line-height: 1.5;
   }
 
   /* CTA area */
@@ -493,18 +425,6 @@ const { eyebrow, headline, phrases, ctaLabel, subtext } = Astro.props;
     box-shadow: 0 6px 32px rgba(0, 229, 255, 0.45);
   }
   .btn-hero-primary:active { transform: scale(0.98); }
-  .btn-emoji { font-size: 16px; line-height: 1; }
-  .btn-badge {
-    font-style: normal;
-    font-size: 10px;
-    font-weight: 800;
-    color: #07090F;
-    background: rgba(7, 9, 15, 0.18);
-    border-radius: 4px;
-    padding: 3px 7px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
   .btn-arrow { flex-shrink: 0; }
 
   /* Responsive */
@@ -521,50 +441,6 @@ const { eyebrow, headline, phrases, ctaLabel, subtext } = Astro.props;
     .btn-hero-primary { width: 100%; max-width: 360px; justify-content: center; }
   }
 </style>
-
-<script>
-  (() => {
-    const INTERVAL = 2800; // ms between flips
-
-    const track = document.getElementById('word-flip-track') as HTMLElement | null;
-    if (!track) return;
-
-    const allItems = Array.from(track.querySelectorAll<HTMLElement>('.word-flip-item'));
-    const real  = allItems.filter(el => !el.classList.contains('word-flip-sentinel'));
-    const total = real.length;
-    if (total < 2) return;
-
-    let current = 0;
-    track.style.transform = 'translateY(0)';
-
-    function advance() {
-      const visualNext = current + 1;
-
-      track!.classList.add('is-animating');
-      track!.style.transform = `translateY(-${visualNext * 1.2}em)`;
-
-      real[current % total].setAttribute('aria-hidden', 'true');
-      real[visualNext % total].setAttribute('aria-hidden', 'false');
-
-      if (visualNext === total) {
-        track!.addEventListener('transitionend', () => {
-          track!.classList.remove('is-animating');
-          track!.classList.add('no-transition');
-          track!.style.transform = 'translateY(0)';
-          void (track!.offsetHeight);
-          track!.classList.remove('no-transition');
-          current = 0;
-        }, { once: true });
-      } else {
-        current = visualNext;
-      }
-    }
-
-    setTimeout(() => {
-      setInterval(advance, INTERVAL);
-    }, INTERVAL);
-  })();
-</script>
 
 <script>
   // Lazy-load the abstract Lottie in the hero background.
