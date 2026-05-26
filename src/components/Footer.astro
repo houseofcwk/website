@@ -5,7 +5,15 @@
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="/" class="footer-logo">CWK.</a>
+        <a href="/" class="footer-logo" aria-label="CWK. — Home">
+          <img
+            src="/logos/logo-play-negative-CWK.svg"
+            alt="CWK."
+            width="220"
+            height="112"
+            loading="lazy"
+          />
+        </a>
         <p class="footer-tagline">Guiding founders through the jungle from $0 to $1M.</p>
       </div>
 
@@ -67,15 +75,16 @@
   }
 
   .footer-logo {
-    display: inline-block;
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text);
-    text-decoration: none;
-    letter-spacing: -0.03em;
-    margin-bottom: 12px;
+    display: block;
+    margin-bottom: 16px;
+    transition: opacity 0.2s ease;
   }
-  .footer-logo:hover { color: var(--cyan); }
+  .footer-logo:hover { opacity: 0.85; }
+  .footer-logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
 
   .footer-tagline {
     font-size: 13px;
