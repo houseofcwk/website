@@ -1,0 +1,367 @@
+---
+import Base from '../layouts/Base.astro';
+
+const pageTitle = 'CWK. Partner Program | Refer founders. Earn forever.';
+const pageDescription =
+  'Refer founders to CWK. and earn 10% lifetime commission on every payment for as long as they stay. No tiers, no leaderboard, no expiry.';
+
+const PARTNER_EMAIL = 'hello@cwkexperience.com';
+const PARTNER_MAILTO = `mailto:${PARTNER_EMAIL}?subject=Partner`;
+
+const features = [
+  {
+    title: "Two steps. That's it.",
+    body: 'Share this page with your contact. Ask them to mention your name when they reach out. We handle everything else.',
+    accent: 'cyan',
+  },
+  {
+    title: 'Your reputation stays intact.',
+    body: 'CWK. delivers 3x value minimum on every engagement. You\'re not sending people to be upsold. You\'re sending them to get their time, clarity, and leverage back.',
+    accent: 'purple',
+  },
+  {
+    title: "Paid when it's clean.",
+    body: 'Commission pays out once the client\'s balance for that period is cleared. Recurring clients mean recurring payouts automatically.',
+    accent: 'pink',
+  },
+];
+
+const notForYou = [
+  'You want to spam your network with cold pitches',
+  "You're looking for a get-rich-quick side hustle",
+  "You don't actually know founders who need help",
+];
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <section class="rp-page">
+
+    <!-- ── Hero ─────────────────────────────────────────────── -->
+    <header class="rp-hero">
+      <span class="rp-eyebrow">Partner Program</span>
+      <h1 class="rp-headline">
+        <span class="rp-headline-line">Refer founders.</span>
+        <span class="rp-headline-line rp-headline-line--accent">Earn forever.</span>
+      </h1>
+      <p class="rp-sub">
+        Know someone building something real who needs infrastructure underneath it?
+        Introduce them to CWK. If they become a client, you earn 10% on every payment
+        for as long as they stay.
+      </p>
+    </header>
+
+    <!-- ── Stat card ────────────────────────────────────────── -->
+    <div class="rp-stat-wrap">
+      <div class="rp-stat">
+        <div class="rp-stat-num">10%</div>
+        <div class="rp-stat-label">Lifetime Commission</div>
+        <p class="rp-stat-body">
+          Every payment. Every upgrade. Every month on retainer.<br />
+          No tiers. No leaderboard. No expiry.
+        </p>
+      </div>
+      <div class="rp-stat-pill">
+        <span>Example: $3,000/mo client</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+        <span>$300/mo to you</span>
+      </div>
+    </div>
+
+    <!-- ── Features (3 columns) ─────────────────────────────── -->
+    <div class="rp-features">
+      {features.map((f) => (
+        <article class={`rp-feature rp-feature--${f.accent}`}>
+          <h3 class="rp-feature-title">{f.title}</h3>
+          <p class="rp-feature-body">{f.body}</p>
+        </article>
+      ))}
+    </div>
+
+    <!-- ── Anti-fit list ────────────────────────────────────── -->
+    <div class="rp-anti">
+      <span class="rp-anti-label">This isn't for you if...</span>
+      <ul class="rp-anti-list">
+        {notForYou.map((item) => (
+          <li class="rp-anti-item">
+            <span class="rp-anti-x" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18M6 6l12 12"/>
+              </svg>
+            </span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- ── Ready to partner CTA ─────────────────────────────── -->
+    <div class="rp-cta-card">
+      <h2 class="rp-cta-title">Ready to partner?</h2>
+      <p class="rp-cta-body">
+        Email the word "Partner" and a guide will reach out to walk you through the program.
+      </p>
+      <a class="rp-cta-mail" href={PARTNER_MAILTO}>
+        <span class="rp-cta-mail-label">Email to partner:</span>
+        <span class="rp-cta-mail-addr">{PARTNER_EMAIL}</span>
+      </a>
+      <span class="rp-cta-foot">No wasting time.</span>
+    </div>
+
+    <!-- ── Footer line ──────────────────────────────────────── -->
+    <div class="rp-footline">
+      <a href="https://cwkexperience.com" class="rp-footline-domain">cwkexperience.com</a>
+      <span class="rp-footline-tag">Build. Learn. Earn. Play.</span>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .rp-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 96px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  /* ── Hero ───────────────────────────────────────────────── */
+  .rp-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .rp-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pink);
+  }
+  .rp-headline {
+    margin: 0;
+    font-size: clamp(48px, 7vw, 84px);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .rp-headline-line { display: block; }
+  .rp-headline-line--accent { color: var(--cyan); }
+  .rp-sub {
+    margin: 4px 0 0;
+    font-size: clamp(15px, 1.6vw, 17px);
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 720px;
+  }
+
+  /* ── Stat card ──────────────────────────────────────────── */
+  .rp-stat-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+  }
+  .rp-stat {
+    width: 100%;
+    padding: 44px 32px;
+    text-align: center;
+    background: rgba(0, 229, 255, 0.025);
+    border: 1px solid rgba(0, 229, 255, 0.32);
+    border-radius: 16px;
+  }
+  .rp-stat-num {
+    font-size: clamp(72px, 10vw, 120px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--cyan);
+  }
+  .rp-stat-label {
+    margin-top: 6px;
+    font-size: clamp(18px, 2.2vw, 24px);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.005em;
+  }
+  .rp-stat-body {
+    margin: 14px auto 0;
+    max-width: 460px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .rp-stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(0, 229, 255, 0.06);
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    border-radius: 100px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--cyan);
+  }
+  .rp-stat-pill svg { flex-shrink: 0; }
+
+  /* ── Features ───────────────────────────────────────────── */
+  .rp-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .rp-feature {
+    padding: 22px 20px;
+    background: var(--glass);
+    border: 1px solid var(--gb);
+    border-radius: 12px;
+    border-left-width: 3px;
+    position: relative;
+  }
+  .rp-feature--cyan   { border-left-color: var(--cyan); }
+  .rp-feature--purple { border-left-color: var(--purple); }
+  .rp-feature--pink   { border-left-color: var(--pink); }
+  .rp-feature-title {
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.005em;
+  }
+  .rp-feature-body {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  /* ── Anti-fit list ──────────────────────────────────────── */
+  .rp-anti {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .rp-anti-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .rp-anti-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .rp-anti-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--gb);
+    border-radius: 10px;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+  .rp-anti-x {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: rgba(251, 48, 121, 0.12);
+    color: var(--pink);
+  }
+
+  /* ── CTA card ───────────────────────────────────────────── */
+  .rp-cta-card {
+    padding: 36px 32px;
+    background: rgba(0, 229, 255, 0.025);
+    border: 1px solid rgba(0, 229, 255, 0.32);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .rp-cta-title {
+    margin: 0;
+    font-size: clamp(22px, 2.6vw, 28px);
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.015em;
+  }
+  .rp-cta-body {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .rp-cta-mail {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    color: var(--muted);
+    transition: opacity 0.2s ease;
+  }
+  .rp-cta-mail:hover { opacity: 0.85; }
+  .rp-cta-mail-addr {
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: -0.005em;
+  }
+  .rp-cta-foot {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--dim);
+  }
+
+  /* ── Footer line ────────────────────────────────────────── */
+  .rp-footline {
+    margin-top: 16px;
+    padding-top: 28px;
+    border-top: 1px solid var(--gb);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+  .rp-footline-domain {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: -0.005em;
+  }
+  .rp-footline-domain:hover { color: var(--text); }
+  .rp-footline-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* ── Responsive ─────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .rp-page { padding: 64px 20px 56px; gap: 40px; }
+    .rp-features { grid-template-columns: 1fr; }
+    .rp-stat { padding: 32px 22px; }
+    .rp-cta-card { padding: 28px 22px; }
+  }
+</style>
