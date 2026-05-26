@@ -4,8 +4,8 @@ const levels = [
     n: '01',
     slug: 'sandbox',
     title: 'CWK. Sandbox',
-    body: "You're figuring out the game. We create the space to test, discover, and find your lane without burning everything down on a whim.",
-    statusLabel: 'Coming Soon',
+    body: "You are just entering the jungle. We build the space for you to test, find your footing, and commit to one direction without burning everything down.",
+    statusLabel: 'COMING SOON',
     cta: { kind: 'waitlist', label: 'Join the Waitlist' },
     state: 'soon',
   },
@@ -13,19 +13,19 @@ const levels = [
     n: '02',
     slug: 'power-ups',
     title: 'CWK. Power Ups',
-    body: "You're in the game but it's chaos. We install the pieces you're missing, one power up at a time or all at once.",
-    statusLabel: 'Modular',
-    cta: { kind: 'link', href: '/power-ups', label: 'See the Power Ups' },
-    state: 'live',
+    body: "You are in the jungle but it's chaos. We install the pieces your business is missing. One power up at a time or all at once.",
+    statusLabel: 'ACTIVATE NOW',
+    cta: { kind: 'link', href: '/power-ups', label: 'Choose your Power Up' },
+    state: 'now',
   },
   {
     n: '03',
     slug: 'command-center',
     title: 'CWK. Command Center',
-    body: "You've built it. Now you need it to run without you. Humans + Kaia + PLOS. The full squad layer.",
-    statusLabel: 'Waitlist',
+    body: "You built it. Now it needs to run without you. We bring in the full squad. Real humans, an AI built for your brand, and a complete operating system built for leverage.",
+    statusLabel: 'WAITLIST',
     cta: { kind: 'waitlist', label: 'Join the Waitlist' },
-    state: 'vip',
+    state: 'waitlist',
   },
 ];
 ---
@@ -35,11 +35,11 @@ const levels = [
     <header class="levels-header">
       <span class="levels-eyebrow reveal-up">
         <span class="levels-eyebrow-dot"></span>
-        ACCESS TIERS
+        3 ENVIRONMENTS
       </span>
       <h2 id="levels-heading" class="levels-title reveal-up reveal-delay-1">The 3 Levels</h2>
       <p class="levels-sub reveal-up reveal-delay-2">
-        Three ways to enter the CWK. ecosystem. Pick the level that matches where you are right now.
+        Pick the level that matches where you are in the jungle right now.
       </p>
     </header>
 
@@ -62,12 +62,12 @@ const levels = [
                 <path d="M3 8 12 13l9-5"/><path d="M12 22V13"/>
               </svg>
             )}
-            {lvl.state === 'live' && (
+            {lvl.state === 'now' && (
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
               </svg>
             )}
-            {lvl.state === 'vip' && (
+            {lvl.state === 'waitlist' && (
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
               </svg>
@@ -212,11 +212,11 @@ const levels = [
   .level-card--soon::before {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
   }
-  .level-card--live::before {
-    background: linear-gradient(90deg, transparent, rgba(0,229,255,0.6), transparent);
+  .level-card--now::before {
+    background: linear-gradient(90deg, transparent, rgba(34,197,94,0.6), transparent);
   }
-  .level-card--vip::before {
-    background: linear-gradient(90deg, transparent, rgba(0,229,255,0.6), rgba(123,97,255,0.6), transparent);
+  .level-card--waitlist::before {
+    background: linear-gradient(90deg, transparent, rgba(255,79,94,0.55), transparent);
   }
 
   /* "Soon" cards read slightly muted to convey gated/locked */
@@ -225,13 +225,13 @@ const levels = [
   }
   .level-card--soon .level-icon { color: var(--muted); }
 
-  .level-card--live .level-icon { color: var(--cyan); }
-  .level-card--vip .level-icon  { color: var(--cyan); }
+  .level-card--now .level-icon       { color: #22C55E; }
+  .level-card--waitlist .level-icon  { color: #FF4F5E; }
 
-  /* "VIP" / Command Center is the headline tier — slightly stronger ambient */
-  .level-card--vip {
-    background: linear-gradient(180deg, rgba(0,229,255,0.04) 0%, rgba(123,97,255,0.05) 100%);
-    border-color: rgba(0,229,255,0.22);
+  /* Power Ups is the actionable tier — ambient green wash */
+  .level-card--now {
+    background: linear-gradient(180deg, rgba(34,197,94,0.04) 0%, rgba(34,197,94,0.06) 100%);
+    border-color: rgba(34,197,94,0.22);
   }
 
   @media (hover: hover) {
@@ -239,8 +239,8 @@ const levels = [
       transform: translateY(-6px);
       box-shadow: 0 24px 60px rgba(0,0,0,0.45);
     }
-    .level-card--live:hover { border-color: rgba(0,229,255,0.4); }
-    .level-card--vip:hover  { border-color: rgba(123,97,255,0.45); }
+    .level-card--now:hover       { border-color: rgba(34,197,94,0.4); }
+    .level-card--waitlist:hover  { border-color: rgba(255,79,94,0.4); }
   }
 
   /* ── Card meta row (number + status) ─────────────────── */
@@ -259,7 +259,8 @@ const levels = [
     color: var(--muted);
     opacity: 0.7;
   }
-  .level-card--vip .level-num { color: var(--cyan); opacity: 0.85; }
+  .level-card--now .level-num      { color: #22C55E; opacity: 0.85; }
+  .level-card--waitlist .level-num { color: #FF4F5E; opacity: 0.85; }
 
   .level-status {
     display: inline-flex;
@@ -287,23 +288,23 @@ const levels = [
     box-shadow: 0 0 0 0 rgba(255,255,255,0.4);
     animation: lvl-pulse-soft 2.6s ease-out infinite;
   }
-  .level-status--live {
-    background: rgba(0,229,255,0.1);
-    border: 1px solid rgba(0,229,255,0.3);
-    color: var(--cyan);
+  .level-status--now {
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.35);
+    color: #4ADE80;
   }
-  .level-status--live .level-status-dot {
-    background: var(--cyan);
-    box-shadow: 0 0 8px rgba(0,229,255,0.55);
+  .level-status--now .level-status-dot {
+    background: #22C55E;
+    box-shadow: 0 0 8px rgba(34,197,94,0.55);
   }
-  .level-status--vip {
-    background: linear-gradient(135deg, rgba(0,229,255,0.14), rgba(123,97,255,0.16));
-    border: 1px solid rgba(123,97,255,0.4);
-    color: #C9C2FF;
+  .level-status--waitlist {
+    background: rgba(255,79,94,0.1);
+    border: 1px solid rgba(255,79,94,0.35);
+    color: #FF7B86;
   }
-  .level-status--vip .level-status-dot {
-    background: var(--purple);
-    box-shadow: 0 0 8px rgba(123,97,255,0.65);
+  .level-status--waitlist .level-status-dot {
+    background: #FF4F5E;
+    box-shadow: 0 0 8px rgba(255,79,94,0.6);
   }
 
   @keyframes lvl-pulse-soft {
@@ -324,14 +325,15 @@ const levels = [
     border: 1px solid rgba(255,255,255,0.08);
     margin-bottom: 18px;
   }
-  .level-card--vip .level-icon {
-    background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(123,97,255,0.14));
-    border-color: rgba(0,229,255,0.3);
-    box-shadow: 0 0 24px rgba(0,229,255,0.18);
+  .level-card--waitlist .level-icon {
+    background: rgba(255,79,94,0.08);
+    border-color: rgba(255,79,94,0.28);
+    box-shadow: 0 0 24px rgba(255,79,94,0.14);
   }
-  .level-card--live .level-icon {
-    background: rgba(0,229,255,0.06);
-    border-color: rgba(0,229,255,0.22);
+  .level-card--now .level-icon {
+    background: rgba(34,197,94,0.08);
+    border-color: rgba(34,197,94,0.28);
+    box-shadow: 0 0 24px rgba(34,197,94,0.14);
   }
 
   /* ── Title + archetypes ──────────────────────────────── */
@@ -388,29 +390,29 @@ const levels = [
     border-color: rgba(255,255,255,0.18);
   }
 
-  /* Live (Power Ups) — outline cyan */
-  .level-card--live .level-cta {
-    background: rgba(0,229,255,0.06);
-    border-color: rgba(0,229,255,0.3);
-    color: var(--cyan);
-  }
-  .level-card--live .level-cta:hover {
-    background: rgba(0,229,255,0.12);
-    border-color: rgba(0,229,255,0.55);
-  }
-
-  /* VIP (Command Center) — solid gradient */
-  .level-card--vip .level-cta {
-    background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%);
+  /* Now (Power Ups) — solid green, headline action */
+  .level-card--now .level-cta {
+    background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
     color: #07090F;
-    box-shadow: 0 6px 24px rgba(0,229,255,0.22);
+    box-shadow: 0 6px 24px rgba(34,197,94,0.25);
   }
-  .level-card--vip .level-cta:hover {
-    box-shadow: 0 10px 32px rgba(123,97,255,0.32);
+  .level-card--now .level-cta:hover {
+    box-shadow: 0 10px 32px rgba(34,197,94,0.35);
     filter: brightness(1.05);
   }
 
-  /* Subtle bottom-right glow only on the headline VIP tier */
+  /* Waitlist (Command Center) — outline red, gated */
+  .level-card--waitlist .level-cta {
+    background: rgba(255,79,94,0.08);
+    border-color: rgba(255,79,94,0.35);
+    color: #FF7B86;
+  }
+  .level-card--waitlist .level-cta:hover {
+    background: rgba(255,79,94,0.14);
+    border-color: rgba(255,79,94,0.55);
+  }
+
+  /* Bottom-right glow on the active green tier */
   .level-glow {
     pointer-events: none;
     position: absolute;
@@ -423,12 +425,12 @@ const levels = [
     filter: blur(50px);
     transition: opacity 0.4s ease;
   }
-  .level-card--vip .level-glow {
-    background: radial-gradient(circle, rgba(123,97,255,0.5), transparent 70%);
-    opacity: 0.25;
+  .level-card--now .level-glow {
+    background: radial-gradient(circle, rgba(34,197,94,0.45), transparent 70%);
+    opacity: 0.22;
   }
   @media (hover: hover) {
-    .level-card--vip:hover .level-glow { opacity: 0.4; }
+    .level-card--now:hover .level-glow { opacity: 0.38; }
   }
 
   /* ── Responsive ──────────────────────────────────────── */
