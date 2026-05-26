@@ -55,6 +55,7 @@ export const HOME_QUERY = groq`
     heroTopline,
     wordFlipPhrases,
     heroHeadline,
+    heroTitle,
     heroSubheadline,
     heroSubtext,
     heroCta,

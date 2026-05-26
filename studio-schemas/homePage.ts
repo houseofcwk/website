@@ -30,10 +30,15 @@ export const homePage = defineType({
     }),
     defineField({
       name: 'heroHeadline',
+      title: 'Hero Headline (legacy — same as Topline)',
+      type: 'string',
+      description: 'Kept for backwards compatibility. The Topline field above is the canonical source; this is only read as a fallback for older docs.',
+    }),
+    defineField({
+      name: 'heroTitle',
       title: 'Hero Title',
       type: 'string',
       description: 'Secondary title shown below the flip headline (e.g. "Guiding founders through the jungle from $0 to $1M.").',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'heroSubheadline',

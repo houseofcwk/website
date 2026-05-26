@@ -511,7 +511,7 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
 <script>
   // Word-flip slot machine — cycles the cyan word in the top headline.
   (() => {
-    const INTERVAL = 2800; // ms between flips
+    const INTERVAL = 1600; // ms between flips
     const track = document.getElementById('word-flip-track') as HTMLElement | null;
     if (!track) return;
 
