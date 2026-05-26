@@ -8,15 +8,13 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
     <!-- Logo -->
     <a href="/" class="logo" aria-label="CWK. Experience: Home">
       <img
-        src="/logos/logo-wht-80.webp"
-        srcset="/logos/logo-wht-40.webp 1x, /logos/logo-wht-80.webp 2x, /logos/logo-wht-120.webp 3x"
+        src="/logos/logo-main-negative-CWK.svg"
         alt="CWK."
-        width="40"
-        height="40"
+        width="74"
+        height="28"
         loading="eager"
         decoding="async"
       />
-      <span class="beta-badge" aria-label="Beta">β</span>
     </a>
 
     <!-- Desktop nav links (no icons) -->
@@ -49,11 +47,10 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
   <div class="overlay-topbar">
     <a href="/" class="overlay-logo" aria-label="CWK. Home">
       <img
-        src="/logos/logo-wht-80.webp"
-        srcset="/logos/logo-wht-40.webp 1x, /logos/logo-wht-80.webp 2x, /logos/logo-wht-120.webp 3x"
+        src="/logos/logo-main-negative-CWK.svg"
         alt="CWK."
-        width="36"
-        height="36"
+        width="74"
+        height="28"
         loading="eager"
       />
     </a>
@@ -126,11 +123,10 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
   <!-- Sticky footer -->
   <div class="overlay-footer">
     <img
-      src="/logos/logo-wht-80.webp"
-      srcset="/logos/logo-wht-40.webp 1x, /logos/logo-wht-80.webp 2x"
+      src="/logos/logo-main-negative-CWK.svg"
       alt="CWK."
-      width="32"
-      height="32"
+      width="64"
+      height="24"
       loading="lazy"
     />
     <div class="overlay-footer-text">
@@ -177,21 +173,7 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
     transition: opacity 0.2s ease;
   }
   .logo:hover { opacity: 0.75; }
-  .logo img { display: block; width: 40px; height: 40px; object-fit: contain; }
-
-  .beta-badge {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    line-height: 1;
-    color: var(--cyan);
-    border: 1px solid rgba(0, 229, 255, 0.25);
-    background: rgba(0, 229, 255, 0.08);
-    padding: 2px 5px;
-    border-radius: 4px;
-    margin-left: 6px;
-    user-select: none;
-  }
+  .logo img { display: block; width: auto; height: 28px; object-fit: contain; }
 
   /* Desktop nav links */
   .nav-links {
@@ -333,7 +315,7 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
     transition: opacity 0.2s;
   }
   .overlay-logo:hover { opacity: 1; }
-  .overlay-logo img { display: block; width: 36px; height: 36px; object-fit: contain; }
+  .overlay-logo img { display: block; width: auto; height: 28px; object-fit: contain; }
 
   .overlay-close {
     display: flex;
@@ -436,8 +418,8 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
 
   .overlay-footer img {
     display: block;
-    width: 32px;
-    height: 32px;
+    width: auto;
+    height: 24px;
     object-fit: contain;
     opacity: 0.7;
   }
