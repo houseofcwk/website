@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const pageTitle = 'Signing you in… | CWK. Experience';
+const pageDescription = 'Completing sign-in.';
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <section style="min-height:60vh;display:flex;align-items:center;justify-content:center;padding:64px 16px;">
+    <p style="color:#A8A29E;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+      Completing sign-in…
+    </p>
+  </section>
+</Base>
+
+<script>
+  // EPIC auth-monetization (#219): generic landing for Google / magic-link
+  // returns. PLOS has already set the shared cookie; confirm via /me, then
+  // forward to the requested return target (default home).
+  import { me } from '../../lib/plosAuth';
+
+  const params = new URL(window.location.href).searchParams;
+  const target = params.get('return') || '/';
+  (async () => {
+    await me().catch(() => undefined);
+    window.location.replace(target);
+  })();
+</script>

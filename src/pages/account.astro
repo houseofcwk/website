@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+
+const pageTitle = 'Your account | CWK. Experience';
+const pageDescription = 'Manage your CWK account and purchases.';
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <section style="min-height:60vh;max-width:560px;margin:0 auto;padding:64px 16px;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#00E5FF;margin:0 0 8px;">Account</p>
+    <h1 style="margin:0 0 24px;font-size:28px;font-weight:800;letter-spacing:-0.5px;color:#EEF0FF;">Your account</h1>
+    <div
+      id="acct-card"
+      style="background:#0B0E18;border:1px solid rgba(0,229,255,0.18);border-radius:14px;padding:28px;color:#EEF0FF;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;"
+    >
+      <p id="acct-loading" style="color:#A8A29E;margin:0;">Loading…</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // EPIC auth-monetization (#221): minimal account view — email + purchases + logout.
+  import { me, logout } from '../lib/plosAuth';
+  import { getFeatures } from '../lib/plosEntitlements';
+
+  const FEATURE_LABELS: Record<string, string> = {
+    'lifestyle-calculator': 'Lifestyle Calculator — unlimited',
+  };
+
+  function esc(s: string): string {
+    return s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c] as string));
+  }
+
+  (async () => {
+    const card = document.getElementById('acct-card');
+    if (!card) return;
+    const auth = await me();
+    if (!auth.authenticated || !auth.user) {
+      window.location.replace(`/login?return=${encodeURIComponent('/account')}`);
+      return;
+    }
+    const features = await getFeatures();
+    const purchases = features.length
+      ? features.map((f) => `<li style="margin:0 0 6px;">${esc(FEATURE_LABELS[f] ?? f)}</li>`).join('')
+      : '<li style="color:#A8A29E;list-style:none;margin-left:-20px;">No purchases yet.</li>';
+
+    card.innerHTML = `
+      <p style="margin:0 0 4px;font-size:12px;color:#A8A29E;">Signed in as</p>
+      <p style="margin:0 0 22px;font-size:16px;font-weight:600;">${esc(auth.user.email)}</p>
+      <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#00E5FF;">Purchases</p>
+      <ul style="margin:0 0 24px;padding-left:20px;font-size:14px;line-height:1.6;">${purchases}</ul>
+      <button id="acct-logout" style="background:transparent;color:#EEF0FF;border:1px solid rgba(255,255,255,0.16);border-radius:8px;padding:11px 18px;font-weight:600;font-size:13px;cursor:pointer;">Log out</button>`;
+
+    document.getElementById('acct-logout')?.addEventListener('click', async () => {
+      await logout();
+      window.location.assign('/');
+    });
+  })();
+</script>

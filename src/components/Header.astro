@@ -28,8 +28,26 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
     </div>
 
     <div class="nav-actions">
+      <!-- EPIC auth-monetization (#222): auth affordance. JS swaps the label to
+           the account email when a shared PLOS session is present. -->
+      <a href="/login" id="nav-auth-link" class:list={['nav-link', { active: isActive('/login') }]} data-cwk-auth>Log in</a>
       <a href="/lifestyle-calculator" class:list={['btn btn-primary nav-cta-btn', { active: isActive('/lifestyle-calculator') }]}>Lifestyle Calculator →</a>
     </div>
+
+    <script>
+      // Reflect auth state in the header without blocking render.
+      import { me } from '../lib/plosAuth';
+      const link = document.getElementById('nav-auth-link') as HTMLAnchorElement | null;
+      if (link) {
+        void me().then((r) => {
+          if (r.authenticated && r.user) {
+            link.textContent = 'Account';
+            link.href = '/account';
+            link.title = r.user.email;
+          }
+        });
+      }
+    </script>
 
     <!-- Hamburger (mobile only) -->
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
