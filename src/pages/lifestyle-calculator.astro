@@ -1277,26 +1277,34 @@ const pageDescription =
   function buildOverlay(opts: { priceLabel: string; note?: string }): HTMLElement {
     const wrap = document.createElement('div');
     wrap.id = 'lc-paywall';
-    wrap.setAttribute(
-      'style',
-      'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;' +
-        'background:rgba(7,9,15,0.92);backdrop-filter:blur(6px);padding:24px;',
-    );
-    const price = opts.priceLabel ? `<div style="font-size:30px;font-weight:800;color:#EEF0FF;margin:4px 0 14px;">${opts.priceLabel}<span style="font-size:13px;color:#A8A29E;font-weight:600;"> · one-time</span></div>` : '';
-    const note = opts.note
-      ? `<p style="margin:0 0 14px;font-size:13px;color:#FB3079;">${opts.note}</p>`
+    wrap.className = 'lc-paywall';
+    const price = opts.priceLabel
+      ? `<div class="lc-paywall-price">${opts.priceLabel}<span> · one-time</span></div>`
       : '';
+    const note = opts.note ? `<p class="lc-paywall-note">${opts.note}</p>` : '';
     wrap.innerHTML = `
-      <div style="max-width:440px;width:100%;background:#0B0E18;border:1px solid rgba(0,229,255,0.18);border-radius:14px;padding:34px 30px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#EEF0FF;">
-        <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#00E5FF;">Lifestyle Calculator</p>
-        <h2 style="margin:0 0 6px;font-size:23px;font-weight:800;letter-spacing:-0.5px;">You've used your free run</h2>
-        <p style="margin:0 0 6px;font-size:14px;color:#A8A29E;line-height:1.6;">Unlock unlimited runs with a one-time payment — re-run every idea, as many times as you want, forever.</p>
+      <div class="lc-paywall-card" role="dialog" aria-modal="true" aria-labelledby="lc-paywall-title">
+        <button type="button" id="lc-paywall-close" class="lc-paywall-close" aria-label="Close">&times;</button>
+        <p class="lc-paywall-eyebrow">Lifestyle Calculator</p>
+        <h2 id="lc-paywall-title" class="lc-paywall-h2">You've used your free run</h2>
+        <p class="lc-paywall-sub">Unlock unlimited runs with a one-time payment — re-run every idea, as many times as you want, forever.</p>
         ${price}
         ${note}
-        <button id="lc-unlock-btn" style="width:100%;background:linear-gradient(90deg,#00E5FF,#7B61FF);color:#07090F;font-weight:700;font-size:14px;border:none;border-radius:8px;padding:14px 0;cursor:pointer;">Unlock unlimited →</button>
-        <p id="lc-unlock-msg" style="margin:12px 0 0;font-size:12px;color:#A8A29E;min-height:16px;"></p>
+        <button type="button" id="lc-unlock-btn" class="lc-paywall-cta">Unlock unlimited →</button>
+        <p id="lc-unlock-msg" class="lc-paywall-msg"></p>
       </div>`;
     return wrap;
+  }
+
+  function closePaywall(): void {
+    const el = document.getElementById('lc-paywall');
+    if (el) el.remove();
+    document.removeEventListener('keydown', onPaywallKey);
+    document.documentElement.style.overflow = '';
+  }
+
+  function onPaywallKey(e: KeyboardEvent): void {
+    if (e.key === 'Escape') closePaywall();
   }
 
   function setMsg(text: string): void {
@@ -1331,7 +1339,14 @@ const pageDescription =
     const priceLabel = product ? formatPrice(product.amount, product.currency) : '';
     const overlay = buildOverlay({ priceLabel, note });
     document.body.appendChild(overlay);
+    document.documentElement.style.overflow = 'hidden';
     document.getElementById('lc-unlock-btn')?.addEventListener('click', () => void onUnlock());
+    document.getElementById('lc-paywall-close')?.addEventListener('click', closePaywall);
+    // Tap the backdrop (outside the card) to dismiss.
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closePaywall();
+    });
+    document.addEventListener('keydown', onPaywallKey);
     track('lc_gate_shown', {});
   }
 
@@ -2295,4 +2310,67 @@ const pageDescription =
     .lc-stress-bar-fill { animation: none; transition: none; }
     #lc-step-6 .lc-reveal { transition: none; opacity: 1; transform: none; }
   }
+
+  /* ── Paywall modal (auth-monetization gate) ─────────────────────────── */
+  .lc-paywall {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    background: rgba(7, 9, 15, 0.92);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    overflow-y: auto;
+    animation: lc-paywall-fade 0.18s ease;
+  }
+  @keyframes lc-paywall-fade { from { opacity: 0; } to { opacity: 1; } }
+  .lc-paywall-card {
+    position: relative;
+    width: 100%; max-width: 440px;
+    max-height: calc(100dvh - 48px);
+    overflow-y: auto;
+    background: #0B0E18;
+    border: 1px solid rgba(0, 229, 255, 0.18);
+    border-radius: 14px;
+    padding: 34px 30px;
+    color: #EEF0FF;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  .lc-paywall-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; border-radius: 8px;
+    color: #A8A29E; font-size: 26px; line-height: 1; cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .lc-paywall-close:hover { color: #EEF0FF; background: rgba(255, 255, 255, 0.06); }
+  .lc-paywall-eyebrow { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; }
+  .lc-paywall-h2 { margin: 0 0 8px; padding-right: 30px; font-size: 23px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; }
+  .lc-paywall-sub { margin: 0 0 14px; font-size: 14px; color: #A8A29E; line-height: 1.6; }
+  .lc-paywall-price { margin: 4px 0 16px; font-size: 30px; font-weight: 800; color: #EEF0FF; }
+  .lc-paywall-price span { font-size: 13px; color: #A8A29E; font-weight: 600; }
+  .lc-paywall-note { margin: 0 0 14px; font-size: 13px; color: #FB3079; }
+  .lc-paywall-cta {
+    width: 100%; padding: 15px 0; cursor: pointer;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF);
+    color: #07090F; font-weight: 700; font-size: 15px;
+    border: none; border-radius: 8px;
+  }
+  .lc-paywall-msg { margin: 12px 0 0; min-height: 16px; font-size: 12px; color: #A8A29E; }
+
+  /* Mobile: bottom sheet, full width, safe-area aware. */
+  @media (max-width: 520px) {
+    .lc-paywall { padding: 0; align-items: flex-end; }
+    .lc-paywall-card {
+      max-width: 100%;
+      max-height: 90dvh;
+      border-radius: 18px 18px 0 0;
+      padding: 26px 20px calc(24px + env(safe-area-inset-bottom));
+      animation: lc-paywall-slide 0.22s ease;
+    }
+    .lc-paywall-h2 { font-size: 21px; }
+    .lc-paywall-price { font-size: 26px; }
+    .lc-paywall-close { top: 10px; right: 10px; }
+  }
+  @keyframes lc-paywall-slide { from { transform: translateY(24px); } to { transform: translateY(0); } }
 </style>
