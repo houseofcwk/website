@@ -14,6 +14,9 @@ const pageDescription =
 ---
 
 <Base title={pageTitle} description={pageDescription}>
+  <!-- Access veil: covers the tool until the gate resolves (paid/admin -> reveal,
+       else redirect to the landing). Prevents a flash of the calculator. -->
+  <div id="lc-gate-veil" class="lc-gate-veil">Loading…</div>
   <section class="lc-page">
     <div class="lc-wrap">
 
@@ -1063,11 +1066,11 @@ const pageDescription =
      needs no access to the calculator script's internals. -->
 <script>
   import { me } from '../lib/plosAuth';
-  import { getFeatures, getProductByFeature, startCheckout, formatPrice } from '../lib/plosEntitlements';
+  import { getFeatures } from '../lib/plosEntitlements';
   import { track } from '../lib/analytics';
 
   const FEATURE = 'lifestyle-calculator';
-  const PRODUCT = 'lifestyle-calculator';
+  const LANDING = '/lifestyle-calculator/unlock';
 
   function currentUrlClean(): string {
     const u = new URL(window.location.href);
@@ -1076,117 +1079,49 @@ const pageDescription =
     return u.toString();
   }
 
-  // ── Paywall overlay ──────────────────────────────────────────────────────
-  function buildOverlay(opts: { priceLabel: string; note?: string }): HTMLElement {
-    const wrap = document.createElement('div');
-    wrap.id = 'lc-paywall';
-    wrap.className = 'lc-paywall';
-    const price = opts.priceLabel
-      ? `<div class="lc-paywall-price">${opts.priceLabel}<span> · one-time</span></div>`
-      : '';
-    const note = opts.note ? `<p class="lc-paywall-note">${opts.note}</p>` : '';
-    wrap.innerHTML = `
-      <div class="lc-paywall-card" role="dialog" aria-modal="true" aria-labelledby="lc-paywall-title">
-        <button type="button" id="lc-paywall-close" class="lc-paywall-close" aria-label="Close">&times;</button>
-        <p class="lc-paywall-eyebrow">Lifestyle Calculator</p>
-        <h2 id="lc-paywall-title" class="lc-paywall-h2">Unlock the Lifestyle Calculator</h2>
-        <p class="lc-paywall-sub">A one-time payment unlocks the full calculator — run every idea, as many times as you want, forever.</p>
-        ${price}
-        ${note}
-        <button type="button" id="lc-unlock-btn" class="lc-paywall-cta">Unlock unlimited →</button>
-        <p id="lc-unlock-msg" class="lc-paywall-msg"></p>
-      </div>`;
-    return wrap;
+  // ── Access gate ──────────────────────────────────────────────────────────
+  // Model: PAID TO TRY. The calculator tool lives here; non-paid (non-admin)
+  // visitors are redirected to the landing page (/lifestyle-calculator/unlock)
+  // which sells + handles checkout. A full-screen veil hides the tool until
+  // access is resolved, so non-paid users never see a flash of the calculator.
+  function revealTool(): void {
+    const veil = document.getElementById('lc-gate-veil');
+    if (veil) veil.setAttribute('hidden', '');
+  }
+  function redirectToLanding(): void {
+    window.location.replace(LANDING);
   }
 
-  function closePaywall(): void {
-    const el = document.getElementById('lc-paywall');
-    if (el) el.remove();
-    document.removeEventListener('keydown', onPaywallKey);
-    document.documentElement.style.overflow = '';
-  }
-
-  function onPaywallKey(e: KeyboardEvent): void {
-    if (e.key === 'Escape') closePaywall();
-  }
-
-  function setMsg(text: string): void {
-    const el = document.getElementById('lc-unlock-msg');
-    if (el) el.textContent = text;
-  }
-
-  async function onUnlock(): Promise<void> {
-    setMsg('Checking your account…');
-    track('lc_checkout_started', {});
-    const auth = await me();
-    if (!auth.authenticated) {
-      // Send to sign-in, returning here to finish payment (payment-first).
-      window.location.assign(`/login?return=${encodeURIComponent(currentUrlClean())}`);
-      return;
-    }
-    const res = await startCheckout(PRODUCT, currentUrlClean());
-    if (res.entitled) {
-      window.location.reload();
-      return;
-    }
-    if (res.url) {
-      window.location.assign(res.url);
-      return;
-    }
-    setMsg('Could not start checkout. Please try again.');
-  }
-
-  async function showPaywall(note?: string): Promise<void> {
-    if (document.getElementById('lc-paywall')) return;
-    const product = await getProductByFeature(FEATURE);
-    const priceLabel = product ? formatPrice(product.amount, product.currency) : '';
-    const overlay = buildOverlay({ priceLabel, note });
-    document.body.appendChild(overlay);
-    document.documentElement.style.overflow = 'hidden';
-    document.getElementById('lc-unlock-btn')?.addEventListener('click', () => void onUnlock());
-    document.getElementById('lc-paywall-close')?.addEventListener('click', closePaywall);
-    // Tap the backdrop (outside the card) to dismiss.
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closePaywall();
-    });
-    document.addEventListener('keydown', onPaywallKey);
-    track('lc_gate_shown', {});
-  }
-
-  // ── Entry ──────────────────────────────────────────────────────────────
-  // Model: PAID TO TRY (no free run). Access requires payment, EXCEPT PLOS
-  // admins (e.g. efemer@gmail.com, hello@cwkexperience.com) who bypass the gate
-  // to validate the calculator.
   (async () => {
-    const params = new URL(window.location.href).searchParams;
-    const checkout = params.get('checkout');
+    const checkout = new URL(window.location.href).searchParams.get('checkout');
 
     const auth = await me();
-    const isAdmin = Boolean(auth.authenticated && auth.user?.isAdmin);
-    if (isAdmin) {
+    if (auth.authenticated && auth.user?.isAdmin) {
       if (checkout) history.replaceState(null, '', currentUrlClean());
-      return; // admin bypass — full access, no paywall
+      revealTool();
+      return; // admin bypass
     }
 
     if (checkout === 'success') {
-      // Webhook may lag a beat — poll entitlement briefly before deciding.
-      for (let i = 0; i < 5; i += 1) {
-        const features = await getFeatures();
-        if (features.includes(FEATURE)) {
+      // Webhook may lag — poll entitlement briefly before deciding.
+      for (let i = 0; i < 6; i += 1) {
+        if ((await getFeatures()).includes(FEATURE)) {
           track('lc_paid', {});
           history.replaceState(null, '', currentUrlClean());
-          return; // unlocked — no overlay
+          revealTool();
+          return;
         }
         await new Promise((r) => setTimeout(r, 1200));
       }
-      history.replaceState(null, '', currentUrlClean());
     }
 
-    const features = await getFeatures();
-    if (features.includes(FEATURE)) return; // paid — full access
+    if ((await getFeatures()).includes(FEATURE)) {
+      revealTool();
+      return; // paid
+    }
 
-    // Not admin, not paid → paid-to-try paywall.
-    await showPaywall(checkout === 'cancel' ? 'Checkout canceled — unlock to continue.' : undefined);
+    // Not admin, not paid → go sell on the landing page.
+    redirectToLanding();
   })();
 </script>
 
@@ -2151,66 +2086,14 @@ const pageDescription =
     #lc-step-6 .lc-reveal { transition: none; opacity: 1; transform: none; }
   }
 
-  /* ── Paywall modal (auth-monetization gate) ─────────────────────────── */
-  .lc-paywall {
+  /* ── Gate loading veil (covers the tool until access is resolved) ────── */
+  .lc-gate-veil {
     position: fixed; inset: 0; z-index: 9999;
     display: flex; align-items: center; justify-content: center;
-    padding: 24px;
-    background: rgba(7, 9, 15, 0.92);
-    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-    overflow-y: auto;
-    animation: lc-paywall-fade 0.18s ease;
-  }
-  @keyframes lc-paywall-fade { from { opacity: 0; } to { opacity: 1; } }
-  .lc-paywall-card {
-    position: relative;
-    width: 100%; max-width: 440px;
-    max-height: calc(100dvh - 48px);
-    overflow-y: auto;
-    background: #0B0E18;
-    border: 1px solid rgba(0, 229, 255, 0.18);
-    border-radius: 14px;
-    padding: 34px 30px;
-    color: #EEF0FF;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    background: #07090F;
+    color: #A8A29E; font-size: 13px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    transition: opacity 0.2s ease;
   }
-  .lc-paywall-close {
-    position: absolute; top: 12px; right: 12px;
-    width: 36px; height: 36px;
-    display: flex; align-items: center; justify-content: center;
-    background: transparent; border: none; border-radius: 8px;
-    color: #A8A29E; font-size: 26px; line-height: 1; cursor: pointer;
-    transition: color 0.15s ease, background 0.15s ease;
-  }
-  .lc-paywall-close:hover { color: #EEF0FF; background: rgba(255, 255, 255, 0.06); }
-  .lc-paywall-eyebrow { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; }
-  .lc-paywall-h2 { margin: 0 0 8px; padding-right: 30px; font-size: 23px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; }
-  .lc-paywall-sub { margin: 0 0 14px; font-size: 14px; color: #A8A29E; line-height: 1.6; }
-  .lc-paywall-price { margin: 4px 0 16px; font-size: 30px; font-weight: 800; color: #EEF0FF; }
-  .lc-paywall-price span { font-size: 13px; color: #A8A29E; font-weight: 600; }
-  .lc-paywall-note { margin: 0 0 14px; font-size: 13px; color: #FB3079; }
-  .lc-paywall-cta {
-    width: 100%; padding: 15px 0; cursor: pointer;
-    background: linear-gradient(90deg, #00E5FF, #7B61FF);
-    color: #07090F; font-weight: 700; font-size: 15px;
-    border: none; border-radius: 8px;
-  }
-  .lc-paywall-msg { margin: 12px 0 0; min-height: 16px; font-size: 12px; color: #A8A29E; }
-
-  /* Mobile: bottom sheet, full width, safe-area aware. */
-  @media (max-width: 520px) {
-    .lc-paywall { padding: 0; align-items: flex-end; }
-    .lc-paywall-card {
-      max-width: 100%;
-      max-height: 90dvh;
-      border-radius: 18px 18px 0 0;
-      padding: 26px 20px calc(24px + env(safe-area-inset-bottom));
-      animation: lc-paywall-slide 0.22s ease;
-    }
-    .lc-paywall-h2 { font-size: 21px; }
-    .lc-paywall-price { font-size: 26px; }
-    .lc-paywall-close { top: 10px; right: 10px; }
-  }
-  @keyframes lc-paywall-slide { from { transform: translateY(24px); } to { transform: translateY(0); } }
+  .lc-gate-veil[hidden] { display: none; }
 </style>

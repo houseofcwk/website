@@ -1,0 +1,242 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/paywall.css';
+
+const pageTitle = 'Lifestyle Calculator — Unlock | CWK. Experience';
+const pageDescription =
+  'Turn the lifestyle you actually want into a real monthly number — and the exact plan to hit it. The map a $500 consultant builds, for $17. One-time. Unlimited runs.';
+
+const DELIVERABLES = [
+  {
+    t: 'Your real income target',
+    d: 'Reverse-engineered from the life you actually want — not a number you guessed.',
+  },
+  {
+    t: 'The two-bridges math',
+    d: 'Exactly how many strangers, leads, and sales per week it takes to hit that number.',
+  },
+  {
+    t: 'A phase-by-phase roadmap',
+    d: 'Four phases tuned to the speed you choose — Turtle, Car, or Rocket Ship.',
+  },
+  {
+    t: 'The tools you actually need',
+    d: 'A lean stack by category with real monthly cost ranges. No brand hype.',
+  },
+  {
+    t: 'The skills to build, in order',
+    d: 'What to learn first so the plan actually moves, based on your service type.',
+  },
+  {
+    t: 'The honest stress reality',
+    d: 'Going solo vs. supported — time to goal, burnout risk, and the real mistake tax.',
+  },
+];
+
+const STEPS = [
+  { n: '1', t: 'Answer a few honest questions', d: 'Six short sections. Real numbers. About five minutes.' },
+  { n: '2', t: 'Get your complete picture', d: 'Your target, the math, the roadmap, the tools, the blocks — instantly.' },
+  { n: '3', t: 'Run it again, forever', d: 'Pressure-test every new idea before you commit. Unlimited runs.' },
+];
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <section class="lcu">
+    <!-- Hero -->
+    <div class="lcu-hero">
+      <span class="lcu-eyebrow"><span class="lcu-dot"></span>LIFESTYLE CALCULATOR</span>
+      <h1 class="lcu-h1">The <span class="lcu-grad">$500 consulting session.</span><br>For $17.</h1>
+      <p class="lcu-sub">
+        Turn the lifestyle you actually want into a real monthly number — and the exact plan to
+        hit it. The math, the roadmap, the tools, and the blocks holding you back. Your complete
+        picture, in one place, in minutes.
+      </p>
+      <div class="lcu-price-row">
+        <span class="lcu-price">US$17</span>
+        <span class="lcu-price-meta">one-time · unlimited runs · no subscription</span>
+      </div>
+      <button type="button" class="lcu-cta" id="lcu-cta-hero">Unlock for $17 →</button>
+      <p class="lcu-cta-note" id="lcu-note"></p>
+    </div>
+
+    <!-- Value comparison -->
+    <div class="lcu-compare">
+      <div class="lcu-compare-col lcu-compare-old">
+        <span class="lcu-compare-label">A business consultant charges $500+ to</span>
+        <ul>
+          <li>Map your income target to the life you want</li>
+          <li>Model the funnel math to get there</li>
+          <li>Hand you a phased execution plan</li>
+          <li>Recommend a tool stack and budget</li>
+          <li>Tell you which skills and blocks matter</li>
+        </ul>
+      </div>
+      <div class="lcu-compare-col lcu-compare-new">
+        <span class="lcu-compare-label lcu-compare-label-new">You get all of it for $17</span>
+        <ul>
+          <li>Built from your real numbers, instantly</li>
+          <li>Re-run it for every idea, as many times as you want</li>
+          <li>Yours forever — the map never expires</li>
+          <li>No call to book. No pitch to sit through.</li>
+          <li>Honest output, not a sales funnel</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- What you get -->
+    <div class="lcu-section">
+      <span class="lcu-section-label">WHAT YOU GET</span>
+      <div class="lcu-grid">
+        {DELIVERABLES.map((it) => (
+          <div class="lcu-card">
+            <h3 class="lcu-card-t">{it.t}</h3>
+            <p class="lcu-card-d">{it.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="lcu-section">
+      <span class="lcu-section-label">HOW IT WORKS</span>
+      <div class="lcu-steps">
+        {STEPS.map((s) => (
+          <div class="lcu-step">
+            <span class="lcu-step-n">{s.n}</span>
+            <div>
+              <div class="lcu-step-t">{s.t}</div>
+              <div class="lcu-step-d">{s.d}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="lcu-final">
+      <h2 class="lcu-final-h">See what your lifestyle really costs.</h2>
+      <p class="lcu-final-sub">One honest number. One real plan. Seventeen dollars.</p>
+      <button type="button" class="lcu-cta" id="lcu-cta-final">Unlock for $17 →</button>
+      <p class="lcu-final-fine">One-time payment · unlimited runs · the map is yours forever.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { me } from '../../lib/plosAuth';
+  import { getFeatures } from '../../lib/plosEntitlements';
+  import { openPaywall } from '../../lib/paywall';
+  import { track } from '../../lib/analytics';
+
+  const FEATURE = 'lifestyle-calculator';
+  const APP_URL = '/lifestyle-calculator';
+
+  const ctas = Array.from(document.querySelectorAll<HTMLButtonElement>('.lcu-cta'));
+  const note = document.getElementById('lcu-note');
+
+  function toApp(): void {
+    window.location.assign(APP_URL);
+  }
+
+  function wireUnlock(): void {
+    ctas.forEach((btn) =>
+      btn.addEventListener('click', () =>
+        void openPaywall({
+          featureKey: FEATURE,
+          productSlug: FEATURE,
+          returnUrl: `${window.location.origin}${APP_URL}`,
+          loginReturnUrl: window.location.href,
+        }),
+      ),
+    );
+  }
+
+  function makeOpenButtons(): void {
+    ctas.forEach((btn) => {
+      btn.textContent = 'Open the Calculator →';
+      btn.addEventListener('click', toApp);
+    });
+  }
+
+  (async () => {
+    track('lcu_landing_viewed', {});
+    if (new URL(window.location.href).searchParams.get('checkout') === 'cancel' && note) {
+      note.textContent = 'Checkout canceled — unlock whenever you are ready.';
+    }
+    // Paid or admin? Turn the CTAs into "Open the Calculator".
+    const auth = await me();
+    const isAdmin = Boolean(auth.authenticated && auth.user?.isAdmin);
+    const entitled = (await getFeatures()).includes(FEATURE);
+    if (isAdmin || entitled) makeOpenButtons();
+    else wireUnlock();
+  })();
+</script>
+
+<style>
+  .lcu {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 72px 20px 96px;
+    color: #EEF0FF;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  .lcu-hero { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+  .lcu-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+    color: #FB3079; margin-bottom: 18px;
+  }
+  .lcu-dot { width: 6px; height: 6px; border-radius: 50%; background: #FB3079; }
+  .lcu-h1 { margin: 0 0 18px; font-size: clamp(34px, 6vw, 54px); font-weight: 800; letter-spacing: -1px; line-height: 1.05; }
+  .lcu-grad { background: linear-gradient(90deg, #00E5FF, #7B61FF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .lcu-sub { margin: 0 auto 26px; max-width: 600px; font-size: 16px; line-height: 1.65; color: #A8A29E; }
+  .lcu-price-row { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .lcu-price { font-size: 40px; font-weight: 800; letter-spacing: -1px; }
+  .lcu-price-meta { font-size: 13px; color: #A8A29E; }
+  .lcu-cta {
+    display: inline-block; cursor: pointer;
+    background: linear-gradient(90deg, #00E5FF, #7B61FF);
+    color: #07090F; font-weight: 700; font-size: 16px;
+    border: none; border-radius: 10px; padding: 16px 38px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .lcu-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(0, 229, 255, 0.28); }
+  .lcu-cta-note { margin: 14px 0 0; font-size: 13px; color: #FB3079; min-height: 18px; }
+
+  .lcu-compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 auto 64px;
+  }
+  .lcu-compare-col { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 26px 24px; background: #0B0E18; }
+  .lcu-compare-new { border-color: rgba(0, 229, 255, 0.25); background: linear-gradient(160deg, rgba(0, 229, 255, 0.06), rgba(123, 97, 255, 0.03)); }
+  .lcu-compare-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #A8A29E; margin-bottom: 14px; }
+  .lcu-compare-label-new { color: #00E5FF; }
+  .lcu-compare-col ul { margin: 0; padding-left: 18px; }
+  .lcu-compare-col li { font-size: 14px; line-height: 1.7; color: #C9C7C4; }
+  .lcu-compare-old li { color: #8A8784; }
+
+  .lcu-section { margin: 0 auto 64px; }
+  .lcu-section-label { display: block; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; margin-bottom: 26px; }
+  .lcu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .lcu-card { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 22px 20px; background: #0B0E18; }
+  .lcu-card-t { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
+  .lcu-card-d { margin: 0; font-size: 13.5px; line-height: 1.6; color: #A8A29E; }
+
+  .lcu-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .lcu-step { display: flex; gap: 14px; align-items: flex-start; }
+  .lcu-step-n {
+    flex-shrink: 0; width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #00E5FF, #7B61FF); color: #07090F; font-weight: 800;
+  }
+  .lcu-step-t { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .lcu-step-d { font-size: 13.5px; line-height: 1.6; color: #A8A29E; }
+
+  .lcu-final { text-align: center; border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 16px; padding: 48px 24px; background: linear-gradient(160deg, rgba(0, 229, 255, 0.06), rgba(123, 97, 255, 0.03)); }
+  .lcu-final-h { margin: 0 0 10px; font-size: clamp(24px, 4vw, 32px); font-weight: 800; letter-spacing: -0.5px; }
+  .lcu-final-sub { margin: 0 0 26px; font-size: 15px; color: #A8A29E; }
+  .lcu-final-fine { margin: 16px 0 0; font-size: 12px; color: #57534E; }
+
+  @media (max-width: 760px) {
+    .lcu-compare, .lcu-grid, .lcu-steps { grid-template-columns: 1fr; }
+  }
+</style>

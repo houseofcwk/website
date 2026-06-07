@@ -1,0 +1,63 @@
+/* Paywall modal (EPIC auth-monetization) — shared by the gated app + landing.
+   Global stylesheet; imported wherever openPaywall() is used. */
+.lc-paywall {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(7, 9, 15, 0.92);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  overflow-y: auto;
+  animation: lc-paywall-fade 0.18s ease;
+}
+@keyframes lc-paywall-fade { from { opacity: 0; } to { opacity: 1; } }
+.lc-paywall-card {
+  position: relative;
+  width: 100%; max-width: 440px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  background: #0B0E18;
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  border-radius: 14px;
+  padding: 34px 30px;
+  color: #EEF0FF;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+.lc-paywall-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: none; border-radius: 8px;
+  color: #A8A29E; font-size: 26px; line-height: 1; cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.lc-paywall-close:hover { color: #EEF0FF; background: rgba(255, 255, 255, 0.06); }
+.lc-paywall-eyebrow { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; }
+.lc-paywall-h2 { margin: 0 0 8px; padding-right: 30px; font-size: 23px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; }
+.lc-paywall-sub { margin: 0 0 14px; font-size: 14px; color: #A8A29E; line-height: 1.6; }
+.lc-paywall-price { margin: 4px 0 16px; font-size: 30px; font-weight: 800; color: #EEF0FF; }
+.lc-paywall-price span { font-size: 13px; color: #A8A29E; font-weight: 600; }
+.lc-paywall-note { margin: 0 0 14px; font-size: 13px; color: #FB3079; }
+.lc-paywall-cta {
+  width: 100%; padding: 15px 0; cursor: pointer;
+  background: linear-gradient(90deg, #00E5FF, #7B61FF);
+  color: #07090F; font-weight: 700; font-size: 15px;
+  border: none; border-radius: 8px;
+}
+.lc-paywall-msg { margin: 12px 0 0; min-height: 16px; font-size: 12px; color: #A8A29E; }
+
+/* Mobile: bottom sheet, full width, safe-area aware. */
+@media (max-width: 520px) {
+  .lc-paywall { padding: 0; align-items: flex-end; }
+  .lc-paywall-card {
+    max-width: 100%;
+    max-height: 90dvh;
+    border-radius: 18px 18px 0 0;
+    padding: 26px 20px calc(24px + env(safe-area-inset-bottom));
+    animation: lc-paywall-slide 0.22s ease;
+  }
+  .lc-paywall-h2 { font-size: 21px; }
+  .lc-paywall-price { font-size: 26px; }
+  .lc-paywall-close { top: 10px; right: 10px; }
+}
+@keyframes lc-paywall-slide { from { transform: translateY(24px); } to { transform: translateY(0); } }
