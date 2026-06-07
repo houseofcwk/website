@@ -2,7 +2,7 @@
 // Drives the multi-step tool at /lifestyle-calculator. All copy lives here so
 // the page itself stays presentational. No em-dashes anywhere (CWK-24).
 
-export type CategoryKey = 'creative' | 'business' | 'home';
+export type CategoryKey = 'creative' | 'business' | 'other';
 export type SpeedKey = 'turtle' | 'car' | 'rocket';
 export type ArchetypeKey =
   | 'explorer'
@@ -87,10 +87,10 @@ export const CATEGORIES: CategoryDef[] = [
     desc: 'Coaching, consulting, strategy, marketing, operations, legal, finance, and any service where the work is the thinking.',
   },
   {
-    key: 'home',
-    label: 'Home Services',
-    icon: 'home',
-    desc: 'Cleaning, landscaping, contracting, repair, installation, and any service where the work is done on-site.',
+    key: 'other',
+    label: 'Other',
+    icon: 'other',
+    desc: 'Home services, trades, local services, or any other service business that does not fit the categories above.',
   },
 ];
 
@@ -163,15 +163,14 @@ export interface RecommendedTool {
   price: string;
 }
 export const RECOMMENDED_TOOLS: RecommendedTool[] = [
-  { label: 'Online scheduling and booking tool', price: '$0 to $30/mo' },
-  { label: 'Email marketing platform', price: '$0 to $50/mo' },
-  { label: 'Simple CRM or pipeline tracker', price: '$0 to $50/mo' },
-  { label: 'Website hosting and payments', price: '$0 to $40/mo' },
-  { label: 'Community or membership platform', price: '$0 to $100/mo' },
+  { label: 'Online scheduling and booking tool', price: '$0 to $30/month' },
+  { label: 'Email marketing platform', price: '$30 to $100/month' },
+  { label: 'Simple CRM or pipeline tracker', price: '$0 to $50/month' },
+  { label: 'Invoicing and payments tool', price: '$0 to $25/month' },
+  { label: 'Community or membership platform', price: '$25 to $100/month' },
 ];
-// Reworded total line (step 7). Confirm the figure.
 export const RECOMMENDED_TOOLS_TOTAL =
-  'Estimated total: $0 to $270/month depending on tools selected.';
+  'Estimated total: $55 to $305/month depending on tools selected.';
 
 // ---------------------------------------------------------------------------
 //  Skills by category
@@ -192,11 +191,11 @@ export const SKILLS: Record<CategoryKey, string[]> = {
     'Packaging expertise into a clear, priced, deliverable engagement.',
     'Positioning: making your offer clearly different, not just better.',
   ],
-  home: [
-    'Building a referral and review system that keeps the calendar full.',
-    'Local and social marketing that brings people specifically to you.',
-    'Quoting and scheduling jobs so margins stay healthy.',
-    'Client retention: turning one-time jobs into recurring contracts.',
+  other: [
+    'Building a referral and review system that keeps the pipeline full.',
+    'Marketing that brings the right people specifically to you.',
+    'Quoting and scheduling work so margins stay healthy.',
+    'Client retention: turning one-time work into recurring revenue.',
   ],
 };
 
@@ -356,16 +355,25 @@ export const SPEED_MONTHS: Record<SpeedKey, number> = {
   rocket: 9,
 };
 
+// Hero summary SPEED stat (step 7): emoji + the speed's headline range (SPEEDS.time).
+export const SPEED_EMOJI: Record<SpeedKey, string> = {
+  turtle: '🐢',
+  car: '🚗',
+  rocket: '🚀',
+};
+
 export const SPEED_TOOL_COST: Record<SpeedKey, string> = {
   turtle: 'Low to zero',
   car: 'Moderate, $50 to $200/mo',
   rocket: 'Significant, $300 to $800/mo',
 };
 
+// EDIT (step 7): the "Time to goal" solo column now matches the speed's headline
+// range (e.g. Rocket Ship -> "3 to 9 months"); "with right people" is faster.
 export const SPEED_TIME_LABELS: Record<SpeedKey, { solo: string; supported: string }> = {
-  turtle: { solo: '24 to 36 months', supported: '16 to 24 months' },
-  car: { solo: '14 to 22 months', supported: '9 to 15 months' },
-  rocket: { solo: '5 to 10 months', supported: '3 to 7 months' },
+  turtle: { solo: '18 to 36 months', supported: '12 to 24 months' },
+  car: { solo: '9 to 18 months', supported: '6 to 12 months' },
+  rocket: { solo: '3 to 9 months', supported: '2 to 6 months' },
 };
 
 // ---------------------------------------------------------------------------

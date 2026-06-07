@@ -38,8 +38,8 @@ const pageDescription =
                 {cat.icon === 'business' && (
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                 )}
-                {cat.icon === 'home' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+                {cat.icon === 'other' && (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
                 )}
               </span>
               <span class="lc-cat-label">{cat.label}</span>
@@ -296,8 +296,8 @@ const pageDescription =
 
         <!-- Save the map (replaces "Email me my map") -->
         <div class="lc-savemap lc-reveal">
-          <button type="button" class="lc-savemap-btn" id="lcSaveMapBtn">Save the map ↓</button>
-          <p class="lc-savemap-note">Print this page or bookmark it to keep your map — no email required.</p>
+          <button type="button" class="lc-savemap-btn" id="lcSaveMapBtn">Save this map</button>
+          <p class="lc-savemap-note">Opens a print-ready version you can save or bookmark — no email required.</p>
         </div>
 
         <!-- CTA -->
@@ -310,15 +310,16 @@ const pageDescription =
           <div class="lc-cta-paths">
             <div class="lc-cta-path lc-cta-path-a">
               <span class="lc-path-label lc-path-a-label">PATH A</span>
-              <div class="lc-cta-path-title">Tour CWK.<br>HQ (Online)</div>
-              <p class="lc-cta-path-desc">See the full world we've built to build, learn, earn, and play.</p>
-              <a class="lc-btn-path-a" id="lcPathABtn" href="https://calendly.com/cwkexperience/experience-tour" target="_blank" rel="noopener">Tour CWK. HQ →</a>
+              <div class="lc-cta-path-title">Tour CWK. HQ</div>
+              <p class="lc-cta-path-desc">See how the game is actually played. 20 minutes. No pitch. Just the full picture of how CWK. builds with founders.</p>
+              <a class="lc-btn-path-a" id="lcPathABtn" href="https://calendly.com/cwkexperience/experience-tour" target="_blank" rel="noopener">Take free tour →</a>
             </div>
             <div class="lc-cta-path lc-cta-path-b">
-              <span class="lc-path-label lc-path-b-label">PATH B / FOR NEXT TIME</span>
-              <div class="lc-cta-path-title">Keep this<br>calculator.</div>
-              <p class="lc-cta-path-desc">Bookmark it. Come back the next time an idea needs a reality check before you commit. This map does not expire. Neither does your dream.</p>
-              <button type="button" class="lc-btn-path-b" id="lcResetBtn">Run a new idea ↺</button>
+              <span class="lc-path-label lc-path-b-label">PATH B</span>
+              <div class="lc-cta-path-title">Find your people.</div>
+              <p class="lc-cta-path-desc">The World Builders Community is free. It is where founders at your stage are building in public, sharing what is working, and moving together.</p>
+              <!-- TODO: replace href with the Skool World Builders Community URL -->
+              <a class="lc-btn-path-b" id="lcPathBBtn" href="https://www.skool.com/" target="_blank" rel="noopener">Join the community →</a>
             </div>
           </div>
         </div>
@@ -341,12 +342,14 @@ const pageDescription =
   import {
     ARCHETYPES,
     MINES,
+    SPEEDS,
     RECOMMENDED_TOOLS,
     RECOMMENDED_TOOLS_TOTAL,
     SKILLS,
     PEOPLE,
     PHASES,
     SPEED_MONTHS,
+    SPEED_EMOJI,
     SPEED_TIME_LABELS,
     type CategoryKey,
     type SpeedKey,
@@ -696,7 +699,7 @@ const pageDescription =
     const catLabels: Record<string, string> = {
       creative: 'Creative Services',
       business: 'Business Services',
-      home: 'Home Services',
+      other: 'Other',
     };
     const catLabel = cat ? (catLabels[cat] ?? '') : '';
 
@@ -715,10 +718,13 @@ const pageDescription =
 
     const stats = document.getElementById('lcPlayerStats');
     if (stats) {
+      // EDIT (step 7): third stat is SPEED (emoji + speed range), not a static Runway.
+      const speedDef = SPEEDS.find((s) => s.key === spd);
+      const speedVal = `${SPEED_EMOJI[spd] ?? ''} ${speedDef ? speedDef.time : ''}`.trim();
       stats.innerHTML =
         statCell('$' + fmtK(state.monthlyGoal) + '/mo', 'Target') +
-        statCell('$' + fmtK(state.offerPrice), 'Offer') +
-        statCell(state.timeMonths + ' mo', 'Runway');
+        statCell('$' + fmtK(state.offerPrice), 'Service') +
+        statCell(speedVal, 'Speed');
     }
 
     // Archetype snapshot
@@ -946,18 +952,6 @@ const pageDescription =
     });
   }
 
-  // ── Reset ──────────────────────────────────────────────
-  function resetAll(): void {
-    state = { ...initialState };
-    clearState();
-    document.querySelectorAll<HTMLInputElement>(
-      '#lc-monthly-goal, #lc-offer-price, #lc-s2l-rate, #lc-l2s-rate'
-    ).forEach((el) => { el.value = ''; });
-    document.querySelectorAll('.is-selected').forEach((el) => el.classList.remove('is-selected'));
-    showStep(0);
-  }
-
-  // ── Email me my map ────────────────────────────────────
   // ── Save the map (replaces "Email me my map") ──────────
   // STUB (step 7, item d): exact behavior TBC. Default = browser print/save
   // dialog (print-ready, no email). Swap for a downloadable export if preferred.
@@ -1044,12 +1038,11 @@ const pageDescription =
     });
   });
 
-  document.getElementById('lcResetBtn')?.addEventListener('click', () => {
+  document.getElementById('lcPathBBtn')?.addEventListener('click', () => {
     track('lc_path_b_clicked', {
       archetype_key: state.archetype,
       category: state.ideaCategory,
     });
-    resetAll();
   });
   document.getElementById('lcPathABtn')?.addEventListener('click', () => {
     conversion('lc_path_a_clicked', {
@@ -1070,8 +1063,7 @@ const pageDescription =
      needs no access to the calculator script's internals. -->
 <script>
   import { me } from '../lib/plosAuth';
-  import { getProductByFeature, startCheckout, formatPrice } from '../lib/plosEntitlements';
-  import { evaluateGate, markFreeRunUsed } from '../lib/gate';
+  import { getFeatures, getProductByFeature, startCheckout, formatPrice } from '../lib/plosEntitlements';
   import { track } from '../lib/analytics';
 
   const FEATURE = 'lifestyle-calculator';
@@ -1097,8 +1089,8 @@ const pageDescription =
       <div class="lc-paywall-card" role="dialog" aria-modal="true" aria-labelledby="lc-paywall-title">
         <button type="button" id="lc-paywall-close" class="lc-paywall-close" aria-label="Close">&times;</button>
         <p class="lc-paywall-eyebrow">Lifestyle Calculator</p>
-        <h2 id="lc-paywall-title" class="lc-paywall-h2">You've used your free run</h2>
-        <p class="lc-paywall-sub">Unlock unlimited runs with a one-time payment — re-run every idea, as many times as you want, forever.</p>
+        <h2 id="lc-paywall-title" class="lc-paywall-h2">Unlock the Lifestyle Calculator</h2>
+        <p class="lc-paywall-sub">A one-time payment unlocks the full calculator — run every idea, as many times as you want, forever.</p>
         ${price}
         ${note}
         <button type="button" id="lc-unlock-btn" class="lc-paywall-cta">Unlock unlimited →</button>
@@ -1161,28 +1153,26 @@ const pageDescription =
     track('lc_gate_shown', {});
   }
 
-  // ── Free-run detection: mark used when the RESULT step (#lc-step-6) shows ──
-  function watchCompletion(): void {
-    const step6 = document.getElementById('lc-step-6');
-    if (!step6) return;
-    const obs = new MutationObserver(() => {
-      if (step6.classList.contains('is-active')) markFreeRunUsed(FEATURE);
-    });
-    obs.observe(step6, { attributes: true, attributeFilter: ['class'] });
-    if (step6.classList.contains('is-active')) markFreeRunUsed(FEATURE);
-  }
-
   // ── Entry ──────────────────────────────────────────────────────────────
+  // Model: PAID TO TRY (no free run). Access requires payment, EXCEPT PLOS
+  // admins (e.g. efemer@gmail.com, hello@cwkexperience.com) who bypass the gate
+  // to validate the calculator.
   (async () => {
-    watchCompletion();
     const params = new URL(window.location.href).searchParams;
     const checkout = params.get('checkout');
+
+    const auth = await me();
+    const isAdmin = Boolean(auth.authenticated && auth.user?.isAdmin);
+    if (isAdmin) {
+      if (checkout) history.replaceState(null, '', currentUrlClean());
+      return; // admin bypass — full access, no paywall
+    }
 
     if (checkout === 'success') {
       // Webhook may lag a beat — poll entitlement briefly before deciding.
       for (let i = 0; i < 5; i += 1) {
-        const g = await evaluateGate(FEATURE);
-        if (g.entitled) {
+        const features = await getFeatures();
+        if (features.includes(FEATURE)) {
           track('lc_paid', {});
           history.replaceState(null, '', currentUrlClean());
           return; // unlocked — no overlay
@@ -1192,10 +1182,11 @@ const pageDescription =
       history.replaceState(null, '', currentUrlClean());
     }
 
-    const gate = await evaluateGate(FEATURE);
-    if (gate.blocked) {
-      await showPaywall(checkout === 'cancel' ? 'Checkout canceled — finish to unlock.' : undefined);
-    }
+    const features = await getFeatures();
+    if (features.includes(FEATURE)) return; // paid — full access
+
+    // Not admin, not paid → paid-to-try paywall.
+    await showPaywall(checkout === 'cancel' ? 'Checkout canceled — unlock to continue.' : undefined);
   })();
 </script>
 
@@ -1373,16 +1364,16 @@ const pageDescription =
   /* EDIT: new service categories (creative=cyan, business=purple, home=green) */
   .lc-creative::after { background: var(--cyan); }
   .lc-business::after { background: var(--purple); }
-  .lc-home::after     { background: #00E396; }
+  .lc-other::after    { background: #00E396; }
   .lc-creative.is-selected { border-color: var(--cyan);   background: rgba(0, 229, 255, 0.05); }
   .lc-business.is-selected { border-color: var(--purple); background: rgba(123, 97, 255, 0.05); }
-  .lc-home.is-selected     { border-color: #00E396;       background: rgba(0, 227, 150, 0.05); }
+  .lc-other.is-selected    { border-color: #00E396;       background: rgba(0, 227, 150, 0.05); }
   .lc-creative .lc-cat-icon { color: var(--cyan); }
   .lc-business .lc-cat-icon { color: var(--purple); }
-  .lc-home .lc-cat-icon     { color: #00E396; }
+  .lc-other .lc-cat-icon    { color: #00E396; }
   .lc-creative.is-selected .lc-cat-check { opacity: 1; transform: scale(1); background: var(--cyan); }
   .lc-business.is-selected .lc-cat-check { opacity: 1; transform: scale(1); background: var(--purple); color: #fff; }
-  .lc-home.is-selected .lc-cat-check     { opacity: 1; transform: scale(1); background: #00E396; }
+  .lc-other.is-selected .lc-cat-check    { opacity: 1; transform: scale(1); background: #00E396; }
 
   /* Sub-options */
   .lc-sub-wrap { margin-top: 16px; }
@@ -1724,7 +1715,7 @@ const pageDescription =
   .lc-badge-pocket { color: var(--pink);   background: rgba(251, 48, 121, 0.1);  border-color: rgba(251, 48, 121, 0.25); }
   .lc-badge-creative { color: var(--cyan);   background: rgba(0, 229, 255, 0.1);  border-color: rgba(0, 229, 255, 0.25); }
   .lc-badge-business { color: var(--purple); background: rgba(123, 97, 255, 0.1); border-color: rgba(123, 97, 255, 0.25); }
-  .lc-badge-home     { color: #00E396;       background: rgba(0, 227, 150, 0.1);  border-color: rgba(0, 227, 150, 0.25); }
+  .lc-badge-other    { color: #00E396;       background: rgba(0, 227, 150, 0.1);  border-color: rgba(0, 227, 150, 0.25); }
 
   /* EDIT (step 7): generic recommended-tools rows */
   .lc-tool-rows { display: flex; flex-direction: column; gap: 2px; margin: 4px 0 14px; }
