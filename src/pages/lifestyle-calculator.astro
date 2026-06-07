@@ -1254,6 +1254,125 @@ const pageDescription =
   showStep(currentStep);
 </script>
 
+<!-- ── EPIC auth-monetization (#220): one-free-run-then-pay gate ─────────────
+     Self-contained module: works off the DOM + localStorage + PLOS APIs, so it
+     needs no access to the calculator script's internals. -->
+<script>
+  import { me } from '../lib/plosAuth';
+  import { getProductByFeature, startCheckout, formatPrice } from '../lib/plosEntitlements';
+  import { evaluateGate, markFreeRunUsed } from '../lib/gate';
+  import { track } from '../lib/analytics';
+
+  const FEATURE = 'lifestyle-calculator';
+  const PRODUCT = 'lifestyle-calculator';
+
+  function currentUrlClean(): string {
+    const u = new URL(window.location.href);
+    u.searchParams.delete('checkout');
+    u.searchParams.delete('auth_error');
+    return u.toString();
+  }
+
+  // ── Paywall overlay ──────────────────────────────────────────────────────
+  function buildOverlay(opts: { priceLabel: string; note?: string }): HTMLElement {
+    const wrap = document.createElement('div');
+    wrap.id = 'lc-paywall';
+    wrap.setAttribute(
+      'style',
+      'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;' +
+        'background:rgba(7,9,15,0.92);backdrop-filter:blur(6px);padding:24px;',
+    );
+    const price = opts.priceLabel ? `<div style="font-size:30px;font-weight:800;color:#EEF0FF;margin:4px 0 14px;">${opts.priceLabel}<span style="font-size:13px;color:#A8A29E;font-weight:600;"> · one-time</span></div>` : '';
+    const note = opts.note
+      ? `<p style="margin:0 0 14px;font-size:13px;color:#FB3079;">${opts.note}</p>`
+      : '';
+    wrap.innerHTML = `
+      <div style="max-width:440px;width:100%;background:#0B0E18;border:1px solid rgba(0,229,255,0.18);border-radius:14px;padding:34px 30px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#EEF0FF;">
+        <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#00E5FF;">Lifestyle Calculator</p>
+        <h2 style="margin:0 0 6px;font-size:23px;font-weight:800;letter-spacing:-0.5px;">You've used your free run</h2>
+        <p style="margin:0 0 6px;font-size:14px;color:#A8A29E;line-height:1.6;">Unlock unlimited runs with a one-time payment — re-run every idea, as many times as you want, forever.</p>
+        ${price}
+        ${note}
+        <button id="lc-unlock-btn" style="width:100%;background:linear-gradient(90deg,#00E5FF,#7B61FF);color:#07090F;font-weight:700;font-size:14px;border:none;border-radius:8px;padding:14px 0;cursor:pointer;">Unlock unlimited →</button>
+        <p id="lc-unlock-msg" style="margin:12px 0 0;font-size:12px;color:#A8A29E;min-height:16px;"></p>
+      </div>`;
+    return wrap;
+  }
+
+  function setMsg(text: string): void {
+    const el = document.getElementById('lc-unlock-msg');
+    if (el) el.textContent = text;
+  }
+
+  async function onUnlock(): Promise<void> {
+    setMsg('Checking your account…');
+    track('lc_checkout_started', {});
+    const auth = await me();
+    if (!auth.authenticated) {
+      // Send to sign-in, returning here to finish payment (payment-first).
+      window.location.assign(`/login?return=${encodeURIComponent(currentUrlClean())}`);
+      return;
+    }
+    const res = await startCheckout(PRODUCT, currentUrlClean());
+    if (res.entitled) {
+      window.location.reload();
+      return;
+    }
+    if (res.url) {
+      window.location.assign(res.url);
+      return;
+    }
+    setMsg('Could not start checkout. Please try again.');
+  }
+
+  async function showPaywall(note?: string): Promise<void> {
+    if (document.getElementById('lc-paywall')) return;
+    const product = await getProductByFeature(FEATURE);
+    const priceLabel = product ? formatPrice(product.amount, product.currency) : '';
+    const overlay = buildOverlay({ priceLabel, note });
+    document.body.appendChild(overlay);
+    document.getElementById('lc-unlock-btn')?.addEventListener('click', () => void onUnlock());
+    track('lc_gate_shown', {});
+  }
+
+  // ── Free-run detection: mark used when the RESULT step (#lc-step-6) shows ──
+  function watchCompletion(): void {
+    const step6 = document.getElementById('lc-step-6');
+    if (!step6) return;
+    const obs = new MutationObserver(() => {
+      if (step6.classList.contains('is-active')) markFreeRunUsed(FEATURE);
+    });
+    obs.observe(step6, { attributes: true, attributeFilter: ['class'] });
+    if (step6.classList.contains('is-active')) markFreeRunUsed(FEATURE);
+  }
+
+  // ── Entry ──────────────────────────────────────────────────────────────
+  (async () => {
+    watchCompletion();
+    const params = new URL(window.location.href).searchParams;
+    const checkout = params.get('checkout');
+
+    if (checkout === 'success') {
+      // Webhook may lag a beat — poll entitlement briefly before deciding.
+      for (let i = 0; i < 5; i += 1) {
+        const g = await evaluateGate(FEATURE);
+        if (g.entitled) {
+          track('lc_paid', {});
+          history.replaceState(null, '', currentUrlClean());
+          return; // unlocked — no overlay
+        }
+        await new Promise((r) => setTimeout(r, 1200));
+      }
+      history.replaceState(null, '', currentUrlClean());
+    }
+
+    const gate = await evaluateGate(FEATURE);
+    if (gate.blocked) {
+      await showPaywall(checkout === 'cancel' ? 'Checkout canceled — finish to unlock.' : undefined);
+    }
+  })();
+</script>
+
 <style is:global>
   /* ───────────────────────────────────────────────────────
      Lifestyle Calculator styles. Marked is:global so they

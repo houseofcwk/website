@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import AuthFlow from '../components/AuthFlow';
+
+const pageTitle = 'Sign in | CWK. Experience';
+const pageDescription = 'Sign in or create your CWK account to continue.';
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <section style="min-height:70vh;display:flex;align-items:center;justify-content:center;padding:64px 16px;">
+    <AuthFlow client:load />
+  </section>
+</Base>
