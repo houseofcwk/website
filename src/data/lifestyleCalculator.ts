@@ -2,7 +2,7 @@
 // Drives the multi-step tool at /lifestyle-calculator. All copy lives here so
 // the page itself stays presentational. No em-dashes anywhere (CWK-24).
 
-export type CategoryKey = 'mind' | 'body' | 'soul' | 'pocket';
+export type CategoryKey = 'creative' | 'business' | 'home';
 export type SpeedKey = 'turtle' | 'car' | 'rocket';
 export type ArchetypeKey =
   | 'explorer'
@@ -28,7 +28,7 @@ export interface CategoryDef {
   label: string;
   icon: string;            // Inline SVG path data
   desc: string;
-  subOptions: SubOption[];
+  subOptions?: SubOption[];
 }
 
 export interface ArchetypeDef {
@@ -75,48 +75,22 @@ export interface PhaseStep {
 
 export const CATEGORIES: CategoryDef[] = [
   {
-    key: 'mind',
-    label: 'MIND',
-    icon: 'mind',
-    desc: 'Monetize your knowledge, expertise, and thinking.',
-    subOptions: [
-      { id: 'expert', label: 'Knowledge Expert', desc: 'Coaching, consulting, advising. You guide people to outcomes using what you know.' },
-      { id: 'educator', label: 'Educator or Trainer', desc: 'Courses, workshops, group programs. You teach what you know in structured formats.' },
-      { id: 'strategist', label: 'Fractional Strategist', desc: 'Part-time expert embedded in a business. You think and they execute.' },
-    ],
+    key: 'creative',
+    label: 'Creative Services',
+    icon: 'creative',
+    desc: 'Design, photography, video, writing, music, content, and any service where the work is the art.',
   },
   {
-    key: 'body',
-    label: 'BODY',
-    icon: 'body',
-    desc: 'Monetize your craft, physical skill, or hands-on practice.',
-    subOptions: [
-      { id: 'wellness', label: 'Wellness Professional', desc: 'Health, fitness, nutrition, therapy. You transform through physical work.' },
-      { id: 'creative', label: 'Creative or Maker', desc: 'Photography, design, music, craft. You create things people specifically seek out.' },
-      { id: 'practitioner', label: 'Skilled Practitioner', desc: 'A hands-on service provider with a specialty people pay a premium for.' },
-    ],
+    key: 'business',
+    label: 'Business Services',
+    icon: 'business',
+    desc: 'Coaching, consulting, strategy, marketing, operations, legal, finance, and any service where the work is the thinking.',
   },
   {
-    key: 'soul',
-    label: 'SOUL',
-    icon: 'soul',
-    desc: 'Monetize your mission, purpose, or creative vision.',
-    subOptions: [
-      { id: 'community', label: 'Community Builder', desc: 'Events, memberships, belonging. You bring people together around something real.' },
-      { id: 'creator', label: 'Purpose-Led Creator', desc: 'Content, brand, or media with a mission at the center of everything.' },
-      { id: 'guide', label: 'Transformation Guide', desc: 'Healing, spiritual, or deep personal work. You hold the space for real change.' },
-    ],
-  },
-  {
-    key: 'pocket',
-    label: 'POCKET',
-    icon: 'pocket',
-    desc: 'Monetize for financial freedom and income independence.',
-    subOptions: [
-      { id: 'independent', label: 'Going Independent', desc: 'Turning your current skills or job into a business you own and control.' },
-      { id: 'digital', label: 'Digital Product Creator', desc: 'Templates, tools, or courses that generate income beyond your active hours.' },
-      { id: 'scaling', label: 'Service Business Scaling', desc: 'You already have clients. Now you are building the team and system around it.' },
-    ],
+    key: 'home',
+    label: 'Home Services',
+    icon: 'home',
+    desc: 'Cleaning, landscaping, contracting, repair, installation, and any service where the work is done on-site.',
   },
 ];
 
@@ -181,55 +155,48 @@ export const ARCHETYPES: ArchetypeDef[] = [
 //  Tools by speed and category
 // ---------------------------------------------------------------------------
 
-export const TOOLS: Record<SpeedKey, Record<CategoryKey, string[]>> = {
-  turtle: {
-    mind: ['Zoom (free)', 'Notion for client notes', 'Canva for social visuals', 'LinkedIn for outreach', 'Calendly (free tier)'],
-    body: ['Instagram or TikTok', 'Canva', 'Calendly (free)', 'Stripe or Square', 'Google Business Profile'],
-    soul: ['Substack (free newsletter)', 'Instagram', 'Zoom for community calls', 'Linktree'],
-    pocket: ['LinkedIn', 'Notion for proposals', 'Wave (free invoicing)', 'Calendly (free)'],
-  },
-  car: {
-    mind: ['ConvertKit or Beehiiv', 'Calendly Pro', 'Squarespace or Webflow', 'Loom for async delivery', 'Teachable or Podia'],
-    body: ['Acuity Scheduling', 'Stripe', 'Website + Google Business', 'Mailchimp', 'Basic client CRM'],
-    soul: ['Circle or Mighty Networks', 'ConvertKit', 'Squarespace', 'Zoom Pro', 'Basic CRM'],
-    pocket: ['Notion or HubSpot (free)', 'Bonsai for proposals', 'Stripe', 'Email sequence tool', 'DocuSign or PandaDoc'],
-  },
-  rocket: {
-    mind: ['Kajabi or Teachable', 'GoHighLevel or HubSpot', 'ActiveCampaign', 'Meta + Google Ads', 'Circle for community'],
-    body: ['Full booking + CRM stack', 'Loyalty or membership platform', 'Meta Ads', 'Team scheduling (Deputy)', 'Analytics dashboard'],
-    soul: ['Circle full stack', 'Event management software', 'ActiveCampaign', 'Paid ads + content team tools', 'Brand partnership CRM'],
-    pocket: ['HubSpot or Pipedrive', 'Asana or Monday.com', 'QuickBooks', 'Rippling or Gusto', 'Analytics stack'],
-  },
-};
+// EDIT (step 7): brand names removed. Recommended tools are now generic
+// categories with price ranges. NOTE: price ranges below are sensible defaults
+// (well-known SaaS bands) — confirm/replace with your preferred figures.
+export interface RecommendedTool {
+  label: string;
+  price: string;
+}
+export const RECOMMENDED_TOOLS: RecommendedTool[] = [
+  { label: 'Online scheduling and booking tool', price: '$0 to $30/mo' },
+  { label: 'Email marketing platform', price: '$0 to $50/mo' },
+  { label: 'Simple CRM or pipeline tracker', price: '$0 to $50/mo' },
+  { label: 'Website hosting and payments', price: '$0 to $40/mo' },
+  { label: 'Community or membership platform', price: '$0 to $100/mo' },
+];
+// Reworded total line (step 7). Confirm the figure.
+export const RECOMMENDED_TOOLS_TOTAL =
+  'Estimated total: $0 to $270/month depending on tools selected.';
 
 // ---------------------------------------------------------------------------
 //  Skills by category
 // ---------------------------------------------------------------------------
 
+// EDIT (step 1 cascade): re-keyed to the new service categories. NOTE: these
+// bullets are drafted from the category descriptions — review/replace the copy.
 export const SKILLS: Record<CategoryKey, string[]> = {
-  mind: [
-    'Writing thought leadership content that attracts the right clients.',
-    'Running discovery calls that qualify and convert without pressure.',
-    'Packaging expertise into a clear, priced, deliverable offer.',
-    'Price anchoring: charging for the transformation, not your time.',
+  creative: [
+    'Packaging your craft into a clear, priced, productized offer.',
+    'Building a portfolio and referral system that fills your calendar.',
+    'Running discovery calls that scope the work and convert without pressure.',
+    'Price anchoring: charging for the outcome, not the hours.',
   ],
-  body: [
-    'Building a referral and social proof system that fills your calendar.',
-    'Creating seasonal campaigns and promotions that drive volume.',
-    'Client retention: turning one-time clients into recurring revenue.',
-    'Local and social marketing that brings people specifically to you.',
-  ],
-  soul: [
-    'Storytelling that makes your mission feel urgent and real to strangers.',
-    'Community facilitation and culture-setting at scale.',
-    'Sponsorship, partnership, and collaboration outreach.',
-    'Content consistency without creative burnout.',
-  ],
-  pocket: [
-    'Sales pipeline management. Knowing where every deal stands at all times.',
+  business: [
+    'Writing thought-leadership content that attracts the right clients.',
+    'Running sales conversations that qualify and close without pressure.',
+    'Packaging expertise into a clear, priced, deliverable engagement.',
     'Positioning: making your offer clearly different, not just better.',
-    'Financial modeling. Knowing your real numbers before you make decisions.',
-    'Delegation thinking: identifying what needs to leave your plate first.',
+  ],
+  home: [
+    'Building a referral and review system that keeps the calendar full.',
+    'Local and social marketing that brings people specifically to you.',
+    'Quoting and scheduling jobs so margins stay healthy.',
+    'Client retention: turning one-time jobs into recurring contracts.',
   ],
 };
 
@@ -380,6 +347,14 @@ export const SPEEDS: SpeedDef[] = [
     desc: 'All in. High investment of time, money, and energy. The math only works if the hours are real.',
   },
 ];
+
+// EDIT (step 5): months now derive from the Speed pick (outer range), since the
+// "Months to hit your goal" input was removed. Turtle 36 / Car 18 / Rocket 9.
+export const SPEED_MONTHS: Record<SpeedKey, number> = {
+  turtle: 36,
+  car: 18,
+  rocket: 9,
+};
 
 export const SPEED_TOOL_COST: Record<SpeedKey, string> = {
   turtle: 'Low to zero',

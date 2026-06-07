@@ -26,23 +26,20 @@ const pageDescription =
       <div id="lc-step-0" class="lc-step is-active">
         <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 01 / YOUR CATEGORY</span>
         <h1 class="lc-h1">What does your<br><span class="lc-grad">lifestyle really cost?</span></h1>
-        <p class="lc-sub">Pick the category that matches what you want to monetize.</p>
+        <p class="lc-sub">Pick the type of service business you run.</p>
 
         <div class="lc-cat-grid">
           {CATEGORIES.map((cat) => (
             <button type="button" class={`lc-cat-tile lc-${cat.key}`} data-cat={cat.key}>
               <span class="lc-cat-icon" aria-hidden="true">
-                {cat.icon === 'mind' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a4 4 0 0 0-4 4v1a3 3 0 0 0-2 2.83v.34A3 3 0 0 0 5 14v.5A3.5 3.5 0 0 0 8.5 18H9v3h2V3Z"/><path d="M15 3a4 4 0 0 1 4 4v1a3 3 0 0 1 2 2.83v.34A3 3 0 0 1 19 14v.5A3.5 3.5 0 0 1 15.5 18H15v3h-2V3Z"/></svg>
+                {cat.icon === 'creative' && (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>
                 )}
-                {cat.icon === 'body' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>
+                {cat.icon === 'business' && (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                 )}
-                {cat.icon === 'soul' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
-                )}
-                {cat.icon === 'pocket' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h2"/></svg>
+                {cat.icon === 'home' && (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
                 )}
               </span>
               <span class="lc-cat-label">{cat.label}</span>
@@ -50,11 +47,6 @@ const pageDescription =
               <span class="lc-cat-check" aria-hidden="true">✓</span>
             </button>
           ))}
-        </div>
-
-        <div class="lc-sub-wrap" id="lcSubWrap" hidden>
-          <div class="lc-sub-label">WHAT SPECIFICALLY?</div>
-          <div class="lc-sub-grid" id="lcSubGrid"></div>
         </div>
 
         <div class="lc-nav-row" style="margin-top:28px;">
@@ -100,7 +92,7 @@ const pageDescription =
         <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 03 / THE PRIZE</span>
         <h1 class="lc-h1">Where do you<br><span class="lc-grad">want to be?</span></h1>
         <p class="lc-sub">Let's calculate what it would take to bring this to life.</p>
-        <p class="lc-helper">If you don't know, just make one up. This is just for fun.</p>
+        <p class="lc-helper">Use your best estimate. The map is only as honest as the numbers you give it.</p>
         <p class="lc-section-tag">The real numbers to get to where you want to be.</p>
 
         <div class="lc-field-grid">
@@ -112,22 +104,11 @@ const pageDescription =
             </div>
           </div>
           <div class="lc-field-group">
-            <label class="lc-field-label" for="lc-offer-price">How much is your service or product?</label>
+            <label class="lc-field-label" for="lc-offer-price">How much is your service?</label>
             <div class="lc-field-prefix">
               <span class="lc-field-prefix-mark">$</span>
               <input type="number" id="lc-offer-price" placeholder="2,500" min="1" inputmode="numeric" />
             </div>
-          </div>
-        </div>
-
-        <div class="lc-field-grid">
-          <div class="lc-field-group">
-            <label class="lc-field-label" for="lc-hours-week">Hours a week you can invest</label>
-            <input type="number" id="lc-hours-week" placeholder="15" min="1" max="168" inputmode="numeric" />
-          </div>
-          <div class="lc-field-group">
-            <label class="lc-field-label" for="lc-time-months">Months to hit your goal</label>
-            <input type="number" id="lc-time-months" placeholder="12" min="1" inputmode="numeric" />
           </div>
         </div>
 
@@ -269,12 +250,6 @@ const pageDescription =
           </div>
         </div>
 
-        <!-- Timeline -->
-        <div class="lc-reveal">
-          <span class="lc-section-label">YOUR TIMELINE</span>
-          <div id="lcResTimeline"></div>
-        </div>
-
         <!-- Phase roadmap -->
         <div class="lc-reveal">
           <span class="lc-section-label">YOUR PHASE ROADMAP</span>
@@ -283,13 +258,13 @@ const pageDescription =
 
         <!-- Tools -->
         <div class="lc-reveal">
-          <span class="lc-section-label">RECOMMENDED TOOLS</span>
+          <span class="lc-section-label">RECOMMENDED TOOLS FOR YOUR JOURNEY</span>
           <div id="lcResTools"></div>
         </div>
 
         <!-- Skills -->
         <div class="lc-reveal">
-          <span class="lc-section-label">SKILLS TO BUILD</span>
+          <span class="lc-section-label">WHAT DO YOU NEED TO LEARN</span>
           <div id="lcResSkills"></div>
         </div>
 
@@ -311,23 +286,25 @@ const pageDescription =
           <div id="lcResWarning"></div>
         </div>
 
-        <!-- Email me my map -->
-        <div class="lc-email-card lc-reveal" id="lcEmailCard">
-          <span class="lc-email-eyebrow">EMAIL ME MY MAP</span>
-          <h3 class="lc-email-title">Want this map in your inbox?</h3>
-          <p class="lc-email-sub">We will send you a copy of your full lifestyle map so you can revisit it any time. No spam, ever.</p>
-          <form class="lc-email-form" id="lcEmailForm" novalidate>
-            <input type="email" id="lc-email-input" placeholder="your@email.com" autocomplete="email" required />
-            <button type="submit" class="lc-email-btn" id="lcEmailBtn">Send my map →</button>
-          </form>
-          <p class="lc-email-msg" id="lcEmailMsg" role="status" aria-live="polite"></p>
+        <!-- Lifestyle Protocol (EDIT step 7): placed between Stress Reality and
+             the CTA. Copy + intensity tiers (by monthly revenue goal) pending —
+             hidden until that content is provided, then always shown. -->
+        <div class="lc-reveal" id="lcResProtocolWrap" hidden>
+          <span class="lc-section-label">LIFESTYLE PROTOCOL</span>
+          <div id="lcResProtocol"></div>
+        </div>
+
+        <!-- Save the map (replaces "Email me my map") -->
+        <div class="lc-savemap lc-reveal">
+          <button type="button" class="lc-savemap-btn" id="lcSaveMapBtn">Save the map ↓</button>
+          <p class="lc-savemap-note">Print this page or bookmark it to keep your map — no email required.</p>
         </div>
 
         <!-- CTA -->
         <div class="lc-cta-section lc-reveal">
           <div class="lc-cta-intro">
             <span class="lc-cta-eyebrow">YOUR NEXT MOVE</span>
-            <h2 class="lc-cta-title">You have the map.<br>Now choose your path.</h2>
+            <h2 class="lc-cta-title">You have the map.<br>What you do with it is the game.</h2>
             <p class="lc-cta-sub">Two options. One moves faster than the other. Neither is wrong. One is just more intentional.</p>
           </div>
           <div class="lc-cta-paths">
@@ -362,15 +339,14 @@ const pageDescription =
 
 <script>
   import {
-    CATEGORIES,
     ARCHETYPES,
-    SPEEDS,
     MINES,
-    TOOLS,
+    RECOMMENDED_TOOLS,
+    RECOMMENDED_TOOLS_TOTAL,
     SKILLS,
     PEOPLE,
     PHASES,
-    SPEED_TOOL_COST,
+    SPEED_MONTHS,
     SPEED_TIME_LABELS,
     type CategoryKey,
     type SpeedKey,
@@ -378,7 +354,7 @@ const pageDescription =
     type MineKey,
     type CalculatorState,
   } from '../data/lifestyleCalculator';
-  import { track, conversion, identify, emailHash } from '../lib/analytics';
+  import { track, conversion } from '../lib/analytics';
 
   function bucketCurrency(n: number): string {
     if (!n || n < 5000) return '<5k';
@@ -518,43 +494,20 @@ const pageDescription =
     setTimeout(() => el.classList.remove('lc-flash'), 1400);
   }
 
-  // ── Step 0: category + sub-option ───────────────────────
+  // ── Step 0: category (sub-step removed) ─────────────────
   function selectCat(key: CategoryKey, btn: HTMLElement): void {
     document.querySelectorAll('.lc-cat-tile').forEach((el) => el.classList.remove('is-selected'));
     btn.classList.add('is-selected');
     state.ideaCategory = key;
     state.ideaType = '';
-    renderSubOptions(key);
     saveState();
     track('lc_category_selected', { category: key });
   }
 
-  function renderSubOptions(key: CategoryKey): void {
-    const cat = CATEGORIES.find((c) => c.key === key);
-    const wrap = document.getElementById('lcSubWrap');
-    const grid = document.getElementById('lcSubGrid');
-    if (!cat || !wrap || !grid) return;
-    grid.innerHTML = cat.subOptions
-      .map(
-        (o) => `<button type="button" class="lc-sub-opt" data-sub="${o.id}">
-          <span class="lc-sub-check">✓</span>
-          <div class="lc-sub-opt-label">${o.label}</div>
-          <div class="lc-sub-opt-desc">${o.desc}</div>
-        </button>`
-      )
-      .join('');
-    wrap.removeAttribute('hidden');
-
-    grid.querySelectorAll<HTMLButtonElement>('.lc-sub-opt').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        grid.querySelectorAll('.lc-sub-opt').forEach((el) => el.classList.remove('is-selected'));
-        btn.classList.add('is-selected');
-        state.ideaType = btn.dataset.sub ?? '';
-        saveState();
-        track('lc_subtype_selected', { category: state.ideaCategory, subtype: state.ideaType });
-      });
-      if (btn.dataset.sub === state.ideaType) btn.classList.add('is-selected');
-    });
+  // Months for the selected speed (drives all timeline math now that the
+  // "months to hit your goal" input is gone). Falls back to Car (18).
+  function speedMonths(): number {
+    return state.speed ? SPEED_MONTHS[state.speed] : SPEED_MONTHS.car;
   }
 
   // ── Step 1: archetype ──────────────────────────────────
@@ -581,6 +534,8 @@ const pageDescription =
         document.querySelectorAll('.lc-speed-card').forEach((el) => el.classList.remove('is-selected'));
         btn.classList.add('is-selected');
         state.speed = (btn.dataset.speed as SpeedKey) ?? '';
+        // EDIT (step 5): the timeline horizon now comes from the speed pick.
+        if (state.speed) state.timeMonths = SPEED_MONTHS[state.speed];
         saveState();
         track('lc_speed_selected', { speed: state.speed });
       });
@@ -680,10 +635,6 @@ const pageDescription =
         flashEl('lc-step-0');
         return false;
       }
-      if (!state.ideaType) {
-        flashEl('lcSubGrid');
-        return false;
-      }
       return true;
     }
     if (step === 1) {
@@ -696,16 +647,12 @@ const pageDescription =
     if (step === 2) {
       const g = parseFloat((document.getElementById('lc-monthly-goal') as HTMLInputElement).value);
       const p = parseFloat((document.getElementById('lc-offer-price') as HTMLInputElement).value);
-      const h = parseFloat((document.getElementById('lc-hours-week') as HTMLInputElement).value);
-      const t = parseFloat((document.getElementById('lc-time-months') as HTMLInputElement).value);
-      if (!g || !p || !h || !t) {
+      if (!g || !p) {
         flashEl('lc-step-2');
         return false;
       }
       state.monthlyGoal = g;
       state.offerPrice = p;
-      state.hoursWeek = h;
-      state.timeMonths = t;
       return true;
     }
     if (step === 3) {
@@ -732,13 +679,6 @@ const pageDescription =
     return ARCHETYPES.find((a) => a.key === key) ?? null;
   }
 
-  function getSubLabel(cat: CategoryKey | '', typeId: string): string {
-    if (!cat) return '';
-    const c = CATEGORIES.find((x) => x.key === cat);
-    if (!c) return '';
-    return c.subOptions.find((o) => o.id === typeId)?.label ?? '';
-  }
-
   function statCell(val: string, lbl: string): string {
     return `<div class="lc-stat-cell"><div class="lc-stat-val">${val}</div><div class="lc-stat-lbl">${lbl}</div></div>`;
   }
@@ -753,20 +693,24 @@ const pageDescription =
     const cat = state.ideaCategory;
     const spd = state.speed || 'car';
 
-    const catLabels: Record<string, string> = { mind: 'MIND', body: 'BODY', soul: 'SOUL', pocket: 'POCKET' };
-    const subLabel = cat ? getSubLabel(cat, state.ideaType) : '';
+    const catLabels: Record<string, string> = {
+      creative: 'Creative Services',
+      business: 'Business Services',
+      home: 'Home Services',
+    };
+    const catLabel = cat ? (catLabels[cat] ?? '') : '';
 
     // Identity
     const badges = document.getElementById('lcPlayerBadges');
     if (badges && cat) {
       badges.innerHTML =
-        `<span class="lc-player-badge lc-badge-${cat}">${catLabels[cat]} / ${escapeHtml(subLabel)}</span>` +
+        `<span class="lc-player-badge lc-badge-${cat}">${escapeHtml(catLabel)}</span>` +
         (arch ? `<span class="lc-player-badge lc-badge-stage">${arch.tag} / ${arch.name}</span>` : '');
     }
 
     const headline = document.getElementById('lcPlayerHeadline');
     if (headline) {
-      headline.innerHTML = `A <span>${arch ? arch.name : ''}</span> monetizing ${escapeHtml(subLabel || 'your edge')}, targeting $${fmtK(state.monthlyGoal)}/month.`;
+      headline.innerHTML = `A <span>${arch ? arch.name : ''}</span> running ${escapeHtml(catLabel || 'your service')}, targeting $${fmtK(state.monthlyGoal)}/month.`;
     }
 
     const stats = document.getElementById('lcPlayerStats');
@@ -799,43 +743,27 @@ const pageDescription =
         </div>`;
     }
 
-    // Timeline
-    const tl = getTimeline(arch ? arch.key : 'explorer', state.timeMonths);
-    const tlEl = document.getElementById('lcResTimeline');
-    if (tlEl) {
-      tlEl.innerHTML = `
-        <div class="lc-timeline-card">
-          ${tl.map((tm, i) => `
-            <div class="lc-timeline-row">
-              <div class="lc-timeline-marker" style="background:${tm.color}">${i + 1}</div>
-              <div>
-                <div class="lc-timeline-when">${tm.when}</div>
-                <div class="lc-timeline-what">${tm.what}</div>
-              </div>
-            </div>`).join('')}
-        </div>`;
-    }
-
-    // Tools
-    const toolList = (cat && TOOLS[spd] && TOOLS[spd][cat]) ? TOOLS[spd][cat] : [];
-    const toolPills = toolList.map((t) => `<span class="lc-tool-pill">${escapeHtml(t)}</span>`).join('');
+    // Tools — EDIT (step 7): generic categories + price ranges (no brand names).
+    const toolRows = RECOMMENDED_TOOLS.map(
+      (t) => `<div class="lc-tool-row"><span class="lc-tool-row-label">${escapeHtml(t.label)}</span><span class="lc-tool-row-price">${escapeHtml(t.price)}</span></div>`,
+    ).join('');
     const toolsEl = document.getElementById('lcResTools');
     if (toolsEl) {
       toolsEl.innerHTML = `
         <div class="lc-breakdown-card">
-          <span class="lc-breakdown-title">RECOMMENDED STACK FOR YOUR SPEED</span>
-          <div class="lc-tool-pills">${toolPills}</div>
-          <div class="lc-tool-cost">Estimated tool cost: <span>${SPEED_TOOL_COST[spd]}</span></div>
+          <span class="lc-breakdown-title">Recommended tools for your journey</span>
+          <div class="lc-tool-rows">${toolRows}</div>
+          <div class="lc-tool-cost">${escapeHtml(RECOMMENDED_TOOLS_TOTAL)}</div>
         </div>`;
     }
 
-    // Skills
+    // Skills — EDIT (step 7): heading renamed to "What do you need to learn".
     const skillList = cat ? SKILLS[cat] : [];
     const skillsEl = document.getElementById('lcResSkills');
     if (skillsEl) {
       skillsEl.innerHTML = `
         <div class="lc-res-card">
-          <span class="lc-res-badge">SKILLS TO BUILD, BASED ON YOUR EDGE</span>
+          <span class="lc-res-badge">What do you need to learn</span>
           <div class="lc-skill-list">
             ${skillList.map((s, i) => `<div class="lc-skill-item"><div class="lc-skill-num">${i + 1}</div><div class="lc-skill-text">${escapeHtml(s)}</div></div>`).join('')}
           </div>
@@ -872,15 +800,18 @@ const pageDescription =
       stressEl.innerHTML = buildStressSection(spd);
     }
 
-    // Phases
+    // Phases — EDIT (step 7): month ranges are dynamic, derived from the speed
+    // selection (total horizon = speedMonths). Phase 1 is always the first 30
+    // days; phases 2-4 split the remaining runway into thirds.
     const phases = PHASES[arch ? arch.key : 'explorer'];
     const phaseEl = document.getElementById('lcResPhases');
     if (phaseEl) {
-      phaseEl.innerHTML = phases.map((ph) => `
+      const M = speedMonths();
+      phaseEl.innerHTML = phases.map((ph, i) => `
         <div class="lc-phase-card">
           <div class="lc-phase-top">
             <span class="lc-phase-badge">${ph.name} / ${ph.sub}</span>
-            <span class="lc-phase-time">${ph.time}</span>
+            <span class="lc-phase-time">${phaseTime(i, M)}</span>
           </div>
           <div class="lc-phase-focus">${escapeHtml(ph.focus)}</div>
           <div class="lc-phase-tasks">
@@ -888,6 +819,10 @@ const pageDescription =
           </div>
         </div>`).join('');
     }
+
+    // EDIT (step 7): Lifestyle Protocol — content + intensity tiers pending.
+    // Kept hidden until that copy is provided (see lcResProtocolWrap).
+    renderProtocol();
 
     // Mind mines
     const minesEl = document.getElementById('lcResMines');
@@ -921,40 +856,21 @@ const pageDescription =
     }
   }
 
-  function getTimeline(archId: ArchetypeKey, targetMonths: number): { color: string; when: string; what: string }[] {
-    const stages: Record<ArchetypeKey, [string, string, string][]> = {
-      explorer: [
-        ['#00E396', 'Week 1 to 2', 'First real conversation happens'],
-        ['#00E5FF', 'Month 1 to 3', 'First paying client'],
-        ['#7B61FF', 'Month 3 to 6', 'First consistent month'],
-        ['#FB3079', `Month ${targetMonths}`, 'Target revenue hit'],
-      ],
-      committer: [
-        ['#00E396', 'Week 1 to 4', 'Offer goes live, imperfect is fine'],
-        ['#00E5FF', 'Month 1 to 2', 'First closed sale'],
-        ['#7B61FF', 'Month 3 to 5', 'Repeatability proven'],
-        ['#FB3079', `Month ${targetMonths}`, 'Target revenue hit'],
-      ],
-      builder: [
-        ['#00E396', 'Week 1 to 4', 'Revenue source audit complete'],
-        ['#00E5FF', 'Month 1 to 3', 'First system built'],
-        ['#7B61FF', 'Month 3 to 6', 'First real delegation'],
-        ['#FB3079', `Month ${targetMonths}`, 'Predictable revenue achieved'],
-      ],
-      operator: [
-        ['#00E396', 'Week 1 to 4', 'First process documented and handed off'],
-        ['#00E5FF', 'Month 1 to 3', 'First full delegation done'],
-        ['#7B61FF', 'Month 3 to 6', 'Business runs 2 weeks without you'],
-        ['#FB3079', `Month ${targetMonths}`, 'Full operating system installed'],
-      ],
-      sovereign: [
-        ['#00E396', 'Week 1 to 4', '3-year clarity sentence written'],
-        ['#00E5FF', 'Month 1 to 3', 'Core IP encoded into transferable systems'],
-        ['#7B61FF', 'Month 3 to 6', 'New play identified and started'],
-        ['#FB3079', `Month ${targetMonths}`, 'Next chapter fully activated'],
-      ],
-    };
-    return (stages[archId] || stages.explorer).map((s) => ({ color: s[0], when: s[1], what: s[2] }));
+  // Phase time labels derived from the total speed horizon M (months).
+  // Phase 1 = first 30 days; phases 2-4 split the remaining runway in thirds.
+  function phaseTime(i: number, M: number): string {
+    if (i === 0) return 'Days 1 to 30';
+    const lo = i === 1 ? 1 : Math.round((M / 3) * (i - 1));
+    const hi = i === 3 ? M : Math.round((M / 3) * i);
+    return `Month ${lo} to ${hi}`;
+  }
+
+  // Lifestyle Protocol (step 7) — copy + intensity-by-revenue-goal tiers pending.
+  // Until provided, the section stays hidden. When you send the copy, populate
+  // #lcResProtocol here and remove the `hidden` attribute on #lcResProtocolWrap.
+  function renderProtocol(): void {
+    const wrap = document.getElementById('lcResProtocolWrap');
+    if (wrap) wrap.setAttribute('hidden', '');
   }
 
   function buildStressSection(spd: SpeedKey): string {
@@ -1009,10 +925,7 @@ const pageDescription =
   function restoreUi(): void {
     if (state.ideaCategory) {
       const tile = document.querySelector<HTMLElement>(`.lc-cat-tile[data-cat="${state.ideaCategory}"]`);
-      if (tile) {
-        tile.classList.add('is-selected');
-        renderSubOptions(state.ideaCategory);
-      }
+      if (tile) tile.classList.add('is-selected');
     }
     if (state.archetype) {
       const ac = document.querySelector(`.lc-arch-card[data-arch="${state.archetype}"]`);
@@ -1024,8 +937,6 @@ const pageDescription =
     }
     if (state.monthlyGoal)  (document.getElementById('lc-monthly-goal') as HTMLInputElement).value = String(state.monthlyGoal);
     if (state.offerPrice)   (document.getElementById('lc-offer-price') as HTMLInputElement).value = String(state.offerPrice);
-    if (state.hoursWeek)    (document.getElementById('lc-hours-week') as HTMLInputElement).value = String(state.hoursWeek);
-    if (state.timeMonths)   (document.getElementById('lc-time-months') as HTMLInputElement).value = String(state.timeMonths);
     if (state.s2l !== 1)    (document.getElementById('lc-s2l-rate') as HTMLInputElement).value = String(state.s2l);
     if (state.l2s !== 20)   (document.getElementById('lc-l2s-rate') as HTMLInputElement).value = String(state.l2s);
 
@@ -1040,100 +951,19 @@ const pageDescription =
     state = { ...initialState };
     clearState();
     document.querySelectorAll<HTMLInputElement>(
-      '#lc-monthly-goal, #lc-offer-price, #lc-hours-week, #lc-time-months, #lc-s2l-rate, #lc-l2s-rate, #lc-email-input'
+      '#lc-monthly-goal, #lc-offer-price, #lc-s2l-rate, #lc-l2s-rate'
     ).forEach((el) => { el.value = ''; });
     document.querySelectorAll('.is-selected').forEach((el) => el.classList.remove('is-selected'));
-    const sub = document.getElementById('lcSubWrap');
-    if (sub) sub.setAttribute('hidden', '');
-    const grid = document.getElementById('lcSubGrid');
-    if (grid) grid.innerHTML = '';
-    const msg = document.getElementById('lcEmailMsg');
-    if (msg) msg.textContent = '';
     showStep(0);
   }
 
   // ── Email me my map ────────────────────────────────────
-  const API_BASE = (import.meta.env.PUBLIC_API_BASE_URL ?? 'https://api.cwkexperience.com') as string;
-  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  async function handleEmailSubmit(e: Event): Promise<void> {
-    e.preventDefault();
-    const input = document.getElementById('lc-email-input') as HTMLInputElement;
-    const btn = document.getElementById('lcEmailBtn') as HTMLButtonElement;
-    const msg = document.getElementById('lcEmailMsg') as HTMLElement;
-    const email = input.value.trim();
-
-    if (!EMAIL_REGEX.test(email)) {
-      msg.textContent = 'Please enter a valid email address.';
-      msg.dataset.tone = 'error';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    msg.textContent = '';
-
-    try {
-      const summary = buildEmailSummary();
-      const res = await fetch(`${API_BASE}/lifestyle-calculator`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, state, summary }),
-      });
-      if (res.ok) {
-        msg.textContent = 'Sent. Check your inbox in the next minute.';
-        msg.dataset.tone = 'success';
-        btn.textContent = 'Sent ✓';
-        const hash = await emailHash(email);
-        if (hash) identify(hash, { source: 'lifestyle_calculator' });
-        conversion('lc_email_submitted', {
-          category: state.ideaCategory,
-          archetype_key: state.archetype,
-          speed: state.speed,
-          monthly_goal_bucket: bucketCurrency(state.monthlyGoal),
-          mines_active: state.mines.length,
-          email_hash: hash,
-        });
-      } else {
-        msg.textContent = 'Something went wrong. Try again in a moment.';
-        msg.dataset.tone = 'error';
-        btn.disabled = false;
-        btn.textContent = 'Send my map →';
-        track('lc_email_failed', { error_code: String(res.status) });
-      }
-    } catch {
-      msg.textContent = 'Network error. Please try again.';
-      msg.dataset.tone = 'error';
-      btn.disabled = false;
-      btn.textContent = 'Send my map →';
-      track('lc_email_failed', { error_code: 'network' });
-    }
-  }
-
-  function buildEmailSummary(): {
-    headline: string;
-    targetLine: string;
-    weeklyLine: string;
-    archetype: string;
-    archetypeFeeling: string;
-    nextMove: string;
-    speed: string;
-    minesActive: number;
-  } {
-    const arch = getArch(state.archetype);
-    const n = calcNumbers();
-    const speed = SPEEDS.find((s) => s.key === state.speed);
-    const subLabel = state.ideaCategory ? getSubLabel(state.ideaCategory, state.ideaType) : '';
-    return {
-      headline: `A ${arch ? arch.name : ''} monetizing ${subLabel || 'your edge'}, targeting $${fmtK(state.monthlyGoal)}/month.`,
-      targetLine: `$${fmt(state.monthlyGoal)} per month at $${fmt(state.offerPrice)} per offer over ${state.timeMonths} months.`,
-      weeklyLine: `${fmt(n.salesPw)} sales/week, ${fmt(n.leadsPw)} leads/week, ${fmt(n.strangersPw)} strangers/week.`,
-      archetype: arch ? `${arch.tag} / ${arch.name}` : '',
-      archetypeFeeling: arch ? arch.feeling : '',
-      nextMove: arch ? arch.next : '',
-      speed: speed ? `${speed.label} (${speed.time})` : '',
-      minesActive: state.mines.length,
-    };
+  // ── Save the map (replaces "Email me my map") ──────────
+  // STUB (step 7, item d): exact behavior TBC. Default = browser print/save
+  // dialog (print-ready, no email). Swap for a downloadable export if preferred.
+  function handleSaveMap(): void {
+    track('lc_save_map', { category: state.ideaCategory, speed: state.speed });
+    window.print();
   }
 
   // ── Wire it all up ─────────────────────────────────────
@@ -1145,23 +975,6 @@ const pageDescription =
     resumed: stateExisted,
     entry_step: currentStep,
   });
-  if (typeof document !== 'undefined') {
-    const lcEmailCard = document.getElementById('lcEmailCard');
-    if (lcEmailCard && 'IntersectionObserver' in window) {
-      let fired = false;
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting && !fired) {
-            fired = true;
-            track('lc_email_form_viewed', {});
-            io.disconnect();
-          }
-        }
-      }, { threshold: 0.5 });
-      io.observe(lcEmailCard);
-    }
-  }
-
   document.querySelectorAll<HTMLButtonElement>('.lc-cat-tile').forEach((btn) => {
     btn.addEventListener('click', () => selectCat(btn.dataset.cat as CategoryKey, btn));
   });
@@ -1184,8 +997,6 @@ const pageDescription =
       if (step === 2) {
         props.monthly_goal_bucket = bucketCurrency(state.monthlyGoal);
         props.offer_price_bucket = bucketCurrency(state.offerPrice);
-        props.hours_per_week = state.hoursWeek;
-        props.time_months = state.timeMonths;
       }
       if (step === 4) {
         props.s2l_pct = state.s2l;
@@ -1247,7 +1058,7 @@ const pageDescription =
       speed: state.speed,
     });
   });
-  document.getElementById('lcEmailForm')?.addEventListener('submit', handleEmailSubmit);
+  document.getElementById('lcSaveMapBtn')?.addEventListener('click', handleSaveMap);
 
   // Restore UI from saved state, then jump to the saved step
   restoreUi();
@@ -1558,6 +1369,20 @@ const pageDescription =
   .lc-body.is-selected .lc-cat-check   { opacity: 1; transform: scale(1); background: #00E396; }
   .lc-soul.is-selected .lc-cat-check   { opacity: 1; transform: scale(1); background: var(--purple); color: #fff; }
   .lc-pocket.is-selected .lc-cat-check { opacity: 1; transform: scale(1); background: var(--pink);   color: #fff; }
+
+  /* EDIT: new service categories (creative=cyan, business=purple, home=green) */
+  .lc-creative::after { background: var(--cyan); }
+  .lc-business::after { background: var(--purple); }
+  .lc-home::after     { background: #00E396; }
+  .lc-creative.is-selected { border-color: var(--cyan);   background: rgba(0, 229, 255, 0.05); }
+  .lc-business.is-selected { border-color: var(--purple); background: rgba(123, 97, 255, 0.05); }
+  .lc-home.is-selected     { border-color: #00E396;       background: rgba(0, 227, 150, 0.05); }
+  .lc-creative .lc-cat-icon { color: var(--cyan); }
+  .lc-business .lc-cat-icon { color: var(--purple); }
+  .lc-home .lc-cat-icon     { color: #00E396; }
+  .lc-creative.is-selected .lc-cat-check { opacity: 1; transform: scale(1); background: var(--cyan); }
+  .lc-business.is-selected .lc-cat-check { opacity: 1; transform: scale(1); background: var(--purple); color: #fff; }
+  .lc-home.is-selected .lc-cat-check     { opacity: 1; transform: scale(1); background: #00E396; }
 
   /* Sub-options */
   .lc-sub-wrap { margin-top: 16px; }
@@ -1897,6 +1722,30 @@ const pageDescription =
   .lc-badge-body   { color: #00E396;       background: rgba(0, 227, 150, 0.1);   border-color: rgba(0, 227, 150, 0.25); }
   .lc-badge-soul   { color: var(--purple); background: rgba(123, 97, 255, 0.1);  border-color: rgba(123, 97, 255, 0.25); }
   .lc-badge-pocket { color: var(--pink);   background: rgba(251, 48, 121, 0.1);  border-color: rgba(251, 48, 121, 0.25); }
+  .lc-badge-creative { color: var(--cyan);   background: rgba(0, 229, 255, 0.1);  border-color: rgba(0, 229, 255, 0.25); }
+  .lc-badge-business { color: var(--purple); background: rgba(123, 97, 255, 0.1); border-color: rgba(123, 97, 255, 0.25); }
+  .lc-badge-home     { color: #00E396;       background: rgba(0, 227, 150, 0.1);  border-color: rgba(0, 227, 150, 0.25); }
+
+  /* EDIT (step 7): generic recommended-tools rows */
+  .lc-tool-rows { display: flex; flex-direction: column; gap: 2px; margin: 4px 0 14px; }
+  .lc-tool-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .lc-tool-row:last-child { border-bottom: none; }
+  .lc-tool-row-label { font-size: 14px; color: var(--text); }
+  .lc-tool-row-price { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  /* EDIT (step 7): Save the map */
+  .lc-savemap { text-align: center; margin: 8px 0 4px; }
+  .lc-savemap-btn {
+    background: rgba(255, 255, 255, 0.04); color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 10px;
+    padding: 13px 26px; font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .lc-savemap-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(0, 229, 255, 0.4); }
+  .lc-savemap-note { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
   .lc-badge-stage  { color: var(--cyan);   background: rgba(0, 229, 255, 0.06);  border-color: rgba(0, 229, 255, 0.28); }
   .lc-player-headline {
     font-size: 22px; font-weight: 700; color: var(--text);
