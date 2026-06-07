@@ -10,8 +10,36 @@ const pageDescription = 'Manage your CWK account and purchases.';
     <span class="acct-eyebrow">ACCOUNT</span>
     <h1 class="acct-h1">Your account</h1>
 
-    <div class="acct-card" id="acct-card">
-      <p class="acct-loading" id="acct-loading">Loading…</p>
+    <!-- Loading state -->
+    <div class="acct-card" id="acct-loading">
+      <p class="acct-muted">Loading…</p>
+    </div>
+
+    <!-- Real card (revealed once auth resolves) -->
+    <div class="acct-card" id="acct-card" hidden>
+      <!-- Identity -->
+      <div class="acct-row acct-identity">
+        <div class="acct-avatar" id="acct-avatar">·</div>
+        <div class="acct-identity-text">
+          <span class="acct-label">Signed in as</span>
+          <span class="acct-email" id="acct-email"></span>
+        </div>
+      </div>
+
+      <div class="acct-divider"></div>
+
+      <!-- Access / purchases -->
+      <div class="acct-block">
+        <span class="acct-label">Your access</span>
+        <div id="acct-purchases"></div>
+      </div>
+
+      <div class="acct-divider"></div>
+
+      <!-- Actions -->
+      <div class="acct-actions">
+        <button type="button" class="acct-logout" id="acct-logout">Log out</button>
+      </div>
     </div>
   </section>
 </Base>
@@ -20,12 +48,8 @@ const pageDescription = 'Manage your CWK account and purchases.';
   import { me, logout } from '../lib/plosAuth';
   import { getFeatures } from '../lib/plosEntitlements';
 
-  const FEATURE_LABELS: Record<string, { name: string; href: string; cta: string }> = {
-    'lifestyle-calculator': {
-      name: 'Lifestyle Calculator',
-      href: '/lifestyle-calculator',
-      cta: 'Open my map →',
-    },
+  const PRODUCTS: Record<string, { name: string; href: string }> = {
+    'lifestyle-calculator': { name: 'Lifestyle Calculator', href: '/lifestyle-calculator' },
   };
 
   function esc(s: string): string {
@@ -33,9 +57,6 @@ const pageDescription = 'Manage your CWK account and purchases.';
   }
 
   (async () => {
-    const card = document.getElementById('acct-card');
-    if (!card) return;
-
     const auth = await me();
     if (!auth.authenticated || !auth.user) {
       window.location.replace(`/login?return=${encodeURIComponent('/account')}`);
@@ -44,59 +65,52 @@ const pageDescription = 'Manage your CWK account and purchases.';
 
     const email = auth.user.email;
     const initial = (auth.user.name || email || '?').trim().charAt(0).toUpperCase();
+
+    const avatarEl = document.getElementById('acct-avatar');
+    const emailEl = document.getElementById('acct-email');
+    if (avatarEl) avatarEl.textContent = initial;
+    if (emailEl) emailEl.textContent = email;
+
     const features = await getFeatures();
-
-    const purchasesHtml = features.length
-      ? `<ul class="acct-purchases">${features
+    const purchasesEl = document.getElementById('acct-purchases');
+    if (purchasesEl) {
+      const owned = features.filter((f) => PRODUCTS[f]);
+      if (owned.length) {
+        purchasesEl.innerHTML = owned
           .map((f) => {
-            const meta = FEATURE_LABELS[f];
-            const name = meta ? meta.name : f;
-            const action = meta
-              ? `<a class="acct-open" href="${meta.href}">${meta.cta}</a>`
-              : '';
-            return `<li class="acct-purchase">
-              <div class="acct-purchase-main">
-                <span class="acct-purchase-dot"></span>
-                <div>
-                  <div class="acct-purchase-name">${esc(name)}</div>
-                  <div class="acct-purchase-meta">Unlimited access · one-time purchase</div>
-                </div>
+            const p = PRODUCTS[f];
+            return `<div class="acct-product">
+              <span class="acct-product-dot" aria-hidden="true"></span>
+              <div class="acct-product-text">
+                <span class="acct-product-name">${esc(p.name)}</span>
+                <span class="acct-product-meta">Active · one-time purchase · yours forever</span>
               </div>
-              ${action}
-            </li>`;
+              <a class="acct-product-open" href="${p.href}">Open &rarr;</a>
+            </div>`;
           })
-          .join('')}</ul>`
-      : `<div class="acct-empty">
-          <p class="acct-empty-text">No purchases yet.</p>
-          <a class="acct-unlock" href="/lifestyle-calculator/unlock">Unlock the Lifestyle Calculator →</a>
+          .join('');
+      } else {
+        purchasesEl.innerHTML = `<div class="acct-empty">
+          <span class="acct-muted">No active products yet.</span>
+          <a class="acct-unlock" href="/lifestyle-calculator/unlock">Unlock the Lifestyle Calculator &rarr;</a>
         </div>`;
-
-    card.innerHTML = `
-      <div class="acct-identity">
-        <div class="acct-avatar">${esc(initial)}</div>
-        <div>
-          <div class="acct-id-label">Signed in as</div>
-          <div class="acct-email">${esc(email)}</div>
-        </div>
-      </div>
-      <div class="acct-divider"></div>
-      <div class="acct-section">
-        <div class="acct-section-label">Purchases</div>
-        ${purchasesHtml}
-      </div>
-      <div class="acct-divider"></div>
-      <button type="button" class="acct-logout" id="acct-logout">Log out</button>`;
+      }
+    }
 
     document.getElementById('acct-logout')?.addEventListener('click', async () => {
       await logout();
       window.location.assign('/');
     });
+
+    document.getElementById('acct-loading')?.setAttribute('hidden', '');
+    document.getElementById('acct-card')?.removeAttribute('hidden');
   })();
 </script>
 
-<style>
+<style is:global>
+  /* is:global so styles also apply to the purchase rows injected at runtime. */
   .acct {
-    max-width: 620px;
+    max-width: 600px;
     margin: 0 auto;
     padding: 128px 20px 96px;
     color: #EEF0FF;
@@ -107,38 +121,40 @@ const pageDescription = 'Manage your CWK account and purchases.';
   .acct-eyebrow { display: block; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; margin-bottom: 10px; }
   .acct-h1 { margin: 0 0 28px; font-size: clamp(28px, 5vw, 34px); font-weight: 800; letter-spacing: -0.6px; }
 
-  .acct-card { border: 1px solid rgba(0, 229, 255, 0.16); border-radius: 16px; background: #0B0E18; padding: 28px 28px; }
-  .acct-loading { margin: 0; color: #A8A29E; }
+  .acct-card { border: 1px solid rgba(0, 229, 255, 0.16); border-radius: 16px; background: #0B0E18; padding: 26px 28px; }
+  .acct-card[hidden] { display: none; }
 
+  .acct-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: #6E6B68; margin-bottom: 6px; }
+  .acct-muted { color: #8A8784; font-size: 14px; }
+
+  /* Identity */
   .acct-identity { display: flex; align-items: center; gap: 16px; }
   .acct-avatar {
-    width: 52px; height: 52px; border-radius: 50%;
+    width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     background: linear-gradient(135deg, #00E5FF, #7B61FF); color: #07090F;
-    font-size: 20px; font-weight: 800; flex-shrink: 0;
+    font-size: 20px; font-weight: 800; line-height: 1;
   }
-  .acct-id-label { font-size: 12px; color: #8A8784; margin-bottom: 3px; }
-  .acct-email { font-size: 17px; font-weight: 600; }
+  .acct-identity-text { display: flex; flex-direction: column; min-width: 0; }
+  .acct-email { font-size: 17px; font-weight: 600; color: #EEF0FF; word-break: break-all; }
 
-  .acct-divider { height: 1px; background: rgba(255, 255, 255, 0.07); margin: 24px 0; }
+  .acct-divider { height: 1px; background: rgba(255, 255, 255, 0.07); margin: 22px 0; }
 
-  .acct-section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #00E5FF; margin-bottom: 14px; }
-
-  .acct-purchases { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-  .acct-purchase {
-    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  /* Access / purchases */
+  .acct-block { display: block; }
+  .acct-product {
+    display: flex; align-items: center; gap: 12px;
     padding: 14px 16px; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 12px;
     background: rgba(255, 255, 255, 0.02);
   }
-  .acct-purchase-main { display: flex; align-items: center; gap: 12px; }
-  .acct-purchase-dot { width: 8px; height: 8px; border-radius: 50%; background: #00E396; flex-shrink: 0; box-shadow: 0 0 10px rgba(0, 227, 150, 0.5); }
-  .acct-purchase-name { font-size: 15px; font-weight: 600; }
-  .acct-purchase-meta { font-size: 12.5px; color: #8A8784; margin-top: 2px; }
-  .acct-open { flex-shrink: 0; font-size: 13px; font-weight: 600; color: #00E5FF; text-decoration: none; white-space: nowrap; }
-  .acct-open:hover { text-decoration: underline; }
+  .acct-product-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #00E396; box-shadow: 0 0 10px rgba(0, 227, 150, 0.5); }
+  .acct-product-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  .acct-product-name { font-size: 15px; font-weight: 600; color: #EEF0FF; }
+  .acct-product-meta { font-size: 12.5px; color: #8A8784; margin-top: 2px; }
+  .acct-product-open { flex-shrink: 0; font-size: 13px; font-weight: 600; color: #00E5FF; text-decoration: none; white-space: nowrap; }
+  .acct-product-open:hover { text-decoration: underline; }
 
-  .acct-empty { text-align: left; }
-  .acct-empty-text { margin: 0 0 14px; font-size: 14px; color: #A8A29E; }
+  .acct-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
   .acct-unlock {
     display: inline-block; font-size: 14px; font-weight: 700; text-decoration: none;
     color: #07090F; background: linear-gradient(90deg, #00E5FF, #7B61FF);
@@ -146,10 +162,12 @@ const pageDescription = 'Manage your CWK account and purchases.';
   }
   .acct-unlock:hover { opacity: 0.92; }
 
+  /* Actions */
+  .acct-actions { display: flex; }
   .acct-logout {
-    background: transparent; color: #EEF0FF; border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 9px; padding: 11px 20px; font-weight: 600; font-size: 13px; cursor: pointer;
-    transition: background 0.15s ease;
+    background: transparent; color: #C9C7C4; border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 9px; padding: 10px 22px; font-weight: 600; font-size: 13px; cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
-  .acct-logout:hover { background: rgba(255, 255, 255, 0.06); }
+  .acct-logout:hover { background: rgba(255, 255, 255, 0.06); color: #EEF0FF; border-color: rgba(255, 255, 255, 0.28); }
 </style>
