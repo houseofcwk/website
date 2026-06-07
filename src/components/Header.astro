@@ -28,22 +28,27 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
     </div>
 
     <div class="nav-actions">
-      <!-- EPIC auth-monetization (#222): auth affordance. JS swaps the label to
-           the account email when a shared PLOS session is present. -->
-      <a href="/login" id="nav-auth-link" class:list={['nav-link', { active: isActive('/login') }]} data-cwk-auth>Log in</a>
       <a href="/lifestyle-calculator" class:list={['btn btn-primary nav-cta-btn', { active: isActive('/lifestyle-calculator') }]}>Lifestyle Calculator →</a>
+      <!-- EPIC auth-monetization (#222): account avatar. Hidden by default;
+           JS reveals it (right of the CTA) only when a shared PLOS session
+           exists. Logged-out users see no account affordance. -->
+      <a href="/account" id="nav-avatar" class="nav-avatar" aria-label="Your account" hidden>
+        <span id="nav-avatar-initial" aria-hidden="true"></span>
+      </a>
     </div>
 
     <script>
-      // Reflect auth state in the header without blocking render.
+      // Reveal the avatar only for signed-in users (shared PLOS session).
       import { me } from '../lib/plosAuth';
-      const link = document.getElementById('nav-auth-link') as HTMLAnchorElement | null;
-      if (link) {
+      const avatar = document.getElementById('nav-avatar') as HTMLAnchorElement | null;
+      const initial = document.getElementById('nav-avatar-initial');
+      if (avatar && initial) {
         void me().then((r) => {
           if (r.authenticated && r.user) {
-            link.textContent = 'Account';
-            link.href = '/account';
-            link.title = r.user.email;
+            const label = (r.user.name || r.user.email || '?').trim();
+            initial.textContent = label.charAt(0).toUpperCase();
+            avatar.title = r.user.email;
+            avatar.hidden = false;
           }
         });
       }
@@ -250,6 +255,32 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
+  }
+
+  /* Account avatar (signed-in only) — sits to the right of the CTA. */
+  .nav-avatar {
+    width: 34px;
+    height: 34px;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #00E5FF, #7B61FF);
+    color: #07090F;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .nav-avatar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 229, 255, 0.3);
+  }
+  .nav-avatar[hidden] {
+    display: none;
   }
 
   .nav-join,
