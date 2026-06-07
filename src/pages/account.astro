@@ -6,25 +6,26 @@ const pageDescription = 'Manage your CWK account and purchases.';
 ---
 
 <Base title={pageTitle} description={pageDescription}>
-  <section style="min-height:60vh;max-width:560px;margin:0 auto;padding:64px 16px;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#00E5FF;margin:0 0 8px;">Account</p>
-    <h1 style="margin:0 0 24px;font-size:28px;font-weight:800;letter-spacing:-0.5px;color:#EEF0FF;">Your account</h1>
-    <div
-      id="acct-card"
-      style="background:#0B0E18;border:1px solid rgba(0,229,255,0.18);border-radius:14px;padding:28px;color:#EEF0FF;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;"
-    >
-      <p id="acct-loading" style="color:#A8A29E;margin:0;">Loading…</p>
+  <section class="acct">
+    <span class="acct-eyebrow">ACCOUNT</span>
+    <h1 class="acct-h1">Your account</h1>
+
+    <div class="acct-card" id="acct-card">
+      <p class="acct-loading" id="acct-loading">Loading…</p>
     </div>
   </section>
 </Base>
 
 <script>
-  // EPIC auth-monetization (#221): minimal account view — email + purchases + logout.
   import { me, logout } from '../lib/plosAuth';
   import { getFeatures } from '../lib/plosEntitlements';
 
-  const FEATURE_LABELS: Record<string, string> = {
-    'lifestyle-calculator': 'Lifestyle Calculator — unlimited',
+  const FEATURE_LABELS: Record<string, { name: string; href: string; cta: string }> = {
+    'lifestyle-calculator': {
+      name: 'Lifestyle Calculator',
+      href: '/lifestyle-calculator',
+      cta: 'Open my map →',
+    },
   };
 
   function esc(s: string): string {
@@ -34,22 +35,57 @@ const pageDescription = 'Manage your CWK account and purchases.';
   (async () => {
     const card = document.getElementById('acct-card');
     if (!card) return;
+
     const auth = await me();
     if (!auth.authenticated || !auth.user) {
       window.location.replace(`/login?return=${encodeURIComponent('/account')}`);
       return;
     }
+
+    const email = auth.user.email;
+    const initial = (auth.user.name || email || '?').trim().charAt(0).toUpperCase();
     const features = await getFeatures();
-    const purchases = features.length
-      ? features.map((f) => `<li style="margin:0 0 6px;">${esc(FEATURE_LABELS[f] ?? f)}</li>`).join('')
-      : '<li style="color:#A8A29E;list-style:none;margin-left:-20px;">No purchases yet.</li>';
+
+    const purchasesHtml = features.length
+      ? `<ul class="acct-purchases">${features
+          .map((f) => {
+            const meta = FEATURE_LABELS[f];
+            const name = meta ? meta.name : f;
+            const action = meta
+              ? `<a class="acct-open" href="${meta.href}">${meta.cta}</a>`
+              : '';
+            return `<li class="acct-purchase">
+              <div class="acct-purchase-main">
+                <span class="acct-purchase-dot"></span>
+                <div>
+                  <div class="acct-purchase-name">${esc(name)}</div>
+                  <div class="acct-purchase-meta">Unlimited access · one-time purchase</div>
+                </div>
+              </div>
+              ${action}
+            </li>`;
+          })
+          .join('')}</ul>`
+      : `<div class="acct-empty">
+          <p class="acct-empty-text">No purchases yet.</p>
+          <a class="acct-unlock" href="/lifestyle-calculator/unlock">Unlock the Lifestyle Calculator →</a>
+        </div>`;
 
     card.innerHTML = `
-      <p style="margin:0 0 4px;font-size:12px;color:#A8A29E;">Signed in as</p>
-      <p style="margin:0 0 22px;font-size:16px;font-weight:600;">${esc(auth.user.email)}</p>
-      <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#00E5FF;">Purchases</p>
-      <ul style="margin:0 0 24px;padding-left:20px;font-size:14px;line-height:1.6;">${purchases}</ul>
-      <button id="acct-logout" style="background:transparent;color:#EEF0FF;border:1px solid rgba(255,255,255,0.16);border-radius:8px;padding:11px 18px;font-weight:600;font-size:13px;cursor:pointer;">Log out</button>`;
+      <div class="acct-identity">
+        <div class="acct-avatar">${esc(initial)}</div>
+        <div>
+          <div class="acct-id-label">Signed in as</div>
+          <div class="acct-email">${esc(email)}</div>
+        </div>
+      </div>
+      <div class="acct-divider"></div>
+      <div class="acct-section">
+        <div class="acct-section-label">Purchases</div>
+        ${purchasesHtml}
+      </div>
+      <div class="acct-divider"></div>
+      <button type="button" class="acct-logout" id="acct-logout">Log out</button>`;
 
     document.getElementById('acct-logout')?.addEventListener('click', async () => {
       await logout();
@@ -57,3 +93,63 @@ const pageDescription = 'Manage your CWK account and purchases.';
     });
   })();
 </script>
+
+<style>
+  .acct {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 128px 20px 96px;
+    color: #EEF0FF;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  @media (max-width: 600px) { .acct { padding: 96px 18px 72px; } }
+
+  .acct-eyebrow { display: block; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; margin-bottom: 10px; }
+  .acct-h1 { margin: 0 0 28px; font-size: clamp(28px, 5vw, 34px); font-weight: 800; letter-spacing: -0.6px; }
+
+  .acct-card { border: 1px solid rgba(0, 229, 255, 0.16); border-radius: 16px; background: #0B0E18; padding: 28px 28px; }
+  .acct-loading { margin: 0; color: #A8A29E; }
+
+  .acct-identity { display: flex; align-items: center; gap: 16px; }
+  .acct-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #00E5FF, #7B61FF); color: #07090F;
+    font-size: 20px; font-weight: 800; flex-shrink: 0;
+  }
+  .acct-id-label { font-size: 12px; color: #8A8784; margin-bottom: 3px; }
+  .acct-email { font-size: 17px; font-weight: 600; }
+
+  .acct-divider { height: 1px; background: rgba(255, 255, 255, 0.07); margin: 24px 0; }
+
+  .acct-section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #00E5FF; margin-bottom: 14px; }
+
+  .acct-purchases { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .acct-purchase {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 14px 16px; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .acct-purchase-main { display: flex; align-items: center; gap: 12px; }
+  .acct-purchase-dot { width: 8px; height: 8px; border-radius: 50%; background: #00E396; flex-shrink: 0; box-shadow: 0 0 10px rgba(0, 227, 150, 0.5); }
+  .acct-purchase-name { font-size: 15px; font-weight: 600; }
+  .acct-purchase-meta { font-size: 12.5px; color: #8A8784; margin-top: 2px; }
+  .acct-open { flex-shrink: 0; font-size: 13px; font-weight: 600; color: #00E5FF; text-decoration: none; white-space: nowrap; }
+  .acct-open:hover { text-decoration: underline; }
+
+  .acct-empty { text-align: left; }
+  .acct-empty-text { margin: 0 0 14px; font-size: 14px; color: #A8A29E; }
+  .acct-unlock {
+    display: inline-block; font-size: 14px; font-weight: 700; text-decoration: none;
+    color: #07090F; background: linear-gradient(90deg, #00E5FF, #7B61FF);
+    padding: 11px 20px; border-radius: 9px;
+  }
+  .acct-unlock:hover { opacity: 0.92; }
+
+  .acct-logout {
+    background: transparent; color: #EEF0FF; border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 9px; padding: 11px 20px; font-weight: 600; font-size: 13px; cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .acct-logout:hover { background: rgba(255, 255, 255, 0.06); }
+</style>
