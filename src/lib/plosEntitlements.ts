@@ -98,6 +98,23 @@ export async function claimCheckout(sessionId: string): Promise<ClaimResult> {
   }
 }
 
+/**
+ * Ping the server when a user reaches the report (map completed) so it can
+ * schedule the day-3 follow-up email. Fire-and-forget; server dedupes + skips admins.
+ */
+export async function mapCompleted(): Promise<void> {
+  try {
+    await fetch(`${PLOS_BASE}/api/account/map-completed`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{}',
+    });
+  } catch {
+    /* non-critical */
+  }
+}
+
 /** Format a price for display (best-effort). */
 export function formatPrice(amount: string | number | null, currency: string): string {
   if (amount == null || amount === '') return '';

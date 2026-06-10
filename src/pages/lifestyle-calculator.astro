@@ -321,8 +321,7 @@ const pageDescription =
               <span class="lc-path-label lc-path-b-label">PATH B</span>
               <div class="lc-cta-path-title">Find your people.</div>
               <p class="lc-cta-path-desc">The World Builders Community is free. It is where founders at your stage are building in public, sharing what is working, and moving together.</p>
-              <!-- TODO: replace href with the Skool World Builders Community URL -->
-              <a class="lc-btn-path-b" id="lcPathBBtn" href="https://www.skool.com/" target="_blank" rel="noopener">Join the community →</a>
+              <a class="lc-btn-path-b" id="lcPathBBtn" href="https://www.skool.com/world-builders-the-build-lab-6158/about" target="_blank" rel="noopener">Join the community →</a>
             </div>
           </div>
         </div>
@@ -1066,11 +1065,27 @@ const pageDescription =
      needs no access to the calculator script's internals. -->
 <script>
   import { me } from '../lib/plosAuth';
-  import { getFeatures, claimCheckout } from '../lib/plosEntitlements';
-  import { track } from '../lib/analytics';
+  import { getFeatures, claimCheckout, mapCompleted } from '../lib/plosEntitlements';
+  import { track, conversion } from '../lib/analytics';
 
   const FEATURE = 'lifestyle-calculator';
   const LANDING = '/lifestyle-calculator/unlock';
+
+  // When the user reaches the report (#lc-step-6 active), ping the server once
+  // so it can schedule the day-3 follow-up email.
+  function watchMapCompletion(): void {
+    const step6 = document.getElementById('lc-step-6');
+    if (!step6) return;
+    let pinged = false;
+    const fire = () => {
+      if (!pinged && step6.classList.contains('is-active')) {
+        pinged = true;
+        void mapCompleted();
+      }
+    };
+    new MutationObserver(fire).observe(step6, { attributes: true, attributeFilter: ['class'] });
+    fire();
+  }
 
   function currentUrlClean(): string {
     const u = new URL(window.location.href);
@@ -1088,6 +1103,7 @@ const pageDescription =
   function revealTool(): void {
     const veil = document.getElementById('lc-gate-veil');
     if (veil) veil.setAttribute('hidden', '');
+    watchMapCompletion();
   }
   function redirectToLanding(): void {
     window.location.replace(LANDING);
@@ -1113,6 +1129,7 @@ const pageDescription =
       for (let i = 0; i < 6; i += 1) {
         if ((await getFeatures()).includes(FEATURE)) {
           track('lc_paid', {});
+          conversion('lc_paid', {});
           history.replaceState(null, '', currentUrlClean());
           revealTool();
           return;
