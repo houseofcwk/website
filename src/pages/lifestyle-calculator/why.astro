@@ -1,0 +1,191 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/paywall.css';
+
+const pageTitle = 'Lifestyle Calculator — Why It Works | CWK. Experience';
+const pageDescription =
+  'What does the life you actually want cost to get? Not just the revenue number — the full picture. What a $500 consulting call delivers, for $17. One-time. Yours forever.';
+
+// "WHAT $17 REPLACES" — feature | $500 consulting call | CWK Lifestyle Map
+const ROWS = [
+  { label: 'Diagnoses where your revenue is actually coming from', consult: true, map: true },
+  { label: 'Shows exactly how many clients you need at your price', consult: true, map: true },
+  { label: 'Maps a phased roadmap to your target', consult: true, map: true },
+  { label: 'Names the blockers standing between you and the number', consult: true, map: true },
+  { label: 'Shows what people and tools you need at your speed', consult: false, map: true },
+  { label: 'Stress reality: solo vs. with the right people', consult: false, map: true },
+  { label: 'Lifestyle protocol for your revenue goal', consult: false, map: true },
+  { label: 'Available at 2am when the anxiety hits', consult: false, map: true },
+  { label: 'Yours to keep and revisit forever', consult: false, map: true },
+];
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <section class="lcu">
+    <!-- Hero -->
+    <div class="lcu-hero">
+      <span class="lcu-eyebrow">CWK. EXPERIENCE</span>
+      <h1 class="lcu-h1">What does the life you actually want cost to get?</h1>
+      <p class="lcu-sub">
+        Not just the revenue number. The full picture. What to charge, how many clients, how fast,
+        and what it costs you personally to get there.
+      </p>
+      <p class="lcu-sub-soft">Six questions. The map gets more honest the more honest you are.</p>
+
+      <div class="lcu-price">
+        <div class="lcu-price-amt">$17</div>
+        <div class="lcu-price-cap">ONE TIME</div>
+        <div class="lcu-price-fine">No subscription. No upsell. Just the map.</div>
+      </div>
+
+      <button type="button" class="lcu-cta" id="lcu-cta-hero">Build my map</button>
+      <p class="lcu-cta-note" id="lcu-note"></p>
+    </div>
+
+    <div class="lcu-divider"></div>
+
+    <!-- What $17 replaces -->
+    <div class="lcu-compare">
+      <div class="lcu-compare-head">
+        <span class="lcu-compare-title">WHAT $17 REPLACES</span>
+        <div class="lcu-compare-cols">
+          <span>$500 CONSULTING CALL</span>
+          <span>CWK. LIFESTYLE MAP</span>
+        </div>
+      </div>
+      <div class="lcu-compare-rows">
+        {ROWS.map((r) => (
+          <div class={`lcu-row ${!r.consult && r.map ? 'lcu-row-only' : ''}`}>
+            <div class="lcu-row-label">{r.label}</div>
+            <div class={`lcu-cell ${r.consult ? 'is-yes' : 'is-no'}`}>{r.consult ? '✓' : '—'}</div>
+            <div class={`lcu-cell ${r.map ? 'is-yes' : 'is-no'}`}>{r.map ? '✓' : '—'}</div>
+          </div>
+        ))}
+        <div class="lcu-row lcu-row-price">
+          <div class="lcu-row-label">Price</div>
+          <div class="lcu-cell lcu-price-old">$500+</div>
+          <div class="lcu-cell lcu-price-new">$17</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guarantee -->
+    <div class="lcu-guarantee">
+      <svg class="lcu-guarantee-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+      <div>
+        <div class="lcu-guarantee-title">Satisfaction guaranteed.</div>
+        <p class="lcu-guarantee-text">
+          If this map does not deliver, email us at
+          <a href="mailto:hello@cwkexperience.com">hello@cwkexperience.com</a> and we will take care of you.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { me } from '../../lib/plosAuth';
+  import { getFeatures } from '../../lib/plosEntitlements';
+  import { openPaywall } from '../../lib/paywall';
+  import { track } from '../../lib/analytics';
+
+  const FEATURE = 'lifestyle-calculator';
+  const APP_URL = '/lifestyle-calculator';
+  const ctas = Array.from(document.querySelectorAll<HTMLButtonElement>('.lcu-cta'));
+  const note = document.getElementById('lcu-note');
+
+  (async () => {
+    track('lcu_landing_viewed', {});
+    if (new URL(window.location.href).searchParams.get('checkout') === 'cancel' && note) {
+      note.textContent = 'Checkout canceled — build your map whenever you are ready.';
+    }
+    const auth = await me();
+    const isAdmin = Boolean(auth.authenticated && auth.user?.isAdmin);
+    const entitled = (await getFeatures()).includes(FEATURE);
+
+    if (isAdmin || entitled) {
+      ctas.forEach((b) => {
+        b.textContent = 'Open my map →';
+        b.addEventListener('click', () => window.location.assign(APP_URL));
+      });
+    } else {
+      ctas.forEach((b) =>
+        b.addEventListener('click', () =>
+          void openPaywall({
+            featureKey: FEATURE,
+            productSlug: FEATURE,
+            returnUrl: `${window.location.origin}${APP_URL}`,
+            loginReturnUrl: window.location.href,
+            title: 'Build my map',
+          }),
+        ),
+      );
+    }
+  })();
+</script>
+
+<style>
+  .lcu {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 128px 20px 96px;
+    color: #EEF0FF;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  @media (max-width: 600px) { .lcu { padding: 96px 18px 72px; } }
+
+  /* Hero */
+  .lcu-hero { text-align: center; }
+  .lcu-eyebrow { display: block; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #8A8784; margin-bottom: 22px; }
+  .lcu-h1 { margin: 0 auto 20px; max-width: 600px; font-size: clamp(30px, 5.2vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.12; }
+  .lcu-sub { margin: 0 auto 18px; max-width: 540px; font-size: 17px; line-height: 1.6; color: #A8A29E; }
+  .lcu-sub-soft { margin: 0 auto 36px; max-width: 460px; font-size: 14px; line-height: 1.6; color: #6E6B68; }
+
+  .lcu-price { margin-bottom: 28px; }
+  .lcu-price-amt { font-size: 56px; font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
+  .lcu-price-cap { margin-top: 8px; font-size: 12px; font-weight: 700; letter-spacing: 2.5px; color: #A8A29E; }
+  .lcu-price-fine { margin-top: 8px; font-size: 14px; color: #8A8784; }
+
+  .lcu-cta {
+    display: inline-block; cursor: pointer;
+    background: linear-gradient(90deg, #00E5FF, #5BD9FF);
+    color: #07090F; font-weight: 700; font-size: 16px;
+    border: none; border-radius: 10px; padding: 16px 40px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .lcu-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3); }
+  .lcu-cta-note { margin: 14px 0 0; font-size: 13px; color: #FB3079; min-height: 18px; }
+
+  .lcu-divider { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 56px 0; }
+
+  /* Comparison */
+  .lcu-compare-title { display: block; text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #8A8784; margin-bottom: 22px; }
+  .lcu-compare-cols { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 12px; align-items: end; margin-bottom: 6px; }
+  .lcu-compare-cols span { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8A8784; text-align: center; }
+  .lcu-compare-cols span:first-child { grid-column: 1; }
+  .lcu-row {
+    display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 12px; align-items: center;
+    padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .lcu-row-only { background: rgba(255, 255, 255, 0.02); border-radius: 8px; padding-left: 12px; padding-right: 12px; }
+  .lcu-row-label { font-size: 14px; line-height: 1.4; color: #D6D4D1; }
+  .lcu-cell { text-align: center; font-size: 16px; }
+  .lcu-cell.is-yes { color: #00E396; }
+  .lcu-cell.is-no { color: #44403C; }
+  .lcu-row-price { border-bottom: none; padding-top: 16px; }
+  .lcu-row-price .lcu-row-label { font-weight: 600; }
+  .lcu-price-old { color: #8A8784; font-weight: 600; }
+  .lcu-price-new { color: #EEF0FF; font-weight: 800; }
+
+  /* Guarantee */
+  .lcu-guarantee {
+    display: flex; gap: 14px; align-items: flex-start;
+    margin-top: 40px; padding: 22px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; background: #0B0E18;
+  }
+  .lcu-guarantee-icon { color: #00E396; flex-shrink: 0; margin-top: 2px; }
+  .lcu-guarantee-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .lcu-guarantee-text { margin: 0; font-size: 13.5px; line-height: 1.6; color: #A8A29E; }
+  .lcu-guarantee-text a { color: #00E5FF; text-decoration: none; }
+  .lcu-guarantee-text a:hover { text-decoration: underline; }
+</style>
