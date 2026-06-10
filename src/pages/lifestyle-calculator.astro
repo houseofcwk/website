@@ -1066,7 +1066,7 @@ const pageDescription =
      needs no access to the calculator script's internals. -->
 <script>
   import { me } from '../lib/plosAuth';
-  import { getFeatures } from '../lib/plosEntitlements';
+  import { getFeatures, claimCheckout } from '../lib/plosEntitlements';
   import { track } from '../lib/analytics';
 
   const FEATURE = 'lifestyle-calculator';
@@ -1076,6 +1076,7 @@ const pageDescription =
     const u = new URL(window.location.href);
     u.searchParams.delete('checkout');
     u.searchParams.delete('auth_error');
+    u.searchParams.delete('session_id');
     return u.toString();
   }
 
@@ -1093,7 +1094,8 @@ const pageDescription =
   }
 
   (async () => {
-    const checkout = new URL(window.location.href).searchParams.get('checkout');
+    const params = new URL(window.location.href).searchParams;
+    const checkout = params.get('checkout');
 
     const auth = await me();
     if (auth.authenticated && auth.user?.isAdmin) {
@@ -1103,7 +1105,11 @@ const pageDescription =
     }
 
     if (checkout === 'success') {
-      // Webhook may lag — poll entitlement briefly before deciding.
+      // Payment-first auto-login: claim the Stripe session → server provisions
+      // the buyer, grants the entitlement, and sets the session cookie.
+      const sessionId = params.get('session_id');
+      if (sessionId) await claimCheckout(sessionId).catch(() => undefined);
+      // Confirm entitlement (claim is sync; poll as a fallback for webhook lag).
       for (let i = 0; i < 6; i += 1) {
         if ((await getFeatures()).includes(FEATURE)) {
           track('lc_paid', {});

@@ -5,7 +5,6 @@
  * routes to login (if signed out) then Stripe checkout. Used by the gated
  * product's landing page. Styles live in src/styles/paywall.css.
  */
-import { me } from './plosAuth';
 import { getProductByFeature, startCheckout, formatPrice } from './plosEntitlements';
 import { track } from './analytics';
 
@@ -69,14 +68,10 @@ export async function openPaywall(opts: PaywallOptions): Promise<void> {
   document.documentElement.style.overflow = 'hidden';
 
   async function onUnlock(): Promise<void> {
-    setMsg('Checking your account…');
+    // Payment-first: go straight to Stripe. No login step — the account is
+    // auto-created from the Stripe email and signed in on return.
+    setMsg('Taking you to secure checkout…');
     track('lc_checkout_started', { feature: opts.featureKey });
-    const auth = await me();
-    if (!auth.authenticated) {
-      const back = opts.loginReturnUrl ?? window.location.href;
-      window.location.assign(`/login?return=${encodeURIComponent(back)}`);
-      return;
-    }
     const res = await startCheckout(opts.productSlug, opts.returnUrl);
     if (res.entitled) {
       window.location.assign(opts.returnUrl);

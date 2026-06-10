@@ -73,6 +73,31 @@ export async function startCheckout(
   }
 }
 
+export interface ClaimResult {
+  ok?: boolean;
+  entitled?: boolean;
+  error?: string;
+}
+
+/**
+ * Payment-first auto-login: after Stripe redirects back with a session id,
+ * claim it — the server provisions/finds the buyer, grants the entitlement,
+ * and sets the shared session cookie. Returns once the cookie is set.
+ */
+export async function claimCheckout(sessionId: string): Promise<ClaimResult> {
+  try {
+    const res = await fetch(`${PLOS_BASE}/api/account/claim-checkout`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId }),
+    });
+    return (await res.json().catch(() => ({}))) as ClaimResult;
+  } catch {
+    return { error: 'network' };
+  }
+}
+
 /** Format a price for display (best-effort). */
 export function formatPrice(amount: string | number | null, currency: string): string {
   if (amount == null || amount === '') return '';
