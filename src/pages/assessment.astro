@@ -129,11 +129,10 @@ const CALENDLY_URL = 'https://calendly.com/cwkexperience/experience-tour';
       </article>
 
       <div class="as-cta-block">
-        <a class="as-primary-cta" data-result-cta href="#"></a>
         <div class="as-guide-cta">
           <h3>Want to speak with a qualified guide?</h3>
-          <p>Twenty minutes. We look at your result together and tell you exactly what your next move should be.</p>
-          <a class="as-guide-link" data-result-calendly href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a conversation →</a>
+          <p>The Jungle of Entrepreneurship is not meant to be walked alone. Now that you know what player you are, let us show you how to navigate it.</p>
+          <a class="as-guide-link" data-result-calendly href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book an Experience Tour →</a>
         </div>
       </div>
 
@@ -263,9 +262,6 @@ const CALENDLY_URL = 'https://calendly.com/cwkexperience/experience-tour';
     document.querySelector<HTMLElement>('[data-result-mindmine]')!.textContent = a.mindMine;
     document.querySelector<HTMLElement>('[data-result-environment]')!.textContent = a.environment;
     document.querySelector<HTMLElement>('[data-result-onemove]')!.textContent = a.oneMove;
-    const cta = document.querySelector<HTMLAnchorElement>('[data-result-cta]')!;
-    cta.textContent = a.primaryCta.label;
-    cta.href = a.primaryCta.href;
     const gap = document.querySelector<HTMLElement>('[data-mindset-gap]')!;
     if (mindsetGap) gap.removeAttribute('hidden');
     else gap.setAttribute('hidden', 'hidden');
@@ -305,15 +301,6 @@ const CALENDLY_URL = 'https://calendly.com/cwkexperience/experience-tour';
     conversion('assessment_calendly_clicked', { archetype_key, destination });
   });
 
-  document.querySelector<HTMLAnchorElement>('[data-result-cta]')?.addEventListener('click', () => {
-    const archetype_key = sections.result?.getAttribute('data-archetype') ?? '';
-    const href = (document.querySelector<HTMLAnchorElement>('[data-result-cta]')?.href) ?? '';
-    if (href.includes('#waitlist') || href.includes('/#waitlist')) {
-      conversion('assessment_waitlist_clicked', { archetype_key });
-    } else {
-      track('assessment_cta_clicked', { archetype_key, destination: href });
-    }
-  });
 
   document.querySelector<HTMLButtonElement>('[data-restart]')?.addEventListener('click', () => {
     track('assessment_restarted', {});
