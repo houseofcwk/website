@@ -582,7 +582,8 @@ const pageDescription =
 
   // ── Math ───────────────────────────────────────────────
   function calcNumbers(): {
-    totalSales: number; salesPw: number; leadsPw: number; strangersPw: number;
+    totalSales: number; totalLeads: number; totalStrangers: number; weeks: number;
+    salesPw: number; leadsPw: number; strangersPw: number;
   } {
     const g = state.monthlyGoal, p = state.offerPrice, m = state.timeMonths;
     const s2l = state.s2l, l2s = state.l2s;
@@ -591,11 +592,23 @@ const pageDescription =
     const totalLeads = Math.ceil(totalSales / (l2s / 100));
     const totalStrangers = Math.ceil(totalLeads / (s2l / 100));
     return {
-      totalSales,
+      totalSales, totalLeads, totalStrangers, weeks,
       salesPw: Math.ceil(totalSales / weeks),
       leadsPw: Math.ceil(totalLeads / weeks),
       strangersPw: Math.ceil(totalStrangers / weeks),
     };
+  }
+
+  // Honest per-week cadence. Below 1/week we'd round up and overstate the pace,
+  // so express it as "1 every N weeks" (e.g. 36 sales over ~78 weeks → 1 / 2 wks).
+  function cadence(total: number, weeks: number, plural: string, singular: string): { num: string; lbl: string; prose: string } {
+    const perWeek = total / weeks;
+    if (perWeek >= 1) {
+      const n = Math.ceil(perWeek);
+      return { num: fmt(n), lbl: plural + ' / week', prose: fmt(n) + ' per week' };
+    }
+    const every = Math.max(2, Math.round(weeks / Math.max(1, total)));
+    return { num: '1', lbl: singular + ' every ' + every + ' weeks', prose: '1 every ' + every + ' weeks' };
   }
 
   function fmt(n: number): string {
@@ -614,10 +627,13 @@ const pageDescription =
     const bottom = document.getElementById('lcFunnelBottom');
     if (!top || !arrows || !bottom) return;
 
+    const strangers = cadence(n.totalStrangers, n.weeks, 'New people', 'New person');
+    const leads = cadence(n.totalLeads, n.weeks, 'Leads', 'Lead');
+    const sales = cadence(n.totalSales, n.weeks, 'Sales', 'Sale');
     top.innerHTML =
-      fCard(fmt(n.strangersPw), 'New people / week') +
-      fCard(fmt(n.leadsPw), 'Leads / week') +
-      fCard(fmt(n.salesPw), 'Sales / week');
+      fCard(strangers.num, strangers.lbl) +
+      fCard(leads.num, leads.lbl) +
+      fCard(sales.num, sales.lbl);
     arrows.innerHTML = '<span>↓</span><span>↓</span><span>↓</span>';
     bottom.innerHTML = `
       <div class="lc-funnel-card lc-funnel-total">
@@ -747,7 +763,7 @@ const pageDescription =
         <div class="lc-res-card">
           <span class="lc-res-badge">YOUR TARGET</span>
           <div class="lc-res-val">$${fmt(state.monthlyGoal)} / month</div>
-          <div class="lc-res-desc">That is $${fmt(state.monthlyGoal * 12)}/year. At $${fmt(state.offerPrice)} per offer you need ${fmt(n.totalSales)} sales over ${state.timeMonths} months, ${fmt(n.salesPw)} per week. To close those you need to reach ${fmt(n.strangersPw)} brand-new people every single week.</div>
+          <div class="lc-res-desc">That is $${fmt(state.monthlyGoal * 12)}/year. At $${fmt(state.offerPrice)} per offer you need ${fmt(n.totalSales)} sales over ${state.timeMonths} months, ${cadence(n.totalSales, n.weeks, 'sales', 'sale').prose}. To close those you need to reach ${fmt(n.strangersPw)} brand-new people every single week.</div>
         </div>`;
     }
 

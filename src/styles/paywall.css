@@ -46,6 +46,30 @@
 }
 .lc-paywall-msg { margin: 12px 0 0; min-height: 16px; font-size: 12px; color: #A8A29E; }
 
+/* Restore-a-purchase (email OTP) — for buyers returning on a new device. */
+.lc-paywall-restore { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.lc-paywall-link {
+  width: 100%; padding: 0; background: transparent; border: none; cursor: pointer;
+  color: #00E5FF; font-size: 13px; font-weight: 600; text-align: center;
+}
+.lc-paywall-link:hover { text-decoration: underline; }
+.lc-restore-hint { margin: 0 0 12px; font-size: 12px; color: #A8A29E; line-height: 1.5; }
+.lc-restore-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.lc-restore-input {
+  flex: 1; min-width: 0; padding: 11px 12px;
+  background: #07090F; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 8px;
+  color: #EEF0FF; font-size: 14px;
+}
+.lc-restore-input:focus { outline: none; border-color: #00E5FF; }
+.lc-restore-input::placeholder { color: #6B7280; }
+.lc-restore-btn {
+  flex: 0 0 auto; padding: 11px 16px; cursor: pointer; white-space: nowrap;
+  background: rgba(0, 229, 255, 0.12); border: 1px solid rgba(0, 229, 255, 0.4); border-radius: 8px;
+  color: #00E5FF; font-weight: 700; font-size: 13px;
+}
+.lc-restore-btn:hover { background: rgba(0, 229, 255, 0.2); }
+.lc-restore-msg { margin: 6px 0 0; min-height: 14px; font-size: 12px; color: #A8A29E; }
+
 /* Mobile: bottom sheet, full width, safe-area aware. */
 @media (max-width: 520px) {
   .lc-paywall { padding: 0; align-items: flex-end; }
