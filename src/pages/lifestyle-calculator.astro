@@ -2135,4 +2135,68 @@ const pageDescription =
     transition: opacity 0.2s ease;
   }
   .lc-gate-veil[hidden] { display: none; }
+
+  /* ── Print / "Save this map" (window.print) ─────────────────────────────
+     The on-screen tool is a dark theme; printed/PDF output must be a clean
+     white page with dark, printable ink. We strip the dark backgrounds,
+     glows and gradient-clipped text, hide all interactive chrome, and keep
+     only the report (the active step) as a readable document. */
+  @media print {
+    html, body { background: #fff !important; }
+
+    /* Hide site chrome + everything that isn't the map. */
+    .site-header, .site-footer,
+    .lc-board-wrap,         /* progress stepper */
+    .lc-nav-row,            /* Back / Next buttons */
+    .lc-savemap,            /* "Save this map" button + note */
+    .lc-gate-veil,
+    #lc-paywall { display: none !important; }
+
+    /* Flatten the page chrome to plain document flow. */
+    .lc-page { padding: 0 !important; min-height: 0 !important; }
+    .lc-wrap { max-width: 100% !important; margin: 0 !important; }
+
+    /* Baseline: black ink, no dark fills, no glows — for screen + injected nodes. */
+    .lc-page, .lc-page * {
+      color: #1a1d29 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Cards: white with a light border instead of dark glass. */
+    .lc-res-card, .lc-funnel-card, .lc-funnel-total,
+    .lc-speed-card, .lc-adjust-block, .lc-stress-section,
+    .lc-breakdown-card, .lc-timeline-card, .lc-phase-card, .lc-tool-row {
+      background: #fff !important;
+      border: 1px solid #d4d8e2 !important;
+      border-radius: 10px !important;
+      break-inside: avoid;
+    }
+    .lc-tool-row { border-radius: 0 !important; border-width: 0 0 1px !important; }
+
+    /* Headings & key figures: solid dark, undo gradient text-clip. */
+    .lc-grad, .lc-h1, .lc-res-val, .lc-funnel-num,
+    .lc-funnel-total-num, .lc-stress-val-head {
+      background: none !important;
+      -webkit-text-fill-color: #0b1020 !important;
+      color: #0b1020 !important;
+    }
+
+    /* Accent labels: a printable brand purple. */
+    .lc-eyebrow, .lc-eyebrow-dot, .lc-res-badge,
+    .lc-supp-label, .lc-solo-label { color: #5b3fd1 !important; }
+    .lc-eyebrow-dot { background: #5b3fd1 !important; }
+
+    /* Secondary copy: readable mid-grey on white. */
+    .lc-sub, .lc-res-desc, .lc-funnel-lbl, .lc-stress-metric-name,
+    .lc-stress-val, .lc-stress-note, .lc-tool-row-price { color: #4a5160 !important; }
+
+    /* Stress bars: light track, keep the meaning-bearing fill colours. */
+    .lc-stress-bar-track { background: #e6e8ef !important; }
+    .lc-solo-fill { background: #e2682a !important; }
+    .lc-supp-fill { background: #109e6f !important; }
+  }
 </style>
