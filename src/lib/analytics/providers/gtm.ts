@@ -1,4 +1,5 @@
 import { CONVERSIONS, isConversion } from '../conversions';
+import { analyticsConfig } from '../config';
 import type { Provider } from '../types';
 
 declare global {
@@ -7,12 +8,10 @@ declare global {
   }
 }
 
-const containerId = (import.meta.env.PUBLIC_GTM_ID ?? '') as string;
-
 export const gtmProvider: Provider = {
   id: 'gtm',
   isReady() {
-    return Boolean(containerId) && typeof window !== 'undefined' && Array.isArray(window.dataLayer);
+    return Boolean(analyticsConfig().gtmId) && typeof window !== 'undefined' && Array.isArray(window.dataLayer);
   },
   init() {
     if (typeof window === 'undefined') return;

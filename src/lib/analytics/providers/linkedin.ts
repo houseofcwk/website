@@ -1,5 +1,6 @@
 import type { Provider } from '../types';
 import { CONVERSIONS, isConversion } from '../conversions';
+import { analyticsConfig } from '../config';
 
 declare global {
   interface Window {
@@ -9,12 +10,11 @@ declare global {
   }
 }
 
-const partnerId = (import.meta.env.PUBLIC_LINKEDIN_PARTNER_ID ?? '') as string;
-
 export const linkedinProvider: Provider = {
   id: 'linkedin',
-  isReady: () => Boolean(partnerId) && typeof window !== 'undefined' && typeof window.lintrk === 'function',
+  isReady: () => Boolean(analyticsConfig().linkedinPartnerId) && typeof window !== 'undefined' && typeof window.lintrk === 'function',
   init() {
+    const partnerId = analyticsConfig().linkedinPartnerId;
     if (!partnerId || typeof window === 'undefined' || window.lintrk) return;
     window._linkedin_partner_id = partnerId;
     window._linkedin_data_partner_ids = window._linkedin_data_partner_ids ?? [];

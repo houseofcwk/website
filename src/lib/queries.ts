@@ -45,7 +45,8 @@ export const SITE_SETTINGS_QUERY = groq`
       knowsAbout
     },
     faqs[]{ question, answer },
-    llmsTxt
+    llmsTxt,
+    analytics{ gtmId, metaPixelId, tiktokPixelId, linkedinPartnerId }
   }
 `;
 

@@ -1,5 +1,6 @@
 import type { Provider } from '../types';
 import { CONVERSIONS, isConversion } from '../conversions';
+import { analyticsConfig } from '../config';
 
 declare global {
   interface Window {
@@ -8,12 +9,11 @@ declare global {
   }
 }
 
-const pixelId = (import.meta.env.PUBLIC_TIKTOK_PIXEL_ID ?? '') as string;
-
 export const tiktokPixelProvider: Provider = {
   id: 'tiktok_pixel',
-  isReady: () => Boolean(pixelId) && typeof window !== 'undefined' && Boolean(window.ttq),
+  isReady: () => Boolean(analyticsConfig().tiktokPixelId) && typeof window !== 'undefined' && Boolean(window.ttq),
   init() {
+    const pixelId = analyticsConfig().tiktokPixelId;
     if (!pixelId || typeof window === 'undefined' || window.ttq) return;
     /* eslint-disable */
     (function (w: any, d: Document, t: string) {

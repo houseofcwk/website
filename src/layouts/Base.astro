@@ -40,6 +40,20 @@ const firebaseMeasurementId = import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID;
 // getSiteSettings is memoized + crash-safe; null when Sanity is empty/down.
 const settings = await getSiteSettings();
 
+// Ad-pixel / analytics IDs: Sanity siteSettings.analytics wins, env is the
+// fallback. These are public IDs, so they're safe to ship from Sanity. Passed
+// to the client analytics layer via a window global (see the init script below).
+const sanityAnalytics = settings?.analytics ?? null;
+const analyticsCfg = {
+  gtmId: sanityAnalytics?.gtmId ?? '',
+  metaPixelId: sanityAnalytics?.metaPixelId ?? '',
+  tiktokPixelId: sanityAnalytics?.tiktokPixelId ?? '',
+  linkedinPartnerId: sanityAnalytics?.linkedinPartnerId ?? '',
+};
+// The GTM container is loaded by an inline <head> script (below), so resolve
+// its ID here too — Sanity first, then env.
+const resolvedGtmId = analyticsCfg.gtmId || gtmId;
+
 const twitterHandle = settings?.twitterHandle ?? TWITTER_HANDLE;
 const defaultOgImage =
   ogImage ?? settings?.defaultSeo?.ogImage?.asset?.url ?? null;
@@ -91,8 +105,8 @@ const extraBlocks = extraJsonLd
 <!doctype html>
 <html lang="en">
   <head>
-    {gtmId && (
-      <script is:inline define:vars={{ gtmId }}>
+    {resolvedGtmId && (
+      <script is:inline define:vars={{ gtmId: resolvedGtmId }}>
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -151,9 +165,15 @@ const extraBlocks = extraJsonLd
     <Footer />
     <WaitlistModal client:load />
 
+    <script is:inline define:vars={{ analyticsCfg }}>
+      /* Ad-pixel / analytics IDs from Sanity (build-time) → client config. */
+      window.__CWK_ANALYTICS__ = analyticsCfg;
+    </script>
     <script>
       import { init as analyticsInit, page as analyticsPage } from '../lib/analytics';
+      import { setAnalyticsConfig } from '../lib/analytics/config';
       import { bindUniversal } from '../lib/analytics/auto-binders';
+      setAnalyticsConfig((window as unknown as { __CWK_ANALYTICS__?: Record<string, string> }).__CWK_ANALYTICS__);
       (async () => {
         await analyticsInit();
         analyticsPage();

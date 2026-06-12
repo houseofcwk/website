@@ -1,5 +1,6 @@
 import type { Provider } from '../types';
 import { CONVERSIONS, isConversion } from '../conversions';
+import { analyticsConfig } from '../config';
 
 declare global {
   interface Window {
@@ -8,12 +9,11 @@ declare global {
   }
 }
 
-const pixelId = (import.meta.env.PUBLIC_META_PIXEL_ID ?? '') as string;
-
 export const metaPixelProvider: Provider = {
   id: 'meta_pixel',
-  isReady: () => Boolean(pixelId) && typeof window !== 'undefined' && typeof window.fbq === 'function',
+  isReady: () => Boolean(analyticsConfig().metaPixelId) && typeof window !== 'undefined' && typeof window.fbq === 'function',
   init() {
+    const pixelId = analyticsConfig().metaPixelId;
     if (!pixelId || typeof window === 'undefined' || typeof window.fbq === 'function') return;
     /* eslint-disable */
     (function (f: any, b, e, v, n?: any, t?: any, s?: any) {

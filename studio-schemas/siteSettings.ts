@@ -117,6 +117,40 @@ export const siteSettings = defineType({
       description:
         'Plain text served at /llms.txt for LLM crawlers. Edit here and re-deploy. Falls back to hardcoded copy when blank.',
     }),
+    defineField({
+      name: 'analytics',
+      title: 'Analytics & Ad Pixels',
+      type: 'object',
+      description:
+        'Tracking / ad-pixel IDs. These are PUBLIC IDs (they ship to the browser), safe to store here. Leave a field blank to disable that pixel. Changes go live on the next site deploy — publishing this document triggers a rebuild.',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        defineField({
+          name: 'gtmId',
+          title: 'Google Tag Manager Container ID',
+          type: 'string',
+          description: 'e.g. GTM-XXXXXXX. Loads the GTM container; manage individual tags inside GTM.',
+        }),
+        defineField({
+          name: 'metaPixelId',
+          title: 'Meta (Facebook) Pixel ID',
+          type: 'string',
+          description: 'Numeric ID from Meta Events Manager → Data sources.',
+        }),
+        defineField({
+          name: 'tiktokPixelId',
+          title: 'TikTok Pixel ID',
+          type: 'string',
+          description: 'From TikTok Ads Manager → Assets → Events → Web events.',
+        }),
+        defineField({
+          name: 'linkedinPartnerId',
+          title: 'LinkedIn Partner ID',
+          type: 'string',
+          description: 'Numeric Partner ID from LinkedIn Campaign Manager → Insight Tag.',
+        }),
+      ],
+    }),
   ],
   preview: {
     prepare: () => ({ title: 'Site Settings' }),
