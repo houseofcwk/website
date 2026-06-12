@@ -2,9 +2,16 @@
 import Base from '../../layouts/Base.astro';
 import '../../styles/paywall.css';
 
-const pageTitle = 'Lifestyle Calculator — Unlock | CWK. Experience';
+const pageTitle = 'Lifestyle Map — Unlock | CWK. Experience';
 const pageDescription =
-  'Turn the lifestyle you actually want into a real monthly number — and the exact plan to hit it. The map a $500 consultant builds, for $17. One-time. Unlimited runs.';
+  'Turn the life you actually want into a real monthly number — and the exact plan to hit it. The map a $500 consultant builds, for $17. One-time. Yours forever.';
+
+// The problem we agitate before the reveal — narration, not a feature list.
+const BLIND = [
+  'You set an income goal because it sounded right — never checking whether your offer can actually get you there.',
+  "You're working flat out with no idea how many people, at what price, over how long, it truly takes.",
+  'So months vanish against the wrong plan at the wrong speed — and you call it the cost of doing business.',
+];
 
 const DELIVERABLES = [
   {
@@ -42,50 +49,44 @@ const STEPS = [
 
 <Base title={pageTitle} description={pageDescription}>
   <section class="lcu">
-    <!-- Hero -->
+    <!-- Hero: one promise, one action. -->
     <div class="lcu-hero">
-      <span class="lcu-eyebrow"><span class="lcu-dot"></span>LIFESTYLE CALCULATOR</span>
-      <h1 class="lcu-h1">The <span class="lcu-grad">$500 consulting session.</span><br>For $17.</h1>
+      <span class="lcu-eyebrow"><span class="lcu-dot"></span>THE LIFESTYLE MAP</span>
+      <h1 class="lcu-h1">
+        You know the life you want.<br />
+        Now see exactly what it <span class="lcu-grad">costs to build.</span>
+      </h1>
       <p class="lcu-sub">
-        Turn the lifestyle you actually want into a real monthly number — and the exact plan to
-        hit it. The math, the roadmap, the tools, and the blocks holding you back. Your complete
-        picture, in one place, in minutes.
+        In about five minutes, the Lifestyle Map turns the life you actually want into a real
+        monthly number — then hands you the exact plan to reach it: the math, the roadmap, the
+        tools, and the blocks standing in your way.
       </p>
-      <div class="lcu-price-row">
-        <span class="lcu-price">US$17</span>
-        <span class="lcu-price-meta">one-time · unlimited runs · no subscription</span>
-      </div>
-      <button type="button" class="lcu-cta" id="lcu-cta-hero">Unlock for $17 →</button>
+      <button type="button" class="lcu-cta" id="lcu-cta-hero">Unlock my Lifestyle Map →</button>
+      <p class="lcu-trust">$17 one-time · unlimited runs · yours forever</p>
       <p class="lcu-cta-note" id="lcu-note"></p>
     </div>
 
-    <!-- Value comparison -->
-    <div class="lcu-compare">
-      <div class="lcu-compare-col lcu-compare-old">
-        <span class="lcu-compare-label">A business consultant charges $500+ to</span>
-        <ul>
-          <li>Map your income target to the life you want</li>
-          <li>Model the funnel math to get there</li>
-          <li>Hand you a phased execution plan</li>
-          <li>Recommend a tool stack and budget</li>
-          <li>Tell you which skills and blocks matter</li>
-        </ul>
+    <!-- Problem: agitate before the reveal. -->
+    <div class="lcu-problem">
+      <h2 class="lcu-problem-h">Most founders are building blind.</h2>
+      <div class="lcu-blind">
+        {BLIND.map((b) => (
+          <div class="lcu-blind-item">
+            <span class="lcu-blind-x" aria-hidden="true">✕</span>
+            <p>{b}</p>
+          </div>
+        ))}
       </div>
-      <div class="lcu-compare-col lcu-compare-new">
-        <span class="lcu-compare-label lcu-compare-label-new">You get all of it for $17</span>
-        <ul>
-          <li>Built from your real numbers, instantly</li>
-          <li>Re-run it for every idea, as many times as you want</li>
-          <li>Yours forever — the map never expires</li>
-          <li>No call to book. No pitch to sit through.</li>
-          <li>Honest output, not a sales funnel</li>
-        </ul>
-      </div>
+      <p class="lcu-problem-kicker">Clarity is cheaper than another wasted quarter.</p>
     </div>
 
-    <!-- What you get -->
+    <!-- The turn: what the map shows you. -->
     <div class="lcu-section">
-      <span class="lcu-section-label">WHAT YOU GET</span>
+      <span class="lcu-section-label">WHAT YOUR MAP SHOWS YOU</span>
+      <p class="lcu-section-lead">
+        Answer six honest questions and get your complete picture — built from your numbers,
+        not generic advice.
+      </p>
       <div class="lcu-grid">
         {DELIVERABLES.map((it) => (
           <div class="lcu-card">
@@ -112,12 +113,42 @@ const STEPS = [
       </div>
     </div>
 
+    <!-- Value anchor: the price reveal, now that they want it. -->
+    <div class="lcu-section lcu-anchor">
+      <span class="lcu-section-label">WHY THIS IS ALMOST UNFAIR</span>
+      <h2 class="lcu-anchor-h">A consultant charges <span class="lcu-strike">$500</span> for this. You pay $17.</h2>
+      <div class="lcu-compare">
+        <div class="lcu-compare-col lcu-compare-old">
+          <span class="lcu-compare-label">A business consultant charges $500+ to</span>
+          <ul>
+            <li>Map your income target to the life you want</li>
+            <li>Model the funnel math to get there</li>
+            <li>Hand you a phased execution plan</li>
+            <li>Recommend a tool stack and budget</li>
+            <li>Tell you which skills and blocks matter</li>
+          </ul>
+        </div>
+        <div class="lcu-compare-col lcu-compare-new">
+          <span class="lcu-compare-label lcu-compare-label-new">You get all of it for $17</span>
+          <ul>
+            <li>Built from your real numbers, instantly</li>
+            <li>Re-run it for every idea, as many times as you want</li>
+            <li>Yours forever — the map never expires</li>
+            <li>No call to book. No pitch to sit through.</li>
+            <li>Honest output, not a sales funnel</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <!-- Final CTA -->
     <div class="lcu-final">
       <h2 class="lcu-final-h">See what your lifestyle really costs.</h2>
-      <p class="lcu-final-sub">One honest number. One real plan. Seventeen dollars.</p>
-      <button type="button" class="lcu-cta" id="lcu-cta-final">Unlock for $17 →</button>
-      <p class="lcu-final-fine">One-time payment · unlimited runs · the map is yours forever.</p>
+      <p class="lcu-final-sub">
+        One honest number. One real plan. Seventeen dollars, once — and the map is yours for good.
+      </p>
+      <button type="button" class="lcu-cta" id="lcu-cta-final">Unlock my Lifestyle Map →</button>
+      <p class="lcu-final-fine">No subscription · no sales call · unlimited runs forever.</p>
     </div>
   </section>
 </Base>
@@ -153,7 +184,7 @@ const STEPS = [
 
   function makeOpenButtons(): void {
     ctas.forEach((btn) => {
-      btn.textContent = 'Open the Calculator →';
+      btn.textContent = 'Open my Lifestyle Map →';
       btn.addEventListener('click', toApp);
     });
   }
@@ -163,7 +194,7 @@ const STEPS = [
     if (new URL(window.location.href).searchParams.get('checkout') === 'cancel' && note) {
       note.textContent = 'Checkout canceled — unlock whenever you are ready.';
     }
-    // Paid or admin? Turn the CTAs into "Open the Calculator".
+    // Paid or admin? Turn the CTAs into "Open my Lifestyle Map".
     const auth = await me();
     const isAdmin = Boolean(auth.authenticated && auth.user?.isAdmin);
     const entitled = (await getFeatures()).includes(FEATURE);
@@ -181,44 +212,45 @@ const STEPS = [
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   }
   @media (max-width: 600px) { .lcu { padding: 96px 18px 72px; } }
-  .lcu-hero { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+
+  /* Hero — single focal point. */
+  .lcu-hero { text-align: center; max-width: 760px; margin: 0 auto 92px; }
   .lcu-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
-    color: #FB3079; margin-bottom: 18px;
+    color: #FB3079; margin-bottom: 22px;
   }
   .lcu-dot { width: 6px; height: 6px; border-radius: 50%; background: #FB3079; }
-  .lcu-h1 { margin: 0 0 18px; font-size: clamp(34px, 6vw, 54px); font-weight: 800; letter-spacing: -1px; line-height: 1.05; }
+  .lcu-h1 { margin: 0 0 22px; font-size: clamp(34px, 6vw, 56px); font-weight: 800; letter-spacing: -1.2px; line-height: 1.06; }
   .lcu-grad { background: linear-gradient(90deg, #00E5FF, #7B61FF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .lcu-sub { margin: 0 auto 26px; max-width: 600px; font-size: 16px; line-height: 1.65; color: #A8A29E; }
-  .lcu-price-row { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
-  .lcu-price { font-size: 40px; font-weight: 800; letter-spacing: -1px; }
-  .lcu-price-meta { font-size: 13px; color: #A8A29E; }
+  .lcu-sub { margin: 0 auto 32px; max-width: 620px; font-size: 17px; line-height: 1.7; color: #A8A29E; }
   .lcu-cta {
     display: inline-block; cursor: pointer;
     background: linear-gradient(90deg, #00E5FF, #7B61FF);
     color: #07090F; font-weight: 700; font-size: 16px;
-    border: none; border-radius: 10px; padding: 16px 38px;
+    border: none; border-radius: 10px; padding: 16px 40px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
   .lcu-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(0, 229, 255, 0.28); }
-  .lcu-cta-note { margin: 14px 0 0; font-size: 13px; color: #FB3079; min-height: 18px; }
+  .lcu-trust { margin: 16px 0 0; font-size: 13px; color: #8A8784; letter-spacing: 0.02em; }
+  .lcu-cta-note { margin: 12px 0 0; font-size: 13px; color: #FB3079; min-height: 18px; }
 
-  .lcu-compare {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 auto 64px;
-  }
-  .lcu-compare-col { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 26px 24px; background: #0B0E18; }
-  .lcu-compare-new { border-color: rgba(0, 229, 255, 0.25); background: linear-gradient(160deg, rgba(0, 229, 255, 0.06), rgba(123, 97, 255, 0.03)); }
-  .lcu-compare-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #A8A29E; margin-bottom: 14px; }
-  .lcu-compare-label-new { color: #00E5FF; }
-  .lcu-compare-col ul { margin: 0; padding-left: 18px; }
-  .lcu-compare-col li { font-size: 14px; line-height: 1.7; color: #C9C7C4; }
-  .lcu-compare-old li { color: #8A8784; }
+  /* Problem — agitation block. */
+  .lcu-problem { max-width: 760px; margin: 0 auto 92px; text-align: center; }
+  .lcu-problem-h { margin: 0 0 32px; font-size: clamp(24px, 4vw, 34px); font-weight: 800; letter-spacing: -0.5px; }
+  .lcu-blind { display: flex; flex-direction: column; gap: 14px; text-align: left; max-width: 640px; margin: 0 auto; }
+  .lcu-blind-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; background: #0B0E18; }
+  .lcu-blind-x { flex-shrink: 0; color: #FB3079; font-weight: 700; font-size: 15px; line-height: 1.6; }
+  .lcu-blind-item p { margin: 0; font-size: 15px; line-height: 1.6; color: #C9C7C4; }
+  .lcu-problem-kicker { margin: 30px 0 0; font-size: 17px; font-weight: 600; color: #EEF0FF; }
 
-  .lcu-section { margin: 0 auto 64px; }
-  .lcu-section-label { display: block; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; margin-bottom: 26px; }
+  /* Sections */
+  .lcu-section { margin: 0 auto 92px; }
+  .lcu-section-label { display: block; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00E5FF; margin-bottom: 14px; }
+  .lcu-section-lead { text-align: center; max-width: 600px; margin: 0 auto 32px; font-size: 16px; line-height: 1.65; color: #A8A29E; }
   .lcu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .lcu-card { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 22px 20px; background: #0B0E18; }
+  .lcu-card { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 22px 20px; background: #0B0E18; transition: border-color 0.15s ease, transform 0.15s ease; }
+  .lcu-card:hover { border-color: rgba(0, 229, 255, 0.25); transform: translateY(-2px); }
   .lcu-card-t { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
   .lcu-card-d { margin: 0; font-size: 13.5px; line-height: 1.6; color: #A8A29E; }
 
@@ -232,12 +264,26 @@ const STEPS = [
   .lcu-step-t { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
   .lcu-step-d { font-size: 13.5px; line-height: 1.6; color: #A8A29E; }
 
-  .lcu-final { text-align: center; border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 16px; padding: 48px 24px; background: linear-gradient(160deg, rgba(0, 229, 255, 0.06), rgba(123, 97, 255, 0.03)); }
-  .lcu-final-h { margin: 0 0 10px; font-size: clamp(24px, 4vw, 32px); font-weight: 800; letter-spacing: -0.5px; }
-  .lcu-final-sub { margin: 0 0 26px; font-size: 15px; color: #A8A29E; }
+  /* Value anchor */
+  .lcu-anchor-h { text-align: center; margin: 0 0 32px; font-size: clamp(22px, 3.6vw, 30px); font-weight: 800; letter-spacing: -0.5px; }
+  .lcu-strike { color: #8A8784; text-decoration: line-through; text-decoration-color: #FB3079; }
+  .lcu-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .lcu-compare-col { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 26px 24px; background: #0B0E18; }
+  .lcu-compare-new { border-color: rgba(0, 229, 255, 0.25); background: linear-gradient(160deg, rgba(0, 229, 255, 0.06), rgba(123, 97, 255, 0.03)); }
+  .lcu-compare-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #A8A29E; margin-bottom: 14px; }
+  .lcu-compare-label-new { color: #00E5FF; }
+  .lcu-compare-col ul { margin: 0; padding-left: 18px; }
+  .lcu-compare-col li { font-size: 14px; line-height: 1.7; color: #C9C7C4; }
+  .lcu-compare-old li { color: #8A8784; }
+
+  /* Final CTA */
+  .lcu-final { text-align: center; border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 16px; padding: 56px 24px; background: linear-gradient(160deg, rgba(0, 229, 255, 0.06), rgba(123, 97, 255, 0.03)); }
+  .lcu-final-h { margin: 0 0 12px; font-size: clamp(24px, 4vw, 34px); font-weight: 800; letter-spacing: -0.5px; }
+  .lcu-final-sub { margin: 0 auto 28px; max-width: 520px; font-size: 16px; line-height: 1.6; color: #A8A29E; }
   .lcu-final-fine { margin: 16px 0 0; font-size: 12px; color: #57534E; }
 
   @media (max-width: 760px) {
     .lcu-compare, .lcu-grid, .lcu-steps { grid-template-columns: 1fr; }
+    .lcu-hero, .lcu-problem, .lcu-section { margin-bottom: 64px; }
   }
 </style>

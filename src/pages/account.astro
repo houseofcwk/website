@@ -49,7 +49,7 @@ const pageDescription = 'Manage your CWK account and purchases.';
   import { getFeatures } from '../lib/plosEntitlements';
 
   const PRODUCTS: Record<string, { name: string; href: string }> = {
-    'lifestyle-calculator': { name: 'Lifestyle Calculator', href: '/lifestyle-calculator' },
+    'lifestyle-calculator': { name: 'Lifestyle Map', href: '/lifestyle-calculator' },
   };
 
   function esc(s: string): string {
@@ -92,7 +92,7 @@ const pageDescription = 'Manage your CWK account and purchases.';
       } else {
         purchasesEl.innerHTML = `<div class="acct-empty">
           <span class="acct-muted">No active products yet.</span>
-          <a class="acct-unlock" href="/lifestyle-calculator/unlock">Unlock the Lifestyle Calculator &rarr;</a>
+          <a class="acct-unlock" href="/lifestyle-calculator/unlock">Unlock the Lifestyle Map &rarr;</a>
         </div>`;
       }
     }

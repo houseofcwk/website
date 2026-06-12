@@ -61,8 +61,8 @@ export async function openPaywall(opts: PaywallOptions): Promise<void> {
   wrap.innerHTML = `
     <div class="lc-paywall-card" role="dialog" aria-modal="true" aria-labelledby="lc-paywall-title">
       <button type="button" id="lc-paywall-close" class="lc-paywall-close" aria-label="Close">&times;</button>
-      <p class="lc-paywall-eyebrow">Lifestyle Calculator</p>
-      <h2 id="lc-paywall-title" class="lc-paywall-h2">${opts.title ?? 'Unlock the Lifestyle Calculator'}</h2>
+      <p class="lc-paywall-eyebrow">Lifestyle Map</p>
+      <h2 id="lc-paywall-title" class="lc-paywall-h2">${opts.title ?? 'Unlock the Lifestyle Map'}</h2>
       <p class="lc-paywall-sub">${opts.subtitle ?? 'A one-time payment unlocks the full calculator — run every idea, as many times as you want, forever.'}</p>
       ${priceHtml}
       ${noteHtml}

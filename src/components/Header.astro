@@ -28,7 +28,7 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
     </div>
 
     <div class="nav-actions">
-      <a href="/lifestyle-calculator" class:list={['btn btn-primary nav-cta-btn', { active: isActive('/lifestyle-calculator') }]}>Lifestyle Calculator →</a>
+      <a href="/lifestyle-calculator" class:list={['btn btn-primary nav-cta-btn', { active: isActive('/lifestyle-calculator') }]}>Lifestyle Map →</a>
       <!-- EPIC auth-monetization (#222): account avatar. Hidden by default;
            JS reveals it (right of the CTA) only when a shared PLOS session
            exists. Logged-out users see no account affordance. -->
@@ -138,7 +138,7 @@ const isActive = (path: string) => currentPath === path || currentPath.startsWit
           <circle cx="14" cy="15.5" r="0.8" fill="currentColor"/>
         </svg>
       </span>
-      Lifestyle Calculator
+      Lifestyle Map
     </a>
 
   </nav>
