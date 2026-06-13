@@ -171,17 +171,57 @@ const pageDescription =
         <div class="lc-adjust-block">
           <div class="lc-adjust-title">
             <span class="lc-adjust-optional">Optional</span>
-            Adjust for your real conversion rates
+            Not sure of your rates? Pick what is true today.
           </div>
+
+          <!-- Situation presets: one tap sets both rates. -->
+          <div class="lc-preset-row" id="lcPresetRow">
+            <button type="button" class="lc-preset" data-s2l="1" data-l2s="20">
+              <strong>No audience yet</strong><span>1% · 20%</span>
+            </button>
+            <button type="button" class="lc-preset" data-s2l="3" data-l2s="25">
+              <strong>Some warm audience</strong><span>3% · 25%</span>
+            </button>
+            <button type="button" class="lc-preset" data-s2l="5" data-l2s="35">
+              <strong>Engaged, proven offer</strong><span>5% · 35%</span>
+            </button>
+          </div>
+
           <div class="lc-adjust-grid">
             <div class="lc-adjust-field">
               <label for="lc-s2l-rate">Stranger → Lead (%)</label>
               <input type="number" id="lc-s2l-rate" placeholder="1" min="0.1" max="100" step="0.1" />
+              <span class="lc-adjust-hint">Cold content is typically 1 to 5%</span>
             </div>
             <div class="lc-adjust-field">
               <label for="lc-l2s-rate">Lead → Sale (%)</label>
               <input type="number" id="lc-l2s-rate" placeholder="20" min="0.1" max="100" step="0.1" />
+              <span class="lc-adjust-hint">Warm leads are typically 20 to 40%</span>
             </div>
+          </div>
+
+          <!-- Estimate-from-data helper: derive real rates from numbers founders already have. -->
+          <button type="button" class="lc-estimate-toggle" id="lcEstimateToggle">
+            Don't know your rates? Estimate them from your last 90 days →
+          </button>
+          <div class="lc-estimate" id="lcEstimate" hidden>
+            <p class="lc-estimate-intro">Use real numbers you already have. A rough count is fine.</p>
+            <div class="lc-estimate-grid">
+              <div class="lc-adjust-field">
+                <label for="lc-est-reached">People who saw your offer</label>
+                <input type="number" id="lc-est-reached" min="1" step="1" placeholder="e.g. 2000" />
+              </div>
+              <div class="lc-adjust-field">
+                <label for="lc-est-inquired">…how many inquired</label>
+                <input type="number" id="lc-est-inquired" min="0" step="1" placeholder="e.g. 40" />
+              </div>
+              <div class="lc-adjust-field">
+                <label for="lc-est-bought">…how many bought</label>
+                <input type="number" id="lc-est-bought" min="0" step="1" placeholder="e.g. 8" />
+              </div>
+            </div>
+            <button type="button" class="lc-estimate-apply" id="lcEstimateApply">Use these rates →</button>
+            <p class="lc-estimate-out" id="lcEstimateOut"></p>
           </div>
         </div>
 
@@ -646,12 +686,35 @@ const pageDescription =
       fCard(fmt2(n.leadsPerWeek), 'Leads / week') +
       fCard(fmt2(n.salesPerWeek), 'Sales / week');
     arrows.innerHTML = '<span>↓</span><span>↓</span><span>↓</span>';
-    bottom.innerHTML = `
-      <div class="lc-funnel-card lc-funnel-total">
-        <div class="lc-funnel-total-num">${fmtSales(n.salesPerMonth)}</div>
-        <div class="lc-funnel-total-meta">
-          <div class="lc-funnel-lbl">Sales needed / month</div>
-          <p>To reach $${fmtK(state.monthlyGoal)}/mo at $${fmtK(state.offerPrice)} per offer.</p>
+    bottom.innerHTML = realityCheck(n);
+    markActivePreset();
+  }
+
+  // Reality Check: the monthly anchor turned into mentorship. Reads the founder's
+  // own inputs back to them as a strategic verdict + the price lever, instead of
+  // a bare "sales needed" number they could derive themselves.
+  function realityCheck(n: ReturnType<typeof calcNumbers>): string {
+    const sm = n.salesPerMonth;
+    const price = state.offerPrice;
+    const people = n.strangersPerWeek;
+    const dbl = price * 2;
+    let verdict: string;
+    if (sm <= 2) {
+      verdict = `This is a <strong>high-ticket, low-volume</strong> game, a handful of the right conversations a month, not a numbers grind. Your leverage is trust, positioning, and close rate, not reach.`;
+    } else if (sm <= 8) {
+      verdict = `A <strong>steady, buildable</strong> pace: real pipeline, no firehose. Sharpening either bridge (a better hook or a tighter close) pulls your goal months closer without more hustle.`;
+    } else {
+      verdict = `At $${fmt(price)} per offer this is a <strong>volume game</strong>, roughly ${fmt(people)} brand-new people every week. The fastest lever is usually <strong>price, not more traffic</strong>: raising your offer to $${fmt(dbl)} would cut every number above <strong>about in half</strong>.`;
+    }
+    return `
+      <div class="lc-reality">
+        <div class="lc-reality-figure">
+          <div class="lc-reality-num">${fmtSales(sm)}</div>
+          <div class="lc-reality-unit">sales / month</div>
+        </div>
+        <div class="lc-reality-body">
+          <span class="lc-reality-tag">REALITY CHECK</span>
+          <p>${verdict}</p>
         </div>
       </div>`;
   }
@@ -1204,7 +1267,7 @@ const pageDescription =
     });
   });
 
-  // Live recalc on conversion-rate inputs
+  // Live recalc on conversion-rate inputs (manual override).
   ['lc-s2l-rate', 'lc-l2s-rate'].forEach((id) => {
     const el = document.getElementById(id) as HTMLInputElement | null;
     el?.addEventListener('input', () => {
@@ -1214,6 +1277,54 @@ const pageDescription =
       saveState();
     });
   });
+
+  // Situation presets + "estimate from your data" helper.
+  function applyRates(s2l: number, l2s: number): void {
+    state.s2l = s2l;
+    state.l2s = l2s;
+    const a = document.getElementById('lc-s2l-rate') as HTMLInputElement | null;
+    const b = document.getElementById('lc-l2s-rate') as HTMLInputElement | null;
+    if (a) a.value = String(s2l);
+    if (b) b.value = String(l2s);
+    renderFunnel();
+    saveState();
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.lc-preset').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      applyRates(parseFloat(btn.dataset.s2l ?? '1'), parseFloat(btn.dataset.l2s ?? '20'));
+      track('lc_rate_preset', { s2l: state.s2l, l2s: state.l2s });
+    });
+  });
+
+  document.getElementById('lcEstimateToggle')?.addEventListener('click', () => {
+    document.getElementById('lcEstimate')?.toggleAttribute('hidden');
+  });
+
+  document.getElementById('lcEstimateApply')?.addEventListener('click', () => {
+    const reached = parseFloat((document.getElementById('lc-est-reached') as HTMLInputElement).value);
+    const inquired = parseFloat((document.getElementById('lc-est-inquired') as HTMLInputElement).value);
+    const bought = parseFloat((document.getElementById('lc-est-bought') as HTMLInputElement).value);
+    const out = document.getElementById('lcEstimateOut');
+    if (!reached || reached <= 0 || Number.isNaN(inquired) || Number.isNaN(bought)) {
+      if (out) out.textContent = 'Enter how many people saw your offer, inquired, and bought.';
+      return;
+    }
+    const round2 = (x: number): number => Math.round(x * 100) / 100;
+    const s2l = Math.min(100, Math.max(0.1, round2((inquired / reached) * 100)));
+    const l2s = inquired > 0 ? Math.min(100, Math.max(0.1, round2((bought / inquired) * 100))) : 20;
+    applyRates(s2l, l2s);
+    if (out) out.textContent = `Your real rates: ${s2l}% stranger→lead, ${l2s}% lead→sale. Applied above.`;
+    track('lc_rate_estimated', { s2l, l2s });
+  });
+
+  function markActivePreset(): void {
+    document.querySelectorAll<HTMLButtonElement>('.lc-preset').forEach((btn) => {
+      const on =
+        parseFloat(btn.dataset.s2l ?? '') === state.s2l && parseFloat(btn.dataset.l2s ?? '') === state.l2s;
+      btn.classList.toggle('is-active', on);
+    });
+  }
 
   document.getElementById('lcPathBBtn')?.addEventListener('click', () => {
     track('lc_path_b_clicked', {
@@ -1721,6 +1832,52 @@ const pageDescription =
     transition: border-color 0.2s;
   }
   .lc-adjust-field input:focus { border-color: rgba(0, 229, 255, 0.45); }
+  .lc-adjust-hint { font-size: 11px; color: var(--dim); letter-spacing: 0; text-transform: none; }
+
+  /* Reality Check (funnel bottom) */
+  .lc-reality {
+    display: flex; align-items: center; gap: 22px;
+    border: 1px solid rgba(0, 229, 255, 0.22);
+    background: rgba(0, 229, 255, 0.04);
+    border-radius: 14px; padding: 22px 24px;
+  }
+  .lc-reality-figure { flex-shrink: 0; text-align: center; min-width: 96px; }
+  .lc-reality-num { font-size: 40px; font-weight: 800; color: var(--cyan); letter-spacing: -0.03em; line-height: 1; }
+  .lc-reality-unit { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-top: 6px; }
+  .lc-reality-body { flex: 1; }
+  .lc-reality-tag { display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: var(--pink); margin-bottom: 8px; }
+  .lc-reality-body p { margin: 0; font-size: 14px; line-height: 1.65; color: var(--muted); }
+  .lc-reality-body strong { color: var(--text); font-weight: 700; }
+
+  /* Conversion presets */
+  .lc-preset-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .lc-preset {
+    display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+    padding: 12px 14px; cursor: pointer; text-align: left;
+    background: var(--bg2); border: 1px solid var(--gb); border-radius: 10px;
+    color: var(--text); font-family: inherit; transition: border-color 0.15s, background 0.15s;
+  }
+  .lc-preset:hover { border-color: rgba(0, 229, 255, 0.4); }
+  .lc-preset.is-active { border-color: var(--cyan); background: rgba(0, 229, 255, 0.07); }
+  .lc-preset strong { font-size: 13px; font-weight: 700; }
+  .lc-preset span { font-size: 11px; color: var(--dim); font-weight: 600; }
+
+  /* Estimate-from-data helper */
+  .lc-estimate-toggle {
+    margin-top: 16px; padding: 0; background: none; border: none; cursor: pointer;
+    color: var(--cyan); font-family: inherit; font-size: 13px; font-weight: 600; text-align: left;
+  }
+  .lc-estimate-toggle:hover { text-decoration: underline; }
+  .lc-estimate { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gb); }
+  .lc-estimate-intro { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .lc-estimate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .lc-estimate-apply {
+    margin-top: 14px; padding: 10px 20px; cursor: pointer;
+    background: rgba(0, 229, 255, 0.12); border: 1px solid rgba(0, 229, 255, 0.4); border-radius: 8px;
+    color: var(--cyan); font-family: inherit; font-size: 13px; font-weight: 700;
+  }
+  .lc-estimate-apply:hover { background: rgba(0, 229, 255, 0.2); }
+  .lc-estimate-out { margin: 12px 0 0; font-size: 12.5px; color: var(--cyan); min-height: 16px; }
 
   /* ── Step 5: Mind mines ────────────────────────────── */
   .lc-mine-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
@@ -2231,12 +2388,15 @@ const pageDescription =
     .lc-speed-grid,
     .lc-cta-paths,
     .lc-adjust-grid,
+    .lc-preset-row,
+    .lc-estimate-grid,
     .lc-now-goal,
     .lc-stress-cols,
     .lc-funnel-top,
     .lc-player-stats,
     .lc-sub-grid,
     .lc-field-grid { grid-template-columns: 1fr; }
+    .lc-reality { flex-direction: column; align-items: flex-start; gap: 14px; }
     .lc-board-wrap { padding: 16px 0 32px; }
     .lc-board-sq { width: 32px; height: 32px; font-size: 10px; border-radius: 8px; }
     .lc-board-sq.is-goal { font-size: 13px; }
