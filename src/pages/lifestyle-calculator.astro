@@ -1009,78 +1009,120 @@ const pageDescription =
     const burnSolo = spd === 'rocket' ? 'Very High' : spd === 'car' ? 'Moderate' : 'Low to Moderate';
     const burnSupp = spd === 'rocket' ? 'Managed' : 'Low';
 
-    const sec = (label: string, body: string): string =>
-      `<section class="lcp-sec"><h2 class="lcp-h2">${label}</h2>${body}</section>`;
+    const today = (() => {
+      const d = new Date();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${mm}.${dd}.${String(d.getFullYear()).slice(-2)}`;
+    })();
+    const ACC = ['cyan', 'purple', 'pink', 'green'];
+    const pad2 = (i: number): string => String(i + 1).padStart(2, '0');
 
-    const phasesHtml = phases
-      .map(
-        (ph, i) => `
-        <div class="lcp-phase">
-          <div class="lcp-phase-head"><span class="lcp-phase-name">${escapeHtml(ph.name)} / ${escapeHtml(ph.sub)}</span><span class="lcp-phase-time">${phaseTime(i, M)}</span></div>
-          <div class="lcp-phase-focus">${escapeHtml(ph.focus)}</div>
-          <ul class="lcp-list">${ph.tasks.map((x) => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
-        </div>`,
+    // Branded section: cyan eyebrow + optional sub-line, like the CWK report.
+    const sec = (label: string, sub: string, body: string): string =>
+      `<section class="lcp-sec"><div class="lcp-sec-label">${label}</div>${sub ? `<div class="lcp-sec-sub">${sub}</div>` : ''}${body}</section>`;
+
+    // Indexed card row: [accent index] [title + desc] [accent tag].
+    const row = (
+      idx: string,
+      idxAcc: string,
+      title: string,
+      desc: string,
+      tag: string,
+      tagAcc: string,
+    ): string =>
+      `<div class="lcp-row">
+        <div class="lcp-row-idx lcp-${idxAcc}">${idx}</div>
+        <div class="lcp-row-main"><div class="lcp-row-title">${title}</div>${desc ? `<div class="lcp-row-desc">${desc}</div>` : ''}</div>
+        ${tag ? `<div class="lcp-row-tag lcp-${tagAcc}">${tag}</div>` : '<div></div>'}
+      </div>`;
+
+    const totalCell = (num: string, label: string, acc: string): string =>
+      `<div class="lcp-total-cell"><div class="lcp-total-num lcp-${acc}">${num}</div><div class="lcp-total-lbl">${label}</div></div>`;
+
+    const metaTable = `
+      <table class="lcp-table lcp-meta-table"><thead><tr>
+        <th>Player</th><th>Service</th><th>Target</th><th>Horizon</th><th>Date</th>
+      </tr></thead><tbody><tr>
+        <td>${arch ? escapeHtml(`${arch.tag} / ${arch.name}`) : '—'}</td>
+        <td>${escapeHtml(catLabel || '—')}</td>
+        <td>$${fmt(state.monthlyGoal)}/mo</td>
+        <td>${state.timeMonths} months</td>
+        <td>${today}</td>
+      </tr></tbody></table>`;
+
+    const totals = `<div class="lcp-totals">
+      ${totalCell('$' + fmtK(state.monthlyGoal), 'Monthly target', 'cyan')}
+      ${totalCell(fmt(n.strangersPw), 'New people / week', 'purple')}
+      ${totalCell(fmt(n.leadsPw), 'Leads / week', 'pink')}
+      ${totalCell(fmt(n.totalSales), `Total sales · ${state.timeMonths} mo`, 'green')}
+    </div>`;
+
+    const verdict = `<div class="lcp-verdict"><p>That is <strong>$${fmt(state.monthlyGoal * 12)}/year</strong>. At $${fmt(state.offerPrice)} per offer you need <strong>${fmt(n.totalSales)} sales</strong> over ${state.timeMonths} months — ${salesCad.prose}. To close those you must reach <strong>${fmt(n.strangersPw)} brand-new people every week</strong>, turning roughly ${fmt(n.leadsPw)} of them into leads. This is the real shape of the number, not the wish.</p></div>`;
+
+    const phaseRows = phases
+      .map((ph, i) =>
+        row(
+          'P-' + pad2(i),
+          'cyan',
+          escapeHtml(`${ph.name} / ${ph.sub}`),
+          `<div class="lcp-row-focus">${escapeHtml(ph.focus)}</div><ul class="lcp-row-list">${ph.tasks.map((x) => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`,
+          phaseTime(i, M),
+          'purple',
+        ),
       )
       .join('');
 
-    const toolsHtml = `<table class="lcp-table"><tbody>${RECOMMENDED_TOOLS.map(
+    const skillRows = skillList
+      .map((s, i) => row('S-' + pad2(i), ACC[i % 4], escapeHtml(s), '', 'LEARN', ACC[i % 4]))
+      .join('');
+
+    const toolsTable = `<table class="lcp-table"><thead><tr><th>Tool / category</th><th class="lcp-r">Monthly cost</th></tr></thead><tbody>${RECOMMENDED_TOOLS.map(
       (tl) => `<tr><td>${escapeHtml(tl.label)}</td><td class="lcp-r">${escapeHtml(tl.price)}</td></tr>`,
     ).join('')}<tr class="lcp-total"><td>Estimated total</td><td class="lcp-r">${escapeHtml(RECOMMENDED_TOOLS_TOTAL)}</td></tr></tbody></table>`;
 
-    const skillsHtml = `<ol class="lcp-ol">${skillList.map((s) => `<li>${escapeHtml(s)}</li>`).join('')}</ol>`;
-
-    const peopleHtml = `<table class="lcp-table"><tbody>${ppl.list
+    const peopleTable = `<table class="lcp-table"><thead><tr><th>Who you need</th><th class="lcp-r">Investment</th></tr></thead><tbody>${ppl.list
       .map(
         (p) =>
           `<tr><td><strong>${escapeHtml(p.who)}</strong><br><span class="lcp-muted">${escapeHtml(p.note)}</span></td><td class="lcp-r">${escapeHtml(p.cost || 'Free')}</td></tr>`,
       )
       .join('')}<tr class="lcp-total"><td>Total people investment</td><td class="lcp-r">${escapeHtml(ppl.total)}</td></tr></tbody></table><p class="lcp-muted">${escapeHtml(ppl.truth)}</p>`;
 
-    const stressHtml = `<table class="lcp-table"><thead><tr><th></th><th class="lcp-r">Going solo</th><th class="lcp-r">With right people</th></tr></thead><tbody>
-      <tr><td>Stress level</td><td class="lcp-r">${stressSolo.toFixed(1)}/10</td><td class="lcp-r">${stressSupported.toFixed(1)}/10</td></tr>
-      <tr><td>Time to goal</td><td class="lcp-r">${escapeHtml(t.solo)}</td><td class="lcp-r">${escapeHtml(t.supported)}</td></tr>
-      <tr><td>Risk of burnout</td><td class="lcp-r">${burnSolo}</td><td class="lcp-r">${burnSupp}</td></tr>
-      <tr><td>Mistake tax</td><td class="lcp-r">Paid in time + money</td><td class="lcp-r">Paid in investment</td></tr>
+    const stressTable = `<table class="lcp-table"><thead><tr><th>Metric</th><th class="lcp-r">Going solo</th><th class="lcp-r">With right people</th></tr></thead><tbody>
+      <tr><td>Stress level</td><td class="lcp-r">${stressSolo.toFixed(1)}/10</td><td class="lcp-r lcp-green">${stressSupported.toFixed(1)}/10</td></tr>
+      <tr><td>Time to goal</td><td class="lcp-r">${escapeHtml(t.solo)}</td><td class="lcp-r lcp-green">${escapeHtml(t.supported)}</td></tr>
+      <tr><td>Risk of burnout</td><td class="lcp-r">${burnSolo}</td><td class="lcp-r lcp-green">${burnSupp}</td></tr>
+      <tr><td>Mistake tax</td><td class="lcp-r">Paid in time + money</td><td class="lcp-r lcp-green">Paid in investment</td></tr>
     </tbody></table>`;
 
-    const minesHtml = state.mines.length
-      ? `<ul class="lcp-mines">${state.mines
-          .map((mk) => {
+    const minesBody = state.mines.length
+      ? state.mines
+          .map((mk, i) => {
             const m = MINES.find((x) => x.key === mk);
             return m
-              ? `<li><strong>${escapeHtml(m.label)}</strong> — ${escapeHtml(m.stat)}<br><span class="lcp-muted">${escapeHtml(m.fix)}</span></li>`
+              ? row('M-' + pad2(i), 'pink', escapeHtml(m.label), escapeHtml(m.fix), escapeHtml(m.stat), 'pink')
               : '';
           })
-          .join('')}</ul>`
-      : '<p class="lcp-muted">No blocks flagged.</p>';
+          .join('')
+      : '<p class="lcp-muted">No blocks flagged — clear runway.</p>';
 
     host.innerHTML = `
       <div class="lcp-doc">
-        <header class="lcp-header">
-          <div class="lcp-brand">CWK. <span>Lifestyle Map</span></div>
-          <div class="lcp-metaline">${escapeHtml(catLabel || 'Your service')}${arch ? ` · ${escapeHtml(arch.tag)} / ${escapeHtml(arch.name)}` : ''}</div>
+        <div class="lcp-foot"><span>CWK_Lifestyle_Map_Report_v1</span><span>CWK. Experience &nbsp;|&nbsp; Build. Learn. Earn. Play.</span></div>
+        <header class="lcp-head">
+          <div class="lcp-eyebrow">Lifestyle Map Report</div>
+          <h1 class="lcp-h1">${arch ? escapeHtml(arch.name) : 'Your'} Lifestyle Map</h1>
+          <div class="lcp-sub">A ${arch ? escapeHtml(arch.name) : 'founder'} running ${escapeHtml(catLabel || 'your service')}, targeting $${fmtK(state.monthlyGoal)}/month — and the exact plan to get there.</div>
         </header>
-        <h1 class="lcp-title">A ${arch ? escapeHtml(arch.name) : 'founder'} running ${escapeHtml(catLabel || 'your service')}, targeting $${fmtK(state.monthlyGoal)}/month.</h1>
-
-        ${sec(
-          'Your target',
-          `<div class="lcp-target">$${fmt(state.monthlyGoal)} / month</div>
-          <p class="lcp-p">That is $${fmt(state.monthlyGoal * 12)}/year. At $${fmt(state.offerPrice)} per offer you need <strong>${fmt(n.totalSales)} sales</strong> over ${state.timeMonths} months, ${salesCad.prose}. To close those you need to reach <strong>${fmt(n.strangersPw)} brand-new people</strong> every week.</p>
-          <div class="lcp-stats">
-            <div class="lcp-stat"><span>${fmt(n.strangersPw)}</span>New people / week</div>
-            <div class="lcp-stat"><span>${fmt(n.leadsPw)}</span>Leads / week</div>
-            <div class="lcp-stat"><span>${salesCad.num}</span>${escapeHtml(salesCad.lbl)}</div>
-            <div class="lcp-stat"><span>${fmt(n.totalSales)}</span>Total sales · ${state.timeMonths} mo</div>
-          </div>`,
-        )}
-        ${sec('Your phase roadmap', phasesHtml)}
-        ${skillList.length ? sec('What to learn, in order', skillsHtml) : ''}
-        ${sec('Recommended tools', toolsHtml)}
-        ${sec('People you need, at your speed', peopleHtml)}
-        ${sec('Stress reality', stressHtml)}
-        ${sec('Mind mines — blocks to clear', minesHtml)}
-
-        <footer class="lcp-footer">cwkexperience.com &nbsp;·&nbsp; Build. Learn. Earn. Play.</footer>
+        ${metaTable}
+        ${sec('Your numbers', 'The real shape of the target.', totals)}
+        ${sec('Your target', 'What this actually takes.', verdict)}
+        ${sec('Phase roadmap', 'The build, in order, at your speed.', phaseRows)}
+        ${skillList.length ? sec('What to learn, in order', 'The skills that move the plan.', skillRows) : ''}
+        ${sec('Recommended tools', 'A lean stack with real monthly cost.', toolsTable)}
+        ${sec('People you need', 'At your chosen speed.', peopleTable)}
+        ${sec('Stress reality', 'Going solo vs. with the right people.', stressTable)}
+        ${sec('Mind mines', 'Blocks to clear before they cost you.', minesBody)}
       </div>`;
   }
 
@@ -2248,65 +2290,87 @@ const pageDescription =
   }
   .lc-gate-veil[hidden] { display: none; }
 
-  /* ── Print-only report ──────────────────────────────────────────────────
-     "Save this map" renders a clean linear document into #lc-print and prints
-     ONLY that. The interactive dark UI is hidden entirely — no fighting the
-     web layout (absolute timeline circles, reveal transforms) for print. */
+  /* ── Print-only report (CWK dark report format) ─────────────────────────
+     "Save this map" renders a branded dark report into #lc-print and prints
+     ONLY that. Matches the CWK report PDF: cyan eyebrows, metadata table,
+     4-colour totals, bordered indexed cards with tags, repeating footer.
+     print-color-adjust:exact forces the dark backgrounds + accents into the PDF. */
   .lc-print { display: none; }
 
   @media print {
-    html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+    html, body { margin: 0 !important; padding: 0 !important; background: #07090F !important; }
 
-    /* Robust hide-all-but-report: visibility (not display) so nesting depth
-       doesn't matter; then re-show the report subtree and pin it to the page. */
+    /* Hide everything but the report (visibility so nesting depth is irrelevant). */
     body * { visibility: hidden !important; }
     #lc-print, #lc-print * { visibility: visible !important; }
+    #lc-print, #lc-print * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-    .lc-print {
-      display: block !important;
-      position: absolute; left: 0; top: 0; width: 100%;
-      color: #14161d;
+    .lc-print { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+    .lcp-doc {
+      background: #07090F;
+      background-image:
+        radial-gradient(1100px 520px at 100% -2%, rgba(123,97,255,0.12), transparent 60%),
+        radial-gradient(900px 520px at 0% 102%, rgba(0,229,255,0.08), transparent 55%);
+      color: #EEF0FF;
       font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      min-height: 100vh;
+      padding: 46px 50px 70px;
+      box-sizing: border-box;
     }
-    .lcp-doc { max-width: 720px; margin: 0 auto; padding: 8px 0 24px; }
 
-    .lcp-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #14161d; padding-bottom: 10px; margin-bottom: 18px; }
-    .lcp-brand { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: #14161d; }
-    .lcp-brand span { color: #6b46e5; font-weight: 700; }
-    .lcp-metaline { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6b7280; }
-    .lcp-title { font-size: 22px; line-height: 1.25; font-weight: 800; letter-spacing: -0.4px; margin: 0 0 22px; color: #14161d; }
+    /* Accent colours */
+    .lcp-cyan { color: #00E5FF !important; }
+    .lcp-purple { color: #7B61FF !important; }
+    .lcp-pink { color: #FB3079 !important; }
+    .lcp-green { color: #00E396 !important; }
 
-    .lcp-sec { margin: 0 0 22px; break-inside: avoid; page-break-inside: avoid; }
-    .lcp-h2 { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #6b46e5; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1px solid #e2e4ec; }
-    .lcp-p { font-size: 13.5px; line-height: 1.65; margin: 0 0 12px; color: #2c2f3a; }
+    /* Header */
+    .lcp-head { margin-bottom: 24px; }
+    .lcp-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: #00E5FF; margin-bottom: 12px; }
+    .lcp-h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.6px; line-height: 1.05; margin: 0 0 8px; color: #fff; }
+    .lcp-sub { font-size: 13.5px; line-height: 1.55; color: #9aa0ad; max-width: 560px; }
 
-    .lcp-target { font-size: 28px; font-weight: 800; letter-spacing: -0.6px; color: #14161d; margin-bottom: 8px; }
-    .lcp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
-    .lcp-stat { border: 1px solid #e2e4ec; border-radius: 8px; padding: 10px 12px; font-size: 10.5px; color: #6b7280; line-height: 1.3; }
-    .lcp-stat span { display: block; font-size: 20px; font-weight: 800; color: #14161d; margin-bottom: 2px; letter-spacing: -0.3px; }
+    /* Sections */
+    .lcp-sec { margin-bottom: 30px; break-inside: avoid; page-break-inside: avoid; }
+    .lcp-sec-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: #00E5FF; margin-bottom: 6px; }
+    .lcp-sec-sub { font-size: 12.5px; color: #8a8f9a; margin-bottom: 14px; }
 
-    .lcp-phase { border: 1px solid #e2e4ec; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; break-inside: avoid; }
-    .lcp-phase-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-    .lcp-phase-name { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #14161d; }
-    .lcp-phase-time { font-size: 11px; color: #6b7280; font-weight: 600; }
-    .lcp-phase-focus { font-size: 14px; font-weight: 700; color: #14161d; margin-bottom: 8px; }
+    /* Totals row */
+    .lcp-totals { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; overflow: hidden; }
+    .lcp-total-cell { padding: 22px 16px; text-align: center; border-right: 1px solid rgba(255,255,255,0.08); }
+    .lcp-total-cell:last-child { border-right: none; }
+    .lcp-total-num { font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1; margin-bottom: 8px; }
+    .lcp-total-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #8a8f9a; }
 
-    .lcp-list, .lcp-ol { margin: 0; padding-left: 18px; }
-    .lcp-list li, .lcp-ol li { font-size: 13px; line-height: 1.6; color: #2c2f3a; margin-bottom: 3px; }
+    /* Verdict card */
+    .lcp-verdict { border: 1px solid rgba(255,255,255,0.10); border-bottom: 3px solid #00E5FF; border-radius: 12px; padding: 22px 24px; }
+    .lcp-verdict p { margin: 0; font-size: 14px; line-height: 1.7; color: #c9cdd6; }
+    .lcp-verdict strong { color: #fff; }
 
-    .lcp-table { width: 100%; border-collapse: collapse; }
-    .lcp-table th { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6b7280; padding: 6px 8px; border-bottom: 1px solid #e2e4ec; text-align: left; }
-    .lcp-table td { font-size: 13px; color: #2c2f3a; padding: 8px; border-bottom: 1px solid #eef0f4; vertical-align: top; }
+    /* Indexed card rows */
+    .lcp-row { display: grid; grid-template-columns: 54px 1fr auto; border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; margin-bottom: 10px; break-inside: avoid; page-break-inside: avoid; }
+    .lcp-row-idx { padding: 16px 0 16px 18px; font-size: 13px; font-weight: 800; letter-spacing: 0.03em; }
+    .lcp-row-main { padding: 15px 16px; }
+    .lcp-row-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+    .lcp-row-desc { font-size: 12.5px; color: #9aa0ad; line-height: 1.6; }
+    .lcp-row-focus { font-size: 13px; font-weight: 600; color: #c9cdd6; margin-bottom: 6px; }
+    .lcp-row-list { margin: 0; padding-left: 16px; }
+    .lcp-row-list li { font-size: 12px; color: #9aa0ad; line-height: 1.6; }
+    .lcp-row-tag { padding: 16px 18px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; align-self: center; white-space: nowrap; text-align: right; }
+
+    /* Tables */
+    .lcp-table { width: 100%; border-collapse: collapse; border: 1px solid rgba(255,255,255,0.10); border-radius: 10px; overflow: hidden; }
+    .lcp-meta-table { margin-bottom: 30px; }
+    .lcp-table th { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7280; text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); }
+    .lcp-table td { font-size: 12.5px; color: #c9cdd6; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+    .lcp-table tr:last-child td { border-bottom: none; }
     .lcp-r { text-align: right; white-space: nowrap; }
-    .lcp-total td { font-weight: 800; color: #14161d; border-top: 2px solid #14161d; border-bottom: none; }
-    .lcp-muted { color: #6b7280; font-size: 12px; line-height: 1.5; }
+    .lcp-table .lcp-total td { font-weight: 800; color: #fff; border-top: 1px solid rgba(255,255,255,0.15); }
+    .lcp-muted { color: #8a8f9a; font-size: 12px; line-height: 1.55; margin: 10px 0 0; }
 
-    .lcp-mines { margin: 0; padding-left: 18px; }
-    .lcp-mines li { font-size: 13px; line-height: 1.6; color: #2c2f3a; margin-bottom: 8px; }
+    /* Repeating footer */
+    .lcp-foot { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 14px 50px; font-size: 9px; letter-spacing: 0.05em; color: #5c6270; text-transform: uppercase; }
 
-    .lcp-footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e4ec; font-size: 10.5px; color: #9aa0ad; text-align: center; letter-spacing: 0.04em; }
-
-    @page { margin: 14mm; }
+    @page { margin: 0; }
   }
 </style>
