@@ -2463,14 +2463,20 @@ const pageDescription =
   .lc-print { display: none; }
 
   @media print {
-    html, body { margin: 0 !important; padding: 0 !important; background: #07090F !important; }
+    html, body {
+      margin: 0 !important; padding: 0 !important; background: #07090F !important;
+      -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+    }
 
-    /* Hide everything but the report (visibility so nesting depth is irrelevant). */
-    body * { visibility: hidden !important; }
-    #lc-print, #lc-print * { visibility: visible !important; }
+    /* Hide everything but the report by REMOVING it from layout (display:none, not
+       visibility) — visibility kept the hidden app's height and spilled blank
+       pages after the report. DOM is body > main > #lc-print. */
+    body > *:not(main) { display: none !important; }      /* Header, Footer, orbs, scripts */
+    main > *:not(#lc-print) { display: none !important; }  /* the interactive calculator + video */
+    main { display: block !important; margin: 0 !important; padding: 0 !important; }
     #lc-print, #lc-print * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-    .lc-print { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+    .lc-print { display: block !important; }
     .lcp-doc {
       background: #07090F;
       background-image:
@@ -2496,19 +2502,23 @@ const pageDescription =
     .lcp-sub { font-size: 13.5px; line-height: 1.55; color: #9aa0ad; max-width: 560px; }
 
     /* Sections */
-    .lcp-sec { margin-bottom: 30px; break-inside: avoid; page-break-inside: avoid; }
+    /* Sections may flow across page breaks (avoid forcing a whole multi-card
+       section onto the next page, which left large gaps). Individual cards/rows
+       stay intact via their own break-inside rules below. */
+    .lcp-sec { margin-bottom: 30px; }
+    .lcp-sec-label { break-after: avoid; }
     .lcp-sec-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: #00E5FF; margin-bottom: 6px; }
     .lcp-sec-sub { font-size: 12.5px; color: #8a8f9a; margin-bottom: 14px; }
 
     /* Totals row */
-    .lcp-totals { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; overflow: hidden; }
+    .lcp-totals { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; overflow: hidden; break-inside: avoid; }
     .lcp-total-cell { padding: 22px 16px; text-align: center; border-right: 1px solid rgba(255,255,255,0.08); }
     .lcp-total-cell:last-child { border-right: none; }
     .lcp-total-num { font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1; margin-bottom: 8px; }
     .lcp-total-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #8a8f9a; }
 
     /* Verdict card */
-    .lcp-verdict { border: 1px solid rgba(255,255,255,0.10); border-bottom: 3px solid #00E5FF; border-radius: 12px; padding: 22px 24px; }
+    .lcp-verdict { border: 1px solid rgba(255,255,255,0.10); border-bottom: 3px solid #00E5FF; border-radius: 12px; padding: 22px 24px; break-inside: avoid; }
     .lcp-verdict p { margin: 0; font-size: 14px; line-height: 1.7; color: #c9cdd6; }
     .lcp-verdict strong { color: #fff; }
 
@@ -2524,7 +2534,8 @@ const pageDescription =
     .lcp-row-tag { padding: 16px 18px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; align-self: center; white-space: nowrap; text-align: right; }
 
     /* Tables */
-    .lcp-table { width: 100%; border-collapse: collapse; border: 1px solid rgba(255,255,255,0.10); border-radius: 10px; overflow: hidden; }
+    .lcp-table { width: 100%; border-collapse: collapse; border: 1px solid rgba(255,255,255,0.10); border-radius: 10px; overflow: hidden; break-inside: avoid; }
+    .lcp-table tr { break-inside: avoid; }
     .lcp-meta-table { margin-bottom: 30px; }
     .lcp-table th { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7280; text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); }
     .lcp-table td { font-size: 12.5px; color: #c9cdd6; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
