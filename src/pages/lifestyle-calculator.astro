@@ -586,38 +586,47 @@ const pageDescription =
   }
 
   // ── Math ───────────────────────────────────────────────
+  // Conversion math — matches the Master Reference Table (BIZ spec):
+  //   sales/month   = target / price
+  //   sales/week    = sales/month / 4.33   (standard weeks per month)
+  //   warm leads/wk = sales/week  / (l2s%)   default 20%  → ×5
+  //   cold people/wk= leads/week  / (s2l%)   default 1%   → ×100  (cold→close 0.2%)
+  // No ceil rounding: weekly figures are exact (shown to 2 decimals); cold
+  // people are rounded to a whole person. `m` (speed horizon) drives only the
+  // roadmap timeline, not the conversion math (it cancels out per-week).
+  const WEEKS_PER_MONTH = 4.33;
   function calcNumbers(): {
-    totalSales: number; totalLeads: number; totalStrangers: number; weeks: number;
-    salesPw: number; leadsPw: number; strangersPw: number;
+    salesPerMonth: number; salesPerWeek: number; leadsPerWeek: number; strangersPerWeek: number;
+    totalSales: number; weeks: number; months: number;
   } {
     const g = state.monthlyGoal, p = state.offerPrice, m = state.timeMonths;
     const s2l = state.s2l, l2s = state.l2s;
-    const weeks = Math.max(1, m * 4.33);
-    const totalSales = Math.ceil((g * m) / Math.max(1, p));
-    const totalLeads = Math.ceil(totalSales / (l2s / 100));
-    const totalStrangers = Math.ceil(totalLeads / (s2l / 100));
+    const salesPerMonth = g / Math.max(1, p);
+    const salesPerWeek = salesPerMonth / WEEKS_PER_MONTH;
+    const leadsPerWeek = salesPerWeek / Math.max(0.0001, l2s / 100);
+    const strangersPerWeek = leadsPerWeek / Math.max(0.0001, s2l / 100);
     return {
-      totalSales, totalLeads, totalStrangers, weeks,
-      salesPw: Math.ceil(totalSales / weeks),
-      leadsPw: Math.ceil(totalLeads / weeks),
-      strangersPw: Math.ceil(totalStrangers / weeks),
+      salesPerMonth,
+      salesPerWeek,
+      leadsPerWeek,
+      strangersPerWeek,
+      totalSales: salesPerMonth * m,
+      weeks: Math.max(1, m * WEEKS_PER_MONTH),
+      months: m,
     };
-  }
-
-  // Honest per-week cadence. Below 1/week we'd round up and overstate the pace,
-  // so express it as "1 every N weeks" (e.g. 36 sales over ~78 weeks → 1 / 2 wks).
-  function cadence(total: number, weeks: number, plural: string, singular: string): { num: string; lbl: string; prose: string } {
-    const perWeek = total / weeks;
-    if (perWeek >= 1) {
-      const n = Math.ceil(perWeek);
-      return { num: fmt(n), lbl: plural + ' / week', prose: fmt(n) + ' per week' };
-    }
-    const every = Math.max(2, Math.round(weeks / Math.max(1, total)));
-    return { num: '1', lbl: singular + ' every ' + every + ' weeks', prose: '1 every ' + every + ' weeks' };
   }
 
   function fmt(n: number): string {
     return new Intl.NumberFormat('en-US').format(Math.round(n));
+  }
+
+  // Exactly 2 decimals (per the reference table: 4.62, 23.10, 0.92, …).
+  function fmt2(n: number): string {
+    return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+  }
+  // Monthly sales-needed: whole when integer (20), else 2 decimals (14.29).
+  function fmtSales(n: number): string {
+    return Number.isInteger(n) ? String(n) : fmt2(n);
   }
 
   function fmtK(n: number): string {
@@ -632,19 +641,16 @@ const pageDescription =
     const bottom = document.getElementById('lcFunnelBottom');
     if (!top || !arrows || !bottom) return;
 
-    const strangers = cadence(n.totalStrangers, n.weeks, 'New people', 'New person');
-    const leads = cadence(n.totalLeads, n.weeks, 'Leads', 'Lead');
-    const sales = cadence(n.totalSales, n.weeks, 'Sales', 'Sale');
     top.innerHTML =
-      fCard(strangers.num, strangers.lbl) +
-      fCard(leads.num, leads.lbl) +
-      fCard(sales.num, sales.lbl);
+      fCard(fmt(n.strangersPerWeek), 'New people / week') +
+      fCard(fmt2(n.leadsPerWeek), 'Leads / week') +
+      fCard(fmt2(n.salesPerWeek), 'Sales / week');
     arrows.innerHTML = '<span>↓</span><span>↓</span><span>↓</span>';
     bottom.innerHTML = `
       <div class="lc-funnel-card lc-funnel-total">
-        <div class="lc-funnel-total-num">${fmt(n.totalSales)}</div>
+        <div class="lc-funnel-total-num">${fmtSales(n.salesPerMonth)}</div>
         <div class="lc-funnel-total-meta">
-          <div class="lc-funnel-lbl">Total sales over ${state.timeMonths} months</div>
+          <div class="lc-funnel-lbl">Sales needed / month</div>
           <p>To reach $${fmtK(state.monthlyGoal)}/mo at $${fmtK(state.offerPrice)} per offer.</p>
         </div>
       </div>`;
@@ -768,7 +774,7 @@ const pageDescription =
         <div class="lc-res-card">
           <span class="lc-res-badge">YOUR TARGET</span>
           <div class="lc-res-val">$${fmt(state.monthlyGoal)} / month</div>
-          <div class="lc-res-desc">That is $${fmt(state.monthlyGoal * 12)}/year. At $${fmt(state.offerPrice)} per offer you need ${fmt(n.totalSales)} sales over ${state.timeMonths} months, ${cadence(n.totalSales, n.weeks, 'sales', 'sale').prose}. To close those you need to reach ${fmt(n.strangersPw)} brand-new people every single week.</div>
+          <div class="lc-res-desc">That is $${fmt(state.monthlyGoal * 12)}/year. At $${fmt(state.offerPrice)} per offer you need ${fmtSales(n.salesPerMonth)} sales per month, about ${fmt2(n.salesPerWeek)} a week. To close those you need ${fmt2(n.leadsPerWeek)} warm leads and ${fmt(n.strangersPerWeek)} brand-new people every single week.</div>
         </div>`;
     }
 
@@ -999,7 +1005,6 @@ const pageDescription =
     const phases = PHASES[arch ? arch.key : 'explorer'];
     const skillList = cat ? SKILLS[cat] : [];
     const ppl = PEOPLE[spd];
-    const salesCad = cadence(n.totalSales, n.weeks, 'sales', 'sale');
 
     // Stress figures — mirror buildStressSection().
     const baseStress = ({ turtle: 5.5, car: 6.5, rocket: 8 } as Record<string, number>)[spd] ?? 6.5;
@@ -1053,12 +1058,12 @@ const pageDescription =
 
     const totals = `<div class="lcp-totals">
       ${totalCell('$' + fmtK(state.monthlyGoal), 'Monthly target', 'cyan')}
-      ${totalCell(fmt(n.strangersPw), 'New people / week', 'purple')}
-      ${totalCell(fmt(n.leadsPw), 'Leads / week', 'pink')}
-      ${totalCell(fmt(n.totalSales), `Total sales · ${state.timeMonths} mo`, 'green')}
+      ${totalCell(fmtSales(n.salesPerMonth), 'Sales / month', 'purple')}
+      ${totalCell(fmt2(n.salesPerWeek), 'Sales / week', 'pink')}
+      ${totalCell(fmt(n.strangersPerWeek), 'Cold people / week', 'green')}
     </div>`;
 
-    const verdict = `<div class="lcp-verdict"><p>That is <strong>$${fmt(state.monthlyGoal * 12)}/year</strong>. At $${fmt(state.offerPrice)} per offer you need <strong>${fmt(n.totalSales)} sales</strong> over ${state.timeMonths} months — ${salesCad.prose}. To close those you must reach <strong>${fmt(n.strangersPw)} brand-new people every week</strong>, turning roughly ${fmt(n.leadsPw)} of them into leads. This is the real shape of the number, not the wish.</p></div>`;
+    const verdict = `<div class="lcp-verdict"><p>That is <strong>$${fmt(state.monthlyGoal * 12)}/year</strong>. At $${fmt(state.offerPrice)} per offer you need <strong>${fmtSales(n.salesPerMonth)} sales per month</strong>, about ${fmt2(n.salesPerWeek)} a week. Each week that means roughly <strong>${fmt2(n.leadsPerWeek)} warm leads</strong> and <strong>${fmt(n.strangersPerWeek)} brand-new (cold) people</strong>, at ${state.l2s}% warm-to-close and ${state.s2l}% cold-to-warm conversion.</p></div>`;
 
     const phaseRows = phases
       .map((ph, i) =>
