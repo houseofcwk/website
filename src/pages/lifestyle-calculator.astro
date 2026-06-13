@@ -364,6 +364,7 @@ const pageDescription =
     type MineKey,
     type CalculatorState,
   } from '../data/lifestyleCalculator';
+  import { computeFunnel, WEEKS_PER_MONTH } from '../lib/lifestyleMath.mjs';
   import { track, conversion } from '../lib/analytics';
 
   function bucketCurrency(n: number): string {
@@ -594,23 +595,22 @@ const pageDescription =
   // No ceil rounding: weekly figures are exact (shown to 2 decimals); cold
   // people are rounded to a whole person. `m` (speed horizon) drives only the
   // roadmap timeline, not the conversion math (it cancels out per-week).
-  const WEEKS_PER_MONTH = 4.33;
   function calcNumbers(): {
     salesPerMonth: number; salesPerWeek: number; leadsPerWeek: number; strangersPerWeek: number;
     totalSales: number; weeks: number; months: number;
   } {
-    const g = state.monthlyGoal, p = state.offerPrice, m = state.timeMonths;
-    const s2l = state.s2l, l2s = state.l2s;
-    const salesPerMonth = g / Math.max(1, p);
-    const salesPerWeek = salesPerMonth / WEEKS_PER_MONTH;
-    const leadsPerWeek = salesPerWeek / Math.max(0.0001, l2s / 100);
-    const strangersPerWeek = leadsPerWeek / Math.max(0.0001, s2l / 100);
+    const m = state.timeMonths;
+    // computeFunnel is the shared single source of truth (src/lib/lifestyleMath.mjs),
+    // verified against the reference table at build time.
+    const f = computeFunnel({
+      target: state.monthlyGoal,
+      price: state.offerPrice,
+      strangerToLeadPct: state.s2l,
+      leadToSalePct: state.l2s,
+    });
     return {
-      salesPerMonth,
-      salesPerWeek,
-      leadsPerWeek,
-      strangersPerWeek,
-      totalSales: salesPerMonth * m,
+      ...f,
+      totalSales: f.salesPerMonth * m,
       weeks: Math.max(1, m * WEEKS_PER_MONTH),
       months: m,
     };

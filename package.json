@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/generate-llms-txt.mjs",
+    "prebuild": "node scripts/generate-llms-txt.mjs && node scripts/verify-lifestyle-math.mjs",
+    "verify:calc": "node scripts/verify-lifestyle-math.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
