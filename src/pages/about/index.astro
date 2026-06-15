@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PortableText from '../../components/PortableText.astro';
 import ExperienceTourSection from '../../components/ExperienceTourSection.astro';
+import FeaturedVideoSection from '../../components/FeaturedVideoSection.astro';
 import { sanity } from '../../lib/sanity';
 import { ABOUT_QUERY } from '../../lib/queries';
 import { seoBaseProps } from '../../lib/seoProps';
@@ -78,6 +79,16 @@ const pageOgType = s?.seo?.ogType ?? 'profile';
       </div>
     </section>
   )}
+
+  <!-- ── Promo video (before the experience tour CTA) ──────── -->
+  <FeaturedVideoSection
+    videoId="VO9me4bta-M"
+    coverSrc="/images/about-kris/about-promo-cover.webp"
+    eyebrow="Watch"
+    headline="A few minutes with Kris."
+    sub="Why CWK exists, and what working together actually looks like."
+    caption="Kris on the mission behind CWK. Experience."
+  />
 
   <!-- ── Closing CTA ───────────────────────────────────────── -->
   <ExperienceTourSection />

@@ -1,10 +1,24 @@
 ---
-// Featured video block on the home page. Sits between the product preview
-// and the Player X-Ray CTA. Uses a click-to-play facade so the YouTube
-// custom thumbnail never renders — the iframe only mounts on activation.
-const videoId = 'S5t5Z9uobOc';
+// Reusable featured-video block (click-to-play facade — the iframe only mounts
+// on activation, so the YouTube thumbnail never renders). Defaults render the
+// home-page video; pass props to reuse it elsewhere (e.g. the About page).
+interface Props {
+  videoId?: string;
+  coverSrc?: string;
+  eyebrow?: string;
+  headline?: string;
+  sub?: string;
+  caption?: string;
+}
+const {
+  videoId = 'S5t5Z9uobOc',
+  coverSrc = '/images/home/featured-video-cover.webp',
+  eyebrow = 'Watch',
+  headline = 'Hear it straight from Kris, Founder of CWK.',
+  sub = '3 years. 53 case studies. Here is what we built and why it matters.',
+  caption = 'Kris on building CWK, the players we rep, and what long-term partnership actually looks like.',
+} = Astro.props;
 const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
-const coverSrc = '/images/home/featured-video-cover.webp';
 ---
 
 <section class="fv-section">
@@ -14,12 +28,10 @@ const coverSrc = '/images/home/featured-video-cover.webp';
     <header class="fv-head reveal-up">
       <span class="fv-eyebrow">
         <span class="fv-eyebrow-dot" aria-hidden="true"></span>
-        Watch
+        {eyebrow}
       </span>
-      <h2 class="fv-headline">Hear it straight from Kris, Founder of CWK.</h2>
-      <p class="fv-sub">
-        3 years. 53 case studies. Here is what we built and why it matters.
-      </p>
+      <h2 class="fv-headline">{headline}</h2>
+      <p class="fv-sub">{sub}</p>
     </header>
 
     <figure class="fv-figure reveal-card">
@@ -44,9 +56,7 @@ const coverSrc = '/images/home/featured-video-cover.webp';
           </svg>
         </button>
       </div>
-      <figcaption class="fv-caption">
-        Kris on building CWK, the players we rep, and what long-term partnership actually looks like.
-      </figcaption>
+      <figcaption class="fv-caption">{caption}</figcaption>
     </figure>
   </div>
 </section>
