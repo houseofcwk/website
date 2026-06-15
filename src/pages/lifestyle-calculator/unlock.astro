@@ -2,21 +2,21 @@
 import Base from '../../layouts/Base.astro';
 import '../../styles/paywall.css';
 
-const pageTitle = 'Lifestyle Map — Unlock | CWK. Experience';
+const pageTitle = 'Lifestyle Map · Unlock | CWK. Experience';
 const pageDescription =
-  'Turn the life you actually want into a real monthly number — and the exact plan to hit it. The map a $500 consultant builds, for $17. One-time. Yours forever.';
+  'Turn the life you actually want into a real monthly number, and the exact plan to hit it. The map a $500 consultant builds, for $17. One-time. Yours forever.';
 
 // The problem we agitate before the reveal — narration, not a feature list.
 const BLIND = [
-  'You set an income goal because it sounded right — never checking whether your offer can actually get you there.',
+  'You set an income goal because it sounded right, never checking whether your offer can actually get you there.',
   "You're working flat out with no idea how many people, at what price, over how long, it truly takes.",
-  'So months vanish against the wrong plan at the wrong speed — and you call it the cost of doing business.',
+  'So months vanish against the wrong plan at the wrong speed, and you call it the cost of doing business.',
 ];
 
 const DELIVERABLES = [
   {
     t: 'Your real income target',
-    d: 'Reverse-engineered from the life you actually want — not a number you guessed.',
+    d: 'Reverse-engineered from the life you actually want, not a number you guessed.',
   },
   {
     t: 'The two-bridges math',
@@ -24,7 +24,7 @@ const DELIVERABLES = [
   },
   {
     t: 'A phase-by-phase roadmap',
-    d: 'Four phases tuned to the speed you choose — Turtle, Car, or Rocket Ship.',
+    d: 'Four phases tuned to the speed you choose: Turtle, Car, or Rocket Ship.',
   },
   {
     t: 'The tools you actually need',
@@ -36,13 +36,13 @@ const DELIVERABLES = [
   },
   {
     t: 'The honest stress reality',
-    d: 'Going solo vs. supported — time to goal, burnout risk, and the real mistake tax.',
+    d: 'Going solo vs. supported: time to goal, burnout risk, and the real mistake tax.',
   },
 ];
 
 const STEPS = [
   { n: '1', t: 'Answer a few honest questions', d: 'Six short sections. Real numbers. About five minutes.' },
-  { n: '2', t: 'Get your complete picture', d: 'Your target, the math, the roadmap, the tools, the blocks — instantly.' },
+  { n: '2', t: 'Get your complete picture', d: 'Your target, the math, the roadmap, the tools, the blocks, instantly.' },
   { n: '3', t: 'Run it again, forever', d: 'Pressure-test every new idea before you commit. Unlimited runs.' },
 ];
 ---
@@ -53,15 +53,14 @@ const STEPS = [
     <div class="lcu-hero">
       <span class="lcu-eyebrow"><span class="lcu-dot"></span>THE LIFESTYLE MAP</span>
       <h1 class="lcu-h1">
-        You know the life you want.<br />
-        Now see exactly what it <span class="lcu-grad">costs to build.</span>
+        You can't build the life you want<br />
+        from <span class="lcu-grad">a plan you've never made.</span>
       </h1>
       <p class="lcu-sub">
-        In about five minutes, the Lifestyle Map turns the life you actually want into a real
-        monthly number — then hands you the exact plan to reach it: the math, the roadmap, the
-        tools, and the blocks standing in your way.
+        In about 5 minutes you'll know exactly what your life costs to build, why hoping it works
+        out isn't a plan, and what to do instead.
       </p>
-      <button type="button" class="lcu-cta" id="lcu-cta-hero">Unlock my Lifestyle Map →</button>
+      <button type="button" class="lcu-cta" id="lcu-cta-hero">Request for Lifestyle Map →</button>
       <p class="lcu-trust">$17 one-time · unlimited runs · yours forever</p>
       <p class="lcu-cta-note" id="lcu-note"></p>
     </div>
@@ -84,7 +83,7 @@ const STEPS = [
     <div class="lcu-section">
       <span class="lcu-section-label">WHAT YOUR MAP SHOWS YOU</span>
       <p class="lcu-section-lead">
-        Answer six honest questions and get your complete picture — built from your numbers,
+        Answer six honest questions and get your complete picture, built from your numbers,
         not generic advice.
       </p>
       <div class="lcu-grid">
@@ -133,7 +132,7 @@ const STEPS = [
           <ul>
             <li>Built from your real numbers, instantly</li>
             <li>Re-run it for every idea, as many times as you want</li>
-            <li>Yours forever — the map never expires</li>
+            <li>Yours forever, the map never expires</li>
             <li>No call to book. No pitch to sit through.</li>
             <li>Honest output, not a sales funnel</li>
           </ul>
@@ -143,11 +142,11 @@ const STEPS = [
 
     <!-- Final CTA -->
     <div class="lcu-final">
-      <h2 class="lcu-final-h">See what your lifestyle really costs.</h2>
+      <h2 class="lcu-final-h">See what your dream costs in real life.</h2>
       <p class="lcu-final-sub">
-        One honest number. One real plan. Seventeen dollars, once — and the map is yours for good.
+        One honest number. One real plan. $17, once, and the map is yours for good.
       </p>
-      <button type="button" class="lcu-cta" id="lcu-cta-final">Unlock my Lifestyle Map →</button>
+      <button type="button" class="lcu-cta" id="lcu-cta-final">Request for Lifestyle Map →</button>
       <p class="lcu-final-fine">No subscription · no sales call · unlimited runs forever.</p>
     </div>
   </section>
@@ -184,7 +183,7 @@ const STEPS = [
 
   function makeOpenButtons(): void {
     ctas.forEach((btn) => {
-      btn.textContent = 'Open my Lifestyle Map →';
+      btn.textContent = 'Request for Lifestyle Map →';
       btn.addEventListener('click', toApp);
     });
   }
@@ -192,7 +191,7 @@ const STEPS = [
   (async () => {
     track('lcu_landing_viewed', {});
     if (new URL(window.location.href).searchParams.get('checkout') === 'cancel' && note) {
-      note.textContent = 'Checkout canceled — unlock whenever you are ready.';
+      note.textContent = 'Checkout canceled. Request whenever you are ready.';
     }
     // Paid or admin? Turn the CTAs into "Open my Lifestyle Map".
     const auth = await me();
