@@ -60,7 +60,7 @@ const STEPS = [
         In about 5 minutes you'll know exactly what your life costs to build, why hoping it works
         out isn't a plan, and what to do instead.
       </p>
-      <button type="button" class="lcu-cta" id="lcu-cta-hero">Request for Lifestyle Map →</button>
+      <button type="button" class="lcu-cta" id="lcu-cta-hero">Unlock my Lifestyle Map →</button>
       <p class="lcu-trust">$17 one-time · unlimited runs · yours forever</p>
       <p class="lcu-cta-note" id="lcu-note"></p>
     </div>
@@ -146,7 +146,7 @@ const STEPS = [
       <p class="lcu-final-sub">
         One honest number. One real plan. $17, once, and the map is yours for good.
       </p>
-      <button type="button" class="lcu-cta" id="lcu-cta-final">Request for Lifestyle Map →</button>
+      <button type="button" class="lcu-cta" id="lcu-cta-final">Unlock my Lifestyle Map →</button>
       <p class="lcu-final-fine">No subscription · no sales call · unlimited runs forever.</p>
     </div>
   </section>
@@ -183,7 +183,7 @@ const STEPS = [
 
   function makeOpenButtons(): void {
     ctas.forEach((btn) => {
-      btn.textContent = 'Request for Lifestyle Map →';
+      btn.textContent = 'Open my Lifestyle Map →';
       btn.addEventListener('click', toApp);
     });
   }
@@ -191,7 +191,7 @@ const STEPS = [
   (async () => {
     track('lcu_landing_viewed', {});
     if (new URL(window.location.href).searchParams.get('checkout') === 'cancel' && note) {
-      note.textContent = 'Checkout canceled. Request whenever you are ready.';
+      note.textContent = 'Checkout canceled. Unlock whenever you are ready.';
     }
     // Paid or admin? Turn the CTAs into "Open my Lifestyle Map".
     const auth = await me();
