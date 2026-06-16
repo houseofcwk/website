@@ -9,6 +9,9 @@ interface Props {
   headline?: string;
   sub?: string;
   caption?: string;
+  /** Drop the section background + glow (and tighten padding) so it blends
+   *  into a page that already supplies its own background (e.g. /unlock). */
+  bare?: boolean;
 }
 const {
   videoId = 'S5t5Z9uobOc',
@@ -17,12 +20,13 @@ const {
   headline = 'Hear it straight from Kris, Founder of CWK.',
   sub = '3 years. 53 case studies. Here is what we built and why it matters.',
   caption = 'Kris on building CWK, the players we rep, and what long-term partnership actually looks like.',
+  bare = false,
 } = Astro.props;
 const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
 ---
 
-<section class="fv-section">
-  <span class="fv-glow" aria-hidden="true"></span>
+<section class:list={['fv-section', { 'fv-bare': bare }]}>
+  {!bare && <span class="fv-glow" aria-hidden="true"></span>}
 
   <div class="fv-inner">
     <header class="fv-head reveal-up">
@@ -89,6 +93,12 @@ const videoSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modest
     background: var(--bg);
     overflow: hidden;
     padding: 96px 24px 80px;
+  }
+  /* Background-free variant: no section fill, no glow, tighter padding —
+     used where the host page already owns the background (e.g. /unlock). */
+  .fv-section.fv-bare {
+    background: transparent;
+    padding: 24px 0 56px;
   }
 
   .fv-glow {
