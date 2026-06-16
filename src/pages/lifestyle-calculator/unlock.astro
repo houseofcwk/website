@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import FeaturedVideoSection from '../../components/FeaturedVideoSection.astro';
 import '../../styles/paywall.css';
 
 const pageTitle = 'Lifestyle Map · Unlock | CWK. Experience';
@@ -64,6 +65,16 @@ const STEPS = [
       <p class="lcu-trust">$17 one-time · unlimited runs · yours forever</p>
       <p class="lcu-cta-note" id="lcu-note"></p>
     </div>
+
+    <!-- Promo video (directly under the hero). -->
+    <FeaturedVideoSection
+      videoId="ItDyoHQKpx4"
+      coverSrc="/images/lifestyle-calculator/unlock-video-cover.webp"
+      eyebrow="Watch"
+      headline="See the Lifestyle Map in action."
+      sub="A quick look at what you get and how it works."
+      caption="Activate your map today."
+    />
 
     <!-- Problem: agitate before the reveal. -->
     <div class="lcu-problem">
