@@ -121,43 +121,9 @@ const pageDescription =
         </div>
       </div>
 
-      <!-- ── SECTION 04: PROGRESS SPEED ────────────────────── -->
+      <!-- ── SECTION 04: THE TWO BRIDGES ───────────────────── -->
       <div id="lc-step-3" class="lc-step">
-        <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 04 / PROGRESS SPEED</span>
-        <h1 class="lc-h1">How fast are<br><span class="lc-grad">you willing to move?</span></h1>
-        <p class="lc-sub">Pick the one you will actually show up at. There are no wrong answers.</p>
-
-        <div class="lc-speed-grid">
-          {SPEEDS.map((s) => (
-            <button type="button" class={`lc-speed-card lc-speed-${s.key}`} data-speed={s.key}>
-              <span class="lc-speed-symbol" aria-hidden="true">
-                {s.key === 'turtle' && (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16a5 5 0 0 0 5-5 5 5 0 0 0-10 0 5 5 0 0 0 5 5z"/><path d="M5 11a7 7 0 0 1 14 0"/><path d="M3 16h2"/><path d="M19 16h2"/><path d="M5 19l1-2"/><path d="M19 19l-1-2"/><path d="M9 19l-1 2"/><path d="M15 19l1 2"/></svg>
-                )}
-                {s.key === 'car' && (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
-                )}
-                {s.key === 'rocket' && (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
-                )}
-              </span>
-              <span class="lc-speed-label">{s.label}</span>
-              <span class="lc-speed-time">{s.time}</span>
-              <span class="lc-speed-desc">{s.desc}</span>
-              <span class="lc-speed-check" aria-hidden="true">✓</span>
-            </button>
-          ))}
-        </div>
-
-        <div class="lc-nav-row">
-          <button type="button" class="lc-btn-back" data-back="3">←</button>
-          <button type="button" class="lc-btn-next" data-next="3">Continue →</button>
-        </div>
-      </div>
-
-      <!-- ── SECTION 05: THE TWO BRIDGES ───────────────────── -->
-      <div id="lc-step-4" class="lc-step">
-        <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 05 / THE TWO BRIDGES</span>
+        <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 04 / THE TWO BRIDGES</span>
         <h1 class="lc-h1">Here's what<br><span class="lc-grad">the numbers say.</span></h1>
         <p class="lc-sub">There are 2 bridges people need to cross in order to make money. Bridge 1: from strangers to interested. Bridge 2: from interested to buyer. These numbers show the path to your destination.</p>
         <p class="lc-helper">Defaults below assume 1% and 20%, honest baselines for someone with no existing audience. Adjust if you have real data.</p>
@@ -223,6 +189,40 @@ const pageDescription =
             <button type="button" class="lc-estimate-apply" id="lcEstimateApply">Use these rates →</button>
             <p class="lc-estimate-out" id="lcEstimateOut"></p>
           </div>
+        </div>
+
+        <div class="lc-nav-row">
+          <button type="button" class="lc-btn-back" data-back="3">←</button>
+          <button type="button" class="lc-btn-next" data-next="3">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── SECTION 05: PROGRESS SPEED ────────────────────── -->
+      <div id="lc-step-4" class="lc-step">
+        <span class="lc-eyebrow"><span class="lc-eyebrow-dot"></span>SECTION 05 / PROGRESS SPEED</span>
+        <h1 class="lc-h1">How fast are<br><span class="lc-grad">you willing to move?</span></h1>
+        <p class="lc-sub">Pick the one you will actually show up at. There are no wrong answers.</p>
+
+        <div class="lc-speed-grid">
+          {SPEEDS.map((s) => (
+            <button type="button" class={`lc-speed-card lc-speed-${s.key}`} data-speed={s.key}>
+              <span class="lc-speed-symbol" aria-hidden="true">
+                {s.key === 'turtle' && (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16a5 5 0 0 0 5-5 5 5 0 0 0-10 0 5 5 0 0 0 5 5z"/><path d="M5 11a7 7 0 0 1 14 0"/><path d="M3 16h2"/><path d="M19 16h2"/><path d="M5 19l1-2"/><path d="M19 19l-1-2"/><path d="M9 19l-1 2"/><path d="M15 19l1 2"/></svg>
+                )}
+                {s.key === 'car' && (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
+                )}
+                {s.key === 'rocket' && (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                )}
+              </span>
+              <span class="lc-speed-label">{s.label}</span>
+              <span class="lc-speed-time">{s.time}</span>
+              <span class="lc-speed-desc">{s.desc}</span>
+              <span class="lc-speed-check" aria-hidden="true">✓</span>
+            </button>
+          ))}
         </div>
 
         <div class="lc-nav-row">
@@ -518,7 +518,7 @@ const pageDescription =
     const fv = document.querySelector<HTMLElement>('[data-lc-featured-video]');
     if (fv) fv.hidden = n !== 0;
 
-    if (n === 4) renderFunnel();
+    if (n === 3) renderFunnel();
     if (n === 6) {
       buildResults();
       triggerResultReveals();
@@ -578,7 +578,7 @@ const pageDescription =
     });
   }
 
-  // ── Step 3: speed ──────────────────────────────────────
+  // ── Step 4: speed ──────────────────────────────────────
   function wireSpeeds(): void {
     document.querySelectorAll<HTMLButtonElement>('.lc-speed-card').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -751,19 +751,19 @@ const pageDescription =
       return true;
     }
     if (step === 3) {
-      if (!state.speed) {
-        flashEl('lc-step-3');
-        return false;
-      }
-      return true;
-    }
-    if (step === 4) {
       const s2lEl = document.getElementById('lc-s2l-rate') as HTMLInputElement;
       const l2sEl = document.getElementById('lc-l2s-rate') as HTMLInputElement;
       const s2l = parseFloat(s2lEl.value) || 1;
       const l2s = parseFloat(l2sEl.value) || 20;
       state.s2l = s2l;
       state.l2s = l2s;
+      return true;
+    }
+    if (step === 4) {
+      if (!state.speed) {
+        flashEl('lc-step-4');
+        return false;
+      }
       return true;
     }
     return true;
@@ -1217,7 +1217,7 @@ const pageDescription =
   wireSpeeds();
   wireMines();
 
-  const STEP_NAMES = ['category', 'archetype', 'prize', 'speed', 'bridges', 'mines'];
+  const STEP_NAMES = ['category', 'archetype', 'prize', 'bridges', 'speed', 'mines'];
 
   document.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -1232,7 +1232,7 @@ const pageDescription =
         props.monthly_goal_bucket = bucketCurrency(state.monthlyGoal);
         props.offer_price_bucket = bucketCurrency(state.offerPrice);
       }
-      if (step === 4) {
+      if (step === 3) {
         props.s2l_pct = state.s2l;
         props.l2s_pct = state.l2s;
         props.defaults_changed = state.s2l !== 1 || state.l2s !== 20;
@@ -1721,7 +1721,7 @@ const pageDescription =
   .lc-field-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
   .lc-field-group input::placeholder { font-size: 22px; font-weight: 300; color: rgba(238, 240, 255, 0.18); }
 
-  /* ── Step 3: Speed ─────────────────────────────────── */
+  /* ── Step 4: Speed ─────────────────────────────────── */
   .lc-speed-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 32px; }
   .lc-speed-card {
     padding: 22px 16px 18px;
@@ -1769,7 +1769,7 @@ const pageDescription =
   .lc-speed-car.is-selected .lc-speed-check    { opacity: 1; transform: scale(1); background: var(--cyan); color: var(--bg); }
   .lc-speed-rocket.is-selected .lc-speed-check { opacity: 1; transform: scale(1); background: var(--pink); color: #fff; }
 
-  /* ── Step 4: Funnel ────────────────────────────────── */
+  /* ── Step 3: Funnel ────────────────────────────────── */
   .lc-funnel-top { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 4px; }
   .lc-funnel-card { padding: 18px 20px; }
   .lc-funnel-num {
