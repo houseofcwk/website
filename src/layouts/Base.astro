@@ -205,6 +205,14 @@ const extraBlocks = extraJsonLd
         targets.forEach(el => io.observe(el));
       })();
     </script>
+
+    <!-- ou.chat live chat bubble (loaded site-wide) -->
+    <script is:inline>
+      (function(w,d,s){w.ouWidget=w.ouWidget||function(){(w.ouWidget.q=w.ouWidget.q||[]).push(arguments)};
+       var j=d.createElement(s);j.async=1;j.src="https://ou.chat/widget.js";
+       d.head.appendChild(j);})(window,document,"script");
+      ouWidget("init", { deploymentId: "wgt_5193c6d751d35b7bd3" });
+    </script>
   </body>
 </html>
 
