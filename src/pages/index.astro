@@ -57,12 +57,13 @@ const heroEyebrow     = s?.heroEyebrow      ?? 'Welcome to the Jungle';
 const heroTopline     = s?.heroTopline      ?? s?.heroHeadline ?? 'CWK. is like a';
 const wordPhrases: string[] = (Array.isArray(s?.wordFlipPhrases) && s.wordFlipPhrases.length > 0)
   ? s.wordFlipPhrases : HARDCODED_PHRASES;
-// Lower title: dedicated heroTitle field (new). Falls back to the brief copy.
-const heroHeadline    = s?.heroTitle        ?? 'Guiding founders through the jungle from $0 to $1M.';
-const heroSubheadline = s?.heroSubheadline  ?? 'CWK. installs the system that makes good months repeat.';
+// Lower title: the two sub-lines condensed into one. Hardcoded to force the new
+// copy regardless of the legacy Sanity heroTitle/heroSubheadline fields.
+const heroHeadline    = 'Stop throwing spaghetti at the wall. Build an asset that runs without you.';
+const heroSubheadline = '';
 // CTA: hardcoded for now — legacy Sanity heroCta still holds the old waitlist
 // label/href. Switch back to s?.heroCta?.{label,href} once it's updated in Studio.
-const heroCtaLabel    = 'See where you are in the jungle';
+const heroCtaLabel    = 'Start mapping your asset';
 const heroCtaHref     = '/assessment';
 const pillars = (Array.isArray(s?.pillars) && s.pillars.length > 0) ? s.pillars : HARDCODED_PILLARS;
 const googleReviews = Array.isArray(s?.googleReviews) ? s.googleReviews : null;
@@ -110,6 +111,5 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
     totalCount={googleReviewsTotalCount}
   />
   <ProductPreviewSection />
-  <FeaturedVideoSection />
   <ExperienceTourSection />
 </Base>

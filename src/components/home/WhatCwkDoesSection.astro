@@ -9,76 +9,7 @@ const spokes = [
 
 <section class="section whatcwk-section">
   <div class="wc-inner">
-    <!-- Left: hub + spokes visual -->
-    <div class="wc-visual reveal-card" aria-hidden="true">
-      <div class="wc-visual-inner">
-        <!-- connecting lines (SVG) -->
-        <svg class="wc-lines" viewBox="0 0 440 340" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <linearGradient id="wc-line-cyan" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%"  stop-color="rgba(255,255,255,0.02)"/>
-              <stop offset="50%" stop-color="rgba(0,229,255,0.55)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
-            </linearGradient>
-            <linearGradient id="wc-line-purple" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%"  stop-color="rgba(255,255,255,0.02)"/>
-              <stop offset="50%" stop-color="rgba(123,97,255,0.55)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
-            </linearGradient>
-            <linearGradient id="wc-line-pink" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"  stop-color="rgba(255,255,255,0.02)"/>
-              <stop offset="50%" stop-color="rgba(251,48,121,0.55)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
-            </linearGradient>
-          </defs>
-
-          <!-- horizontal left spoke -->
-          <line class="wc-line wc-line-a" x1="80"  y1="170" x2="220" y2="170" stroke="url(#wc-line-cyan)" stroke-width="1.5"/>
-          <!-- horizontal right spoke -->
-          <line class="wc-line wc-line-b" x1="220" y1="170" x2="360" y2="170" stroke="url(#wc-line-purple)" stroke-width="1.5"/>
-          <!-- vertical top spoke -->
-          <line class="wc-line wc-line-c" x1="220" y1="70"  x2="220" y2="170" stroke="url(#wc-line-pink)"   stroke-width="1.5"/>
-          <!-- vertical bottom spoke -->
-          <line class="wc-line wc-line-d" x1="220" y1="170" x2="220" y2="270" stroke="url(#wc-line-pink)"   stroke-width="1.5"/>
-        </svg>
-
-        <!-- central hub -->
-        <div class="wc-hub">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-          </svg>
-          <span class="wc-hub-ring"></span>
-          <span class="wc-hub-ring wc-hub-ring--2"></span>
-        </div>
-
-        <!-- spoke nodes -->
-        <div class="wc-node wc-node--left">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V9"/><path d="M11 16V6"/><path d="M15 16v-3"/><path d="M19 16V4"/>
-          </svg>
-        </div>
-        <div class="wc-node wc-node--right">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        </div>
-        <div class="wc-node wc-node--top">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
-          </svg>
-        </div>
-        <div class="wc-node wc-node--bottom">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
-          </svg>
-        </div>
-
-        <span class="wc-visual-glow" aria-hidden="true"></span>
-      </div>
-    </div>
-
-    <!-- Right: copy -->
+    <!-- Copy -->
     <div class="wc-copy">
       <span class="wc-eyebrow reveal-up">
         <span class="wc-eyebrow-dot"></span>
@@ -110,146 +41,12 @@ const spokes = [
   }
 
   .wc-inner {
-    max-width: 1200px;
+    max-width: 760px;
     margin: 0 auto;
     padding: 0 24px;
-    display: grid;
-    grid-template-columns: 1fr 1.05fr;
-    gap: 60px;
-    align-items: center;
   }
 
-  /* ── Left: visual ─────────────────────────────────────────── */
-  .wc-visual {
-    position: relative;
-    display: flex;
-    justify-content: center;
-  }
-
-  .wc-visual-inner {
-    position: relative;
-    width: 100%;
-    max-width: 440px;
-    aspect-ratio: 440 / 340;
-    background: var(--glass);
-    border: 1px solid var(--gb);
-    border-radius: 16px;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  .wc-visual-glow {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    width: 50%;
-    height: 50%;
-    background: radial-gradient(ellipse, rgba(0, 229, 255, 0.12) 0%, transparent 70%);
-    filter: blur(14px);
-    pointer-events: none;
-    animation: wc-breathe 6s ease-in-out infinite;
-  }
-  @keyframes wc-breathe {
-    0%, 100% { opacity: 0.7; }
-    50%       { opacity: 1; }
-  }
-
-  .wc-lines {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .wc-line {
-    stroke-dasharray: 180;
-    stroke-dashoffset: 180;
-  }
-  .wc-visual.is-visible .wc-line-a { animation: wc-draw 0.9s 0.30s ease-out forwards; }
-  .wc-visual.is-visible .wc-line-b { animation: wc-draw 0.9s 0.45s ease-out forwards; }
-  .wc-visual.is-visible .wc-line-c { animation: wc-draw 0.9s 0.60s ease-out forwards; }
-  .wc-visual.is-visible .wc-line-d { animation: wc-draw 0.9s 0.75s ease-out forwards; }
-  @keyframes wc-draw {
-    to { stroke-dashoffset: 0; }
-  }
-
-  /* Central hub */
-  .wc-hub {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 64px; height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(0, 229, 255, 0.18), rgba(123, 97, 255, 0.14));
-    border: 1px solid rgba(0, 229, 255, 0.4);
-    color: var(--cyan);
-    box-shadow: 0 0 32px rgba(0, 229, 255, 0.35);
-    z-index: 3;
-  }
-
-  .wc-hub-ring {
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    border: 1px solid rgba(0, 229, 255, 0.25);
-    animation: wc-ring 3.6s ease-out infinite;
-  }
-  .wc-hub-ring--2 {
-    animation-delay: 1.8s;
-  }
-  @keyframes wc-ring {
-    0%   { transform: scale(0.7); opacity: 0.8; }
-    100% { transform: scale(1.9); opacity: 0;   }
-  }
-
-  /* Spoke nodes */
-  .wc-node {
-    position: absolute;
-    width: 40px; height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background: var(--bg3);
-    border: 1px solid var(--gb);
-    color: var(--muted);
-    z-index: 2;
-    opacity: 0;
-    transform: scale(0.6);
-    transition:
-      opacity 0.45s ease,
-      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.3s ease,
-      color 0.3s ease,
-      background 0.3s ease;
-  }
-  .wc-visual.is-visible .wc-node { opacity: 1; transform: scale(1); }
-  .wc-visual.is-visible .wc-node--left   { transition-delay: 1.05s; }
-  .wc-visual.is-visible .wc-node--right  { transition-delay: 1.20s; }
-  .wc-visual.is-visible .wc-node--top    { transition-delay: 1.35s; }
-  .wc-visual.is-visible .wc-node--bottom { transition-delay: 1.50s; }
-
-  /* positions match svg endpoints (220×170 center, 140px spoke) */
-  .wc-node--left   { top: calc(50% - 20px); left: calc(80/440 * 100%  - 20px); }
-  .wc-node--right  { top: calc(50% - 20px); left: calc(360/440 * 100% - 20px); }
-  .wc-node--top    { top: calc(70/340 * 100% - 20px); left: calc(50% - 20px); }
-  .wc-node--bottom { top: calc(270/340 * 100% - 20px); left: calc(50% - 20px); }
-
-  @media (hover: hover) {
-    .wc-node:hover {
-      transform: scale(1.12);
-      background: color-mix(in srgb, var(--cyan) 10%, var(--bg3));
-      border-color: rgba(0, 229, 255, 0.45);
-      color: var(--cyan);
-    }
-  }
-
-  /* ── Right: copy ──────────────────────────────────────────── */
+  /* ── Copy ─────────────────────────────────────────────────── */
   .wc-copy {
     display: flex;
     flex-direction: column;
@@ -323,19 +120,8 @@ const spokes = [
   }
 
   /* Responsive */
-  @media (max-width: 960px) {
-    .wc-inner { grid-template-columns: 1fr; gap: 44px; }
-    .wc-visual { order: -1; }
-    .wc-visual-inner { max-width: 420px; margin: 0 auto; }
-  }
   @media (max-width: 640px) {
     .whatcwk-section { padding-top: 64px; padding-bottom: 64px; }
     .wc-quote { font-size: 15px; padding-left: 16px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .wc-hub-ring, .wc-visual-glow { animation: none !important; }
-    .wc-line { stroke-dashoffset: 0 !important; }
-    .wc-node { opacity: 1 !important; transform: none !important; }
   }
 </style>
