@@ -18,9 +18,6 @@ let s: any = null;
 try { s = await sanity.fetch(HOME_QUERY); } catch { s = null; }
 const siteSettings = await getSiteSettings();
 
-const HARDCODED_PHRASES = [
-  'partner', 'operator', 'architect', 'co-founder', 'infrastructure',
-];
 const HARDCODED_PILLARS = [
   { key: 'mind',   title: 'Mind',   body: 'Strategic clarity, decision frameworks, mental performance, and clearing psychological blockers that stop growth.' },
   { key: 'body',   title: 'Body',   body: 'The operational systems required for the body to be nurtured through access to nutrition and regular fitness habits.' },
@@ -51,18 +48,14 @@ const faqJsonLd = {
   })),
 };
 const heroEyebrow     = s?.heroEyebrow      ?? 'Welcome to the Jungle';
-// Topline: prefer the new heroTopline field; fall back to legacy heroHeadline
-// (existing Sanity docs already hold "CWK. is like a" there).
-const heroTopline     = s?.heroTopline      ?? s?.heroHeadline ?? 'CWK. is like a';
-const wordPhrases: string[] = (Array.isArray(s?.wordFlipPhrases) && s.wordFlipPhrases.length > 0)
-  ? s.wordFlipPhrases : HARDCODED_PHRASES;
-// Lower title: the two sub-lines condensed into one. Hardcoded to force the new
-// copy regardless of the legacy Sanity heroTitle/heroSubheadline fields.
-const heroHeadline    = 'Stop throwing spaghetti at the wall. Build an asset that runs without you.';
-const heroSubheadline = '';
-// CTA: hardcoded for now — legacy Sanity heroCta still holds the old waitlist
-// label/href. Switch back to s?.heroCta?.{label,href} once it's updated in Studio.
-const heroCtaLabel    = 'Start mapping your asset';
+// Hero headline: white topline + a single cyan accent line. Hardcoded to force
+// the new copy regardless of the legacy Sanity hero fields.
+const heroTopline     = 'Building alone is the hardest way to build.';
+const wordPhrases: string[] = ['Build an asset instead of another job.'];
+const heroHeadline    = '';
+const heroSubheadline = 'Systems that run the business when you step away. Built for you. In 30 days.';
+// CTA opens the ou.chat live chat ("Kai") instead of navigating.
+const heroCtaLabel    = 'Chat with Kai';
 const heroCtaHref     = '/assessment';
 const pillars = (Array.isArray(s?.pillars) && s.pillars.length > 0) ? s.pillars : HARDCODED_PILLARS;
 const googleReviews = Array.isArray(s?.googleReviews) ? s.googleReviews : null;
@@ -89,6 +82,8 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
     subheadline={heroSubheadline}
     ctaLabel={heroCtaLabel}
     ctaHref={heroCtaHref}
+    ctaChat={true}
+    ctaCaption="24/7 Front Desk"
     subtext={s?.heroSubtext}
   />
   <FeaturedVideoSection
