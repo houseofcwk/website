@@ -7,6 +7,8 @@ interface Props {
   phrases: string[];
   headline: string;
   subheadline?: string;
+  /** Optional cyan accent line rendered under the main title. */
+  headlineAccent?: string;
   ctaLabel: string;
   ctaHref?: string;
   /** When true, the CTA is a button that opens the live chat (ou.chat) instead of a link. */
@@ -21,6 +23,7 @@ const {
   topline,
   phrases,
   headline,
+  headlineAccent,
   subheadline,
   ctaLabel,
   ctaHref = '/assessment',
@@ -100,21 +103,13 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
     <div class="deco-line dl-3"></div>
     <div class="deco-line dl-4"></div>
 
-    <!-- Decorative icons (Lucide: trending-up, hexagon, zap, sparkles) -->
-    <svg class="deco-icon di-1" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
-      <polyline points="16 7 22 7 22 13"/>
-    </svg>
-    <svg class="deco-icon di-2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-    </svg>
-    <svg class="deco-icon di-3" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-    </svg>
-    <svg class="deco-icon di-4" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-      <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
-    </svg>
+    <!-- Decorative floating icons (CWK icon library, tinted via CSS mask) -->
+    <span class="deco-icon di-1" aria-hidden="true"></span>
+    <span class="deco-icon di-2" aria-hidden="true"></span>
+    <span class="deco-icon di-3" aria-hidden="true"></span>
+    <span class="deco-icon di-4" aria-hidden="true"></span>
+    <span class="deco-icon di-5" aria-hidden="true"></span>
+    <span class="deco-icon di-6" aria-hidden="true"></span>
 
     <!-- Accent squares -->
     <div class="acc-sq as-1"></div>
@@ -147,9 +142,12 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
       )}
     </h1>
 
-    <!-- Lower block: optional title + subtitle -->
+    <!-- Lower block: optional title (+ accent line) + subtitle -->
     {headline && (
-      <h2 class="hero-title fade-up fade-up-delay-2">{headline}</h2>
+      <h2 class="hero-title fade-up fade-up-delay-2">
+        <span class="ht-line">{headline}</span>
+        {headlineAccent && <span class="ht-line ht-accent">{headlineAccent}</span>}
+      </h2>
     )}
     {subheadline && (
       <p class="hero-subtitle fade-up fade-up-delay-2">{subheadline}</p>
@@ -315,14 +313,24 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
   .dl-3 { width: 110px; right: 9.7%; top: 270px; rotate: -20deg; opacity: 0.5; }
   .dl-4 { width:  90px; right:11.1%; top: 470px; rotate:  18deg; opacity: 0.4; }
 
-  /* Decorative icons */
+  /* Decorative icons — CWK icon-library SVGs used as tintable CSS masks.
+     The mask uses each icon's alpha, so background-color sets the tint. */
   .deco-icon {
     position: absolute;
+    background-color: currentColor;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
   }
-  .di-1 { color: #00E5FF; opacity: 0.6; left: 81.9%; top:  60px; animation: icon-drift 11s ease-in-out infinite; }
-  .di-2 { color: #7B61FF; opacity: 0.4; left:   18%;  top: 300px; animation: icon-drift 13s ease-in-out infinite 2s; }
-  .di-3 { color: #FB3079; opacity: 0.5; left: 80.6%; top: 620px; animation: icon-drift  9s ease-in-out infinite 1s; }
-  .di-4 { color: #00E5FF; opacity: 0.3; left: 18.75%; top: 70px; animation: icon-drift 14s ease-in-out infinite 3s; }
+  .di-1 { -webkit-mask-image: url('/images/hero-icons/icon_rocketship.svg'); mask-image: url('/images/hero-icons/icon_rocketship.svg'); width: 40px; height: 40px; color: #00E5FF; opacity: 0.6;  left: 81.5%; top:  56px; animation: icon-drift 11s ease-in-out infinite; }
+  .di-2 { -webkit-mask-image: url('/images/hero-icons/icon_build.svg');      mask-image: url('/images/hero-icons/icon_build.svg');      width: 36px; height: 36px; color: #7B61FF; opacity: 0.5;  left:   17%; top: 300px; animation: icon-drift 13s ease-in-out infinite 2s; }
+  .di-3 { -webkit-mask-image: url('/images/hero-icons/icon_power_ups.svg');  mask-image: url('/images/hero-icons/icon_power_ups.svg');  width: 34px; height: 34px; color: #FB3079; opacity: 0.55; left: 80.6%; top: 620px; animation: icon-drift  9s ease-in-out infinite 1s; }
+  .di-4 { -webkit-mask-image: url('/images/hero-icons/icon_target.svg');     mask-image: url('/images/hero-icons/icon_target.svg');     width: 32px; height: 32px; color: #00E5FF; opacity: 0.45; left: 18.75%; top: 70px; animation: icon-drift 14s ease-in-out infinite 3s; }
+  .di-5 { -webkit-mask-image: url('/images/hero-icons/icon_money_bag.svg');  mask-image: url('/images/hero-icons/icon_money_bag.svg');  width: 36px; height: 36px; color: #7B61FF; opacity: 0.5;  left: 84.5%; top: 420px; animation: icon-drift 12s ease-in-out infinite 4s; }
+  .di-6 { -webkit-mask-image: url('/images/hero-icons/icon_operator.svg');   mask-image: url('/images/hero-icons/icon_operator.svg');   width: 36px; height: 36px; color: #00E5FF; opacity: 0.5;  left: 13.5%; top: 540px; animation: icon-drift 10s ease-in-out infinite 2.5s; }
   @keyframes icon-drift {
     0%, 100% { translate: 0 0;    rotate:  0deg; }
     33%       { translate: 4px -8px;  rotate:  5deg; }
@@ -444,6 +452,8 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
     letter-spacing: -0.015em;
     color: var(--text);
   }
+  .hero-title .ht-line { display: block; }
+  .hero-title .ht-accent { color: var(--cyan); }
   .hero-subtitle {
     margin: 0 0 28px;
     max-width: 640px;
@@ -512,7 +522,7 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
   /* Responsive */
   @media (max-width: 1024px) {
     /* Hide right-side background cards on mid-size screens */
-    .fc-4, .fc-5, .fc-6, .dl-3, .dl-4, .di-1, .di-3, .as-2 { display: none; }
+    .fc-4, .fc-5, .fc-6, .dl-3, .dl-4, .di-1, .di-3, .di-5, .as-2 { display: none; }
   }
   @media (max-width: 768px) {
     /* Hide all background decoration on mobile */

@@ -18,6 +18,9 @@ let s: any = null;
 try { s = await sanity.fetch(HOME_QUERY); } catch { s = null; }
 const siteSettings = await getSiteSettings();
 
+const HARDCODED_PHRASES = [
+  'partner', 'operator', 'architect', 'co-founder', 'infrastructure',
+];
 const HARDCODED_PILLARS = [
   { key: 'mind',   title: 'Mind',   body: 'Strategic clarity, decision frameworks, mental performance, and clearing psychological blockers that stop growth.' },
   { key: 'body',   title: 'Body',   body: 'The operational systems required for the body to be nurtured through access to nutrition and regular fitness habits.' },
@@ -48,12 +51,15 @@ const faqJsonLd = {
   })),
 };
 const heroEyebrow     = s?.heroEyebrow      ?? 'Welcome to the Jungle';
-// Hero headline: white topline + a single cyan accent line. Hardcoded to force
-// the new copy regardless of the legacy Sanity hero fields.
-const heroTopline     = 'Building alone is the hardest way to build.';
-const wordPhrases: string[] = ['Build an asset instead of another job.'];
-const heroHeadline    = '';
-const heroSubheadline = 'Systems that run the business when you step away. Built for you. In 30 days.';
+// Flip headline (restored): topline + rotating cyan word. Sanity-first with a
+// hardcoded fallback.
+const heroTopline     = s?.heroTopline      ?? s?.heroHeadline ?? 'CWK. is like a';
+const wordPhrases: string[] = (Array.isArray(s?.wordFlipPhrases) && s.wordFlipPhrases.length > 0)
+  ? s.wordFlipPhrases : HARDCODED_PHRASES;
+// Title + cyan accent line + subhead under the flip (hardcoded to the new copy).
+const heroHeadline       = 'Building alone is the hardest way to build.';
+const heroHeadlineAccent = 'Build an asset instead of another job.';
+const heroSubheadline    = 'Systems that run the business when you step away. Built for you. In 30 days.';
 // CTA opens the ou.chat live chat ("Kai") instead of navigating.
 const heroCtaLabel    = 'Chat with Kai';
 const heroCtaHref     = '/assessment';
@@ -79,6 +85,7 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
     topline={heroTopline}
     phrases={wordPhrases}
     headline={heroHeadline}
+    headlineAccent={heroHeadlineAccent}
     subheadline={heroSubheadline}
     ctaLabel={heroCtaLabel}
     ctaHref={heroCtaHref}
