@@ -9,6 +9,8 @@ interface Props {
   subheadline?: string;
   /** Optional cyan accent line rendered under the main title. */
   headlineAccent?: string;
+  /** Optional gradient line rendered under the subheadline. */
+  subheadlineAccent?: string;
   ctaLabel: string;
   ctaHref?: string;
   /** When true, the CTA is a button that opens the live chat (ou.chat) instead of a link. */
@@ -25,6 +27,7 @@ const {
   headline,
   headlineAccent,
   subheadline,
+  subheadlineAccent,
   ctaLabel,
   ctaHref = '/assessment',
   ctaChat = false,
@@ -150,7 +153,12 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
       </h2>
     )}
     {subheadline && (
-      <p class="hero-subtitle fade-up fade-up-delay-2">{subheadline}</p>
+      <p class="hero-subtitle fade-up fade-up-delay-2">
+        <span class="hs-line">{subheadline}</span>
+        {subheadlineAccent && (
+          <span class="hs-line hs-accent gradient-text">{subheadlineAccent}</span>
+        )}
+      </p>
     )}
     {subtext && (
       <div class="hero-sub fade-up fade-up-delay-2 pt-hero-sub"><PortableText value={subtext} /></div>
@@ -462,6 +470,9 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
     line-height: 1.55;
     color: var(--muted);
   }
+  .hero-subtitle .hs-line { display: block; }
+  /* Gradient closing line (uses the global .gradient-text treatment) */
+  .hero-subtitle .hs-accent { font-weight: 700; }
 
   /* Optional rich-text subtext (Sanity-driven) */
   .hero-sub {

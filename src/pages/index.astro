@@ -58,7 +58,8 @@ const wordPhrases: string[] = (Array.isArray(s?.wordFlipPhrases) && s.wordFlipPh
   ? s.wordFlipPhrases : HARDCODED_PHRASES;
 // Title + subhead under the flip (hardcoded to the new copy).
 const heroHeadline       = 'Building alone is the hardest way to build.';
-const heroSubheadline    = 'For owners who refuse to run a messy business just because everyone else does.';
+const heroSubheadline       = 'For owners who refuse to run a messy business just because';
+const heroSubheadlineAccent = 'everyone else does.';
 // CTA opens the ou.chat live chat ("Kai") instead of navigating.
 const heroCtaLabel    = 'Chat with Kai';
 const heroCtaHref     = '/assessment';
@@ -85,6 +86,7 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
     phrases={wordPhrases}
     headline={heroHeadline}
     subheadline={heroSubheadline}
+    subheadlineAccent={heroSubheadlineAccent}
     ctaLabel={heroCtaLabel}
     ctaHref={heroCtaHref}
     ctaChat={true}
