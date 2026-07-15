@@ -56,9 +56,8 @@ const heroEyebrow     = s?.heroEyebrow      ?? 'Welcome to the Jungle';
 const heroTopline     = s?.heroTopline      ?? s?.heroHeadline ?? 'CWK. is like a';
 const wordPhrases: string[] = (Array.isArray(s?.wordFlipPhrases) && s.wordFlipPhrases.length > 0)
   ? s.wordFlipPhrases : HARDCODED_PHRASES;
-// Title + cyan accent line + subhead under the flip (hardcoded to the new copy).
+// Title + subhead under the flip (hardcoded to the new copy).
 const heroHeadline       = 'Building alone is the hardest way to build.';
-const heroHeadlineAccent = 'Build an asset instead of another job.';
 const heroSubheadline    = 'Systems that run the business when you step away. Built for you. In 30 days.';
 // CTA opens the ou.chat live chat ("Kai") instead of navigating.
 const heroCtaLabel    = 'Chat with Kai';
@@ -85,7 +84,6 @@ const googleReviewsTotalCount = typeof s?.googleReviewsTotalCount === 'number' ?
     topline={heroTopline}
     phrases={wordPhrases}
     headline={heroHeadline}
-    headlineAccent={heroHeadlineAccent}
     subheadline={heroSubheadline}
     ctaLabel={heroCtaLabel}
     ctaHref={heroCtaHref}
