@@ -9,6 +9,10 @@ export interface Env {
 
   // Secrets (wrangler secret put …)
   RESEND_API?: string;
+  // Player X-Ray micro-app flow (Omazy plugin-flow): HMAC secret for the
+  // core→worker signature + the Core API token (per-install) for memory writes.
+  XRAY_HMAC_SECRET?: string;
+  CORE_API_TOKEN?: string;
   TURNSTILE_SECRET?: string;
   HASH_SALT?: string;
   SLACK_WEBHOOK_URL?: string;

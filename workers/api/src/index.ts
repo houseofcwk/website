@@ -7,6 +7,7 @@ import { handleWaitlistPost } from './handlers/waitlist';
 import { handleContactPost } from './handlers/contact';
 import { handleGoogleReviewsGet } from './handlers/googleReviews';
 import { handleLifestyleCalculatorPost } from './handlers/lifestyleCalculator';
+import { handleXrayFlow } from './handlers/xrayFlow';
 
 type Method = 'GET' | 'POST' | 'OPTIONS' | string;
 
@@ -55,6 +56,11 @@ export default {
     if (pathname === '/lifestyle-calculator') {
       if (method === 'POST') return handleLifestyleCalculatorPost(request, env, ctx);
       return methodNotAllowed('POST, OPTIONS', env);
+    }
+    // ── Player X-Ray micro-app flow (Omazy plugin-flow webhook; HMAC-auth) ──
+    if (pathname === '/xray/flow') {
+      if (method === 'POST') return handleXrayFlow(request, env);
+      return methodNotAllowed('POST', env);
     }
 
     return new Response('Not Found', { status: 404 });
