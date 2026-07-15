@@ -8,6 +8,7 @@ import { handleContactPost } from './handlers/contact';
 import { handleGoogleReviewsGet } from './handlers/googleReviews';
 import { handleLifestyleCalculatorPost } from './handlers/lifestyleCalculator';
 import { handleXrayFlow } from './handlers/xrayFlow';
+import { handleXrayTool } from './handlers/xrayTool';
 
 type Method = 'GET' | 'POST' | 'OPTIONS' | string;
 
@@ -60,6 +61,11 @@ export default {
     // ── Player X-Ray micro-app flow (Omazy plugin-flow webhook; HMAC-auth) ──
     if (pathname === '/xray/flow') {
       if (method === 'POST') return handleXrayFlow(request, env);
+      return methodNotAllowed('POST', env);
+    }
+    // ── Player X-Ray tool (Omazy chat tool-calling; HMAC-auth) ──────────────
+    if (pathname === '/xray/tool') {
+      if (method === 'POST') return handleXrayTool(request, env);
       return methodNotAllowed('POST', env);
     }
 
