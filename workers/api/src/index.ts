@@ -9,6 +9,7 @@ import { handleGoogleReviewsGet } from './handlers/googleReviews';
 import { handleLifestyleCalculatorPost } from './handlers/lifestyleCalculator';
 import { handleXrayFlow } from './handlers/xrayFlow';
 import { handleXrayTool } from './handlers/xrayTool';
+import { handleXrayContext } from './handlers/xrayContext';
 
 type Method = 'GET' | 'POST' | 'OPTIONS' | string;
 
@@ -66,6 +67,11 @@ export default {
     // ── Player X-Ray tool (Omazy chat tool-calling; HMAC-auth) ──────────────
     if (pathname === '/xray/tool') {
       if (method === 'POST') return handleXrayTool(request, env);
+      return methodNotAllowed('POST', env);
+    }
+    // ── Player X-Ray context provider (Omazy ambient context; HMAC-auth) ────
+    if (pathname === '/xray/context') {
+      if (method === 'POST') return handleXrayContext(request, env);
       return methodNotAllowed('POST', env);
     }
 
