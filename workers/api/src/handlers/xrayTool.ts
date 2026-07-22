@@ -1,24 +1,44 @@
-// xrayTool — the CWK "get_player_result" tool, exposed to Kai via the Omazy
-// chat tool-calling primitive (RFC micro-app M6). When Kai decides it needs the
-// visitor's Player X-Ray result mid-conversation, the Omazy dispatcher POSTs
-// here (HMAC-signed); we read the archetype the visitor saved to their Omazy
-// CRM record (Core API) and return a compact factual summary for the reply.
+// xrayTool — the agent-callable tools endpoint, exposed to Kai via the Omazy
+// chat tool-calling primitive (RFC micro-app M6). When Kai decides it needs one
+// of the app's tools mid-conversation, the Omazy dispatcher POSTs here
+// (HMAC-signed) with the tool name; we resolve it against the agentTool
+// documents in the Studio and return the rendered content for the reply.
+//
+// The model-facing surface — name, description, arguments, response copy — is
+// editable in the Studio. The data lookup is a named handler below; adding a
+// tool that reads a NEW data source is the one change that still needs code.
 import type { Env } from '../env';
-import { ARCHETYPES, type ArchetypeKey } from '../../../../src/data/assessment';
+import { getAgentConfig, getFlow, getTool, archetypeScope } from '../lib/agentConfig';
+import { renderBlock } from '../lib/template';
+import type { AgentConfig, RtTool } from '../lib/agentTypes';
 import { readSigned, json, CoreClient, type ToolRequest, type ToolResponse } from '../omazy-sdk';
 
-function summarize(archetype: ArchetypeKey): string {
-  const a = ARCHETYPES[archetype];
-  if (!a) return `The visitor's saved Player X-Ray archetype is "${archetype}".`;
-  return (
-    `The visitor already took the Player X-Ray. Their archetype is **${a.name}** (${a.eyebrow}). ` +
-    `Tagline: ${a.tagline} ` +
-    `What's happening: ${a.happening} ` +
-    `What's costing them: ${a.mindMine} ` +
-    `Their one move this week: ${a.oneMove} ` +
-    `Ideal next environment: ${a.environment} ` +
-    `Use this to personalize your reply; do not dump it verbatim.`
-  );
+/**
+ * player_result — read the archetype the visitor saved to their Omazy CRM
+ * record during the flow this tool is bound to, and render the tool's response
+ * template against it.
+ */
+async function playerResult(
+  env: Env, cfg: AgentConfig, tool: RtTool, customerId: string | null | undefined,
+): Promise<ToolResponse> {
+  if (!customerId) return { content: tool.unidentifiedResponse };
+
+  const flow = getFlow(cfg, tool.flowKey) ?? cfg.flows[0];
+  if (!flow) return { content: tool.notTakenResponse };
+
+  const customer = await new CoreClient((env as any).CORE_API_TOKEN).getCustomer(customerId);
+  const saved = customer?.custom_fields?.[flow.memoryKey];
+  if (typeof saved !== 'string') return { content: tool.notTakenResponse };
+
+  const archetype = flow.archetypes.find((a) => a.key === saved);
+  if (!archetype) {
+    // A result saved under a key the flow no longer defines — the archetype was
+    // renamed or removed in the Studio after this visitor took it. Report the
+    // raw key rather than claiming they never took it.
+    return { content: `The visitor's saved result is "${saved}", which no longer maps to a current archetype.` };
+  }
+
+  return { content: renderBlock(tool.responseTemplate, archetypeScope(archetype)) };
 }
 
 export async function handleXrayTool(request: Request, env: Env): Promise<Response> {
@@ -26,18 +46,19 @@ export async function handleXrayTool(request: Request, env: Env): Promise<Respon
   if (!s.ok) return new Response('unauthorized', { status: s.status });
   const req = s.body;
 
-  if (req.tool && req.tool !== 'get_player_result') {
-    return json<ToolResponse>({ content: `Unknown tool "${req.tool}".`, is_error: true });
-  }
-  if (!req.customer_id) {
-    return json<ToolResponse>({ content: "The visitor hasn't been identified yet, so there's no saved Player X-Ray result. Invite them to take the Player X-Ray (say \"player x-ray\")." });
+  const cfg = await getAgentConfig(env);
+  // A missing tool name means a single-tool install; fall back to the only
+  // enabled tool so existing registrations keep working.
+  const enabled = cfg.tools.filter((t) => t.enabled);
+  const tool = req.tool ? getTool(cfg, req.tool) : enabled.length === 1 ? enabled[0] : null;
+
+  if (!tool) {
+    return json<ToolResponse>({ content: `Unknown tool "${req.tool ?? ''}".`, is_error: true });
   }
 
-  const core = new CoreClient((env as any).CORE_API_TOKEN);
-  const customer = await core.getCustomer(req.customer_id);
-  const arch = customer?.custom_fields?.player_archetype;
-  if (typeof arch !== 'string') {
-    return json<ToolResponse>({ content: "This visitor hasn't taken the Player X-Ray yet. Invite them to take it — it's five quick reads, under 2 minutes." });
+  if (tool.handler === 'static') {
+    return json<ToolResponse>({ content: tool.responseTemplate });
   }
-  return json<ToolResponse>({ content: summarize(arch as ArchetypeKey) });
+
+  return json<ToolResponse>(await playerResult(env, cfg, tool, req.customer_id));
 }

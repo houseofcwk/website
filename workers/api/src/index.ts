@@ -10,6 +10,7 @@ import { handleLifestyleCalculatorPost } from './handlers/lifestyleCalculator';
 import { handleXrayFlow } from './handlers/xrayFlow';
 import { handleXrayTool } from './handlers/xrayTool';
 import { handleXrayContext } from './handlers/xrayContext';
+import { handleAgentManifest } from './handlers/agentManifest';
 
 type Method = 'GET' | 'POST' | 'OPTIONS' | string;
 
@@ -73,6 +74,11 @@ export default {
     if (pathname === '/xray/context') {
       if (method === 'POST') return handleXrayContext(request, env);
       return methodNotAllowed('POST', env);
+    }
+    // ── Omazy install manifest, generated from the Studio config (bearer-auth)
+    if (pathname === '/agent/manifest') {
+      if (method === 'GET') return handleAgentManifest(request, env);
+      return methodNotAllowed('GET', env);
     }
 
     return new Response('Not Found', { status: 404 });

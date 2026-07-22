@@ -7,6 +7,9 @@ import { journeyPage } from './journeyPage';
 import { sideQuestsPage } from './sideQuestsPage';
 import { caseStudy } from './caseStudy';
 import { legalPage } from './legalPage';
+import { agentApp } from './agentApp';
+import { agentFlow } from './agentFlow';
+import { agentTool } from './agentTool';
 
 // Shared objects
 import { seo } from './objects/seo';
@@ -18,6 +21,11 @@ import { blockContent } from './objects/blockContent';
 import { googleReview } from './objects/googleReview';
 import { faqItem } from './objects/faqItem';
 import { organizationSchema } from './objects/organizationSchema';
+import { agentOption } from './objects/agentOption';
+import { agentStep } from './objects/agentStep';
+import { agentArchetype } from './objects/agentArchetype';
+import { agentScoring } from './objects/agentScoring';
+import { agentToolInput } from './objects/agentToolInput';
 
 export {
   siteSettings,
@@ -28,6 +36,9 @@ export {
   sideQuestsPage,
   caseStudy,
   legalPage,
+  agentApp,
+  agentFlow,
+  agentTool,
   seo,
   ctaButton,
   statItem,
@@ -37,6 +48,11 @@ export {
   googleReview,
   faqItem,
   organizationSchema,
+  agentOption,
+  agentStep,
+  agentArchetype,
+  agentScoring,
+  agentToolInput,
 };
 
 export const schemaTypes = [
@@ -49,6 +65,10 @@ export const schemaTypes = [
   sideQuestsPage,
   caseStudy,
   legalPage,
+  // Agent micro-app
+  agentApp,
+  agentFlow,
+  agentTool,
   // Objects
   seo,
   ctaButton,
@@ -59,4 +79,9 @@ export const schemaTypes = [
   googleReview,
   faqItem,
   organizationSchema,
+  agentOption,
+  agentStep,
+  agentArchetype,
+  agentScoring,
+  agentToolInput,
 ];

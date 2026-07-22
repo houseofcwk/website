@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/generate-llms-txt.mjs && node scripts/verify-lifestyle-math.mjs",
+    "prebuild": "node scripts/generate-llms-txt.mjs && node scripts/verify-lifestyle-math.mjs && tsx scripts/verify-agent-scoring.mjs",
     "verify:calc": "node scripts/verify-lifestyle-math.mjs",
+    "seed:agent": "tsx scripts/seed-agent-config.mjs",
+    "verify:scoring": "tsx scripts/verify-agent-scoring.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -33,6 +35,7 @@
     "@sanity/vision": "^5.20.0",
     "sanity": "^5.20.0",
     "styled-components": "^6.4.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.8.3"
   }
 }

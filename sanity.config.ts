@@ -11,6 +11,7 @@ const SINGLETONS = [
   'aboutPage',
   'journeyPage',
   'sideQuestsPage',
+  'agentApp',
 ] as const;
 
 type SingletonId = (typeof SINGLETONS)[number];
@@ -73,6 +74,20 @@ export default defineConfig({
             S.divider(),
             S.documentTypeListItem('caseStudy').title('Case Studies'),
             S.documentTypeListItem('legalPage').title('Legal Pages'),
+            S.divider(),
+            // ── Agent (Omazy micro-app) ──────────────────────────────────
+            // Everything the in-chat agent reads at runtime. Publishing here
+            // takes effect within the config TTL — no deploy. See
+            // docs/AGENT_CONFIG.md.
+            S.listItem()
+              .title('🤖 Agent · App')
+              .child(
+                S.document()
+                  .schemaType('agentApp')
+                  .documentId('agentApp'),
+              ),
+            S.documentTypeListItem('agentFlow').title('🤖 Agent · Journeys'),
+            S.documentTypeListItem('agentTool').title('🤖 Agent · Tools'),
           ]),
     }),
     visionTool({ defaultApiVersion: '2024-10-01' }),

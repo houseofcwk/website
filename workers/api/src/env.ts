@@ -13,6 +13,8 @@ export interface Env {
   // core→worker signature + the Core API token (per-install) for memory writes.
   XRAY_HMAC_SECRET?: string;
   CORE_API_TOKEN?: string;
+  // Bearer token gating GET /agent/manifest. Unset disables the endpoint.
+  AGENT_ADMIN_TOKEN?: string;
   TURNSTILE_SECRET?: string;
   HASH_SALT?: string;
   SLACK_WEBHOOK_URL?: string;
@@ -28,4 +30,12 @@ export interface Env {
   CONTACT_INBOX_TO: string;
   WAITLIST_INBOX_TO?: string;
   CWK_PLACE_ID?: string;
+
+  // Agent config (Sanity Studio → runtime). Defaults are compiled into
+  // lib/agentConfig.ts; these only exist to point a preview worker at a
+  // different dataset or to retune the cache without a code change.
+  SANITY_PROJECT_ID?: string;
+  SANITY_DATASET?: string;
+  /** Seconds the agent config is memoised per isolate. Default 60. */
+  AGENT_CONFIG_TTL?: string;
 }
