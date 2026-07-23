@@ -261,6 +261,18 @@ const extraBlocks = extraJsonLd
           ouWidget("open");
         } catch (e) { void e; }
       })();
+
+      // Any [data-open-chat] element opens the chat, on every page.
+      //
+      // Bound once here by delegation rather than per-element in a component.
+      // This binding used to live inside the homepage hero, which meant the
+      // attribute rendered fine but did nothing anywhere else — a dead button
+      // with no error to notice. Delegation also covers markup added later.
+      document.addEventListener("click", function (e) {
+        var t = e.target;
+        var el = t && t.closest ? t.closest("[data-open-chat]") : null;
+        if (el) ouWidget("open");
+      });
     </script>
   </body>
 </html>

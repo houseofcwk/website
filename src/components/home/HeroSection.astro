@@ -585,14 +585,8 @@ const flipPhrases = Array.isArray(phrases) && phrases.length > 0 ? phrases : [];
   })();
 </script>
 
-<script>
-  // Open the ou.chat live chat widget when the hero CTA is clicked.
-  // ouWidget is a command queue (loaded in Base.astro); if the widget script
-  // hasn't finished loading yet, the "open" command queues and fires on load.
-  (() => {
-    const w = window as unknown as { ouWidget?: (cmd: string) => void };
-    document.querySelectorAll<HTMLElement>('[data-open-chat]').forEach((btn) => {
-      btn.addEventListener('click', () => { w.ouWidget && w.ouWidget('open'); });
-    });
-  })();
-</script>
+<!--
+  The [data-open-chat] click binding used to live here. It now runs site-wide in
+  Base.astro: scoped to this component it only existed on the homepage, so the
+  same attribute silently did nothing on every other page that used it.
+-->

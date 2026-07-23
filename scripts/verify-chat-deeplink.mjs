@@ -89,9 +89,48 @@ check('control chars', run('?chat=hi%00%1Fthere').message === 'hithere',
     m === null ? 'no message was sent at all' : `expected 120 chars, got ${m.length}`);
 }
 
+// The [data-open-chat] binding must live in the layout, not in a component.
+// It previously sat inside the homepage hero, so the attribute rendered on
+// other pages with no listener attached: a dead button that throws no error and
+// looks correct in the markup.
+//
+// Extract the delegated binder and actually fire a click through it — asserting
+// the code is merely present would pass on a listener that never calls open.
+{
+  const bStart = src.indexOf('document.addEventListener("click"');
+  if (bStart < 0) {
+    failures.push('open-chat binder: Base.astro has no site-wide click binder for [data-open-chat]');
+  } else {
+    const binder = src.slice(bStart, src.indexOf('});', bStart) + '});'.length);
+    const calls = [];
+    let handler = null;
+    const ctx = {
+      document: { addEventListener: (evt, cb) => { if (evt === 'click') handler = cb; } },
+      ouWidget: (cmd) => calls.push(cmd),
+    };
+    vm.createContext(ctx);
+    vm.runInContext(binder, ctx);
+
+    check('open-chat binder', typeof handler === 'function', 'no click handler was registered');
+
+    if (handler) {
+      // A click on (or inside) a [data-open-chat] element opens the chat.
+      handler({ target: { closest: (sel) => (sel === '[data-open-chat]' ? {} : null) } });
+      check('open-chat fires', calls.includes('open'),
+        `clicking [data-open-chat] must call ouWidget('open') — got [${calls}]`);
+
+      // A click anywhere else must not.
+      const before = calls.length;
+      handler({ target: { closest: () => null } });
+      check('open-chat scoped', calls.length === before,
+        'clicking outside [data-open-chat] must not open the chat');
+    }
+  }
+}
+
 if (failures.length) {
   console.error(`✗ ${failures.length} deep-link check(s) failed:\n`);
   failures.forEach((f) => console.error(`  ${f}`));
   process.exit(1);
 }
-console.log('✓ ?chat= deep-link handler verified (8 checks, incl. ready-before-open ordering)');
+console.log('✓ chat triggers verified (11 checks: ?chat= handler, ready-before-open ordering, [data-open-chat] binder)');
