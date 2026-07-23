@@ -255,3 +255,53 @@ already exists ([sanity-webhook.md](sanity-webhook.md)) — its GROQ filter woul
 need `agentFlow` added to the document-type list. Note that this also makes
 `score()` config-driven, which requires reworking `verify-agent-scoring.mjs`,
 since that script currently uses `score()` as its reference implementation.
+
+---
+
+## QR codes that start a conversation
+
+A printed QR can drop someone straight into a journey instead of on a page they
+still have to navigate. The codes encode a normal site URL carrying `?chat=`:
+
+```
+https://cwkexperience.com/?chat=player+x-ray
+```
+
+The deep-link handler in [`src/layouts/Base.astro`](../src/layouts/Base.astro)
+reads that param, opens the widget, and sends the value as the visitor's first
+message — which the flow's trigger phrases then match, starting the X-Ray.
+
+### Generating one
+
+```bash
+npm run qr -- --text "player x-ray" --label xray
+npm run qr -- --text "book a power up" --path /power-ups --label powerups
+```
+
+Writes a PNG and an SVG to `resources/design/qr/`. Use the **SVG** for print —
+it scales to any size without softening the module edges.
+
+Options: `--text` (starter message) · `--path` (landing page) · `--label`
+(filename) · `--out` (directory) · `--size` (PNG px) · `--dark` / `--light`.
+
+Every code is **decoded back before the files are written**. A QR that scans to
+the wrong URL is expensive to discover on printed material, and encoders fail
+quietly with long payloads at high error-correction levels. Codes are generated
+at ECC level H (~30% damage tolerance) because print gets creased and smudged.
+
+### Two things not to break
+
+**Ordering.** The chat UI lazy-loads in an iframe on first open, and the widget
+SDK's `postToApp()` is fire-and-forget with no queue. A `startChat` issued
+before that iframe boots is dropped **without any error**. The handler must
+register the `ready` listener *before* calling `open`, and send from inside the
+callback. `npm run verify:deeplink` guards this (it runs in `prebuild`); it was
+confirmed to fail loudly when the two calls are swapped.
+
+**The value is untrusted.** It lands in the visitor's own conversation as though
+they typed it, so anyone can craft a link that puts words in their mouth. The
+handler strips control characters, collapses whitespace and caps the text at 120
+characters, and `replaceState` removes the param so a refresh or a forwarded URL
+does not re-fire it. `utm_*` params are preserved for attribution. If you ever
+want this tighter, the next step is an allow-list of starter phrases rather than
+free text.
