@@ -212,6 +212,43 @@ const extraBlocks = extraJsonLd
        var j=d.createElement(s);j.async=1;j.src="https://ou.chat/widget.js";
        d.head.appendChild(j);})(window,document,"script");
       ouWidget("init", { deploymentId: "wgt_5193c6d751d35b7bd3" });
+
+      // ?chat=<text> — open the chat and send <text> as the visitor's first
+      // message. Powers printed QR codes ("scan to take the Player X-Ray").
+      //
+      // The widget SDK reads only ?model= from the URL, so this deep link is
+      // ours. Order matters: the chat UI lazy-loads in an iframe on first open
+      // and postToApp() is fire-and-forget with no queue, so a startChat sent
+      // before the iframe boots is silently dropped. Subscribe to `ready`
+      // first, then open, and send from inside the callback.
+      (function () {
+        try {
+          var params = new URLSearchParams(location.search);
+          var raw = params.get("chat");
+          if (!raw) return;
+
+          // This text lands in the visitor's own conversation as though they
+          // typed it, so a crafted link must not be able to smuggle in a wall
+          // of instructions: strip control characters, collapse whitespace and
+          // cap the length. Plain text only.
+          var text = "";
+          for (var i = 0; i < raw.length; i++) {
+            var c = raw.charCodeAt(i);
+            if (c >= 32 && c !== 127) text += raw.charAt(i);
+          }
+          text = text.replace(/\s+/g, " ").trim().slice(0, 120);
+          if (!text) return;
+
+          // Drop the param so a refresh — or the URL being shared onward —
+          // does not re-fire the message.
+          params.delete("chat");
+          var qs = params.toString();
+          history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+
+          ouWidget("on", "ready", function () { ouWidget("startChat", { message: text }); });
+          ouWidget("open");
+        } catch (e) { void e; }
+      })();
     </script>
   </body>
 </html>

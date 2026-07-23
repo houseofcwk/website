@@ -5,13 +5,15 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/generate-llms-txt.mjs && node scripts/verify-lifestyle-math.mjs && tsx scripts/verify-agent-scoring.mjs",
+    "prebuild": "node scripts/generate-llms-txt.mjs && node scripts/verify-lifestyle-math.mjs && tsx scripts/verify-agent-scoring.mjs && node scripts/verify-chat-deeplink.mjs",
     "verify:calc": "node scripts/verify-lifestyle-math.mjs",
     "seed:agent": "tsx scripts/seed-agent-config.mjs",
     "verify:scoring": "tsx scripts/verify-agent-scoring.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "qr": "node scripts/make-qr.mjs",
+    "verify:deeplink": "node scripts/verify-chat-deeplink.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
@@ -33,6 +35,9 @@
     "@astrojs/check": "^0.9.4",
     "@cloudflare/workers-types": "^4.20260412.1",
     "@sanity/vision": "^5.20.0",
+    "jsqr": "^1.4.0",
+    "pngjs": "^7.0.0",
+    "qrcode": "^1.5.4",
     "sanity": "^5.20.0",
     "styled-components": "^6.4.0",
     "tsx": "^4.21.0",
