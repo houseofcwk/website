@@ -21,9 +21,32 @@ the bottom of the content list.
 | **🤖 Agent · Journeys** | The guided flows. Trigger phrases, steps, archetypes, scoring rules, every line of copy, the result email, the ambient context line. |
 | **🤖 Agent · Tools** | The functions Kai can call. Name, description, arguments, response copy. |
 
-Changes go live **within 60 seconds** of publishing (the worker memoises the
-config per isolate; see `AGENT_CONFIG_TTL`). Drafts are excluded from the query,
-so an in-progress edit cannot reach a visitor before you hit Publish.
+Publishing is a **pull, not a push**: nothing is deployed, and the worker fetches
+the config from the Sanity CDN on demand, memoised per isolate (see
+`AGENT_CONFIG_TTL`). Drafts are excluded from the query, so an in-progress edit
+cannot reach a visitor before you hit Publish.
+
+### ⚠️ Not every field goes live on its own
+
+Two surfaces, reached differently. **Read this before tuning a tool
+description** — it is the field most worth changing and the one that does *not*
+take effect by itself.
+
+| Field | Reaches the model |
+| --- | --- |
+| Questions, options, archetypes, result copy, scoring rules | **~60s, automatic** |
+| Opt-in copy, interstitial messages, result email, CTA link | **~60s, automatic** |
+| Tool *response* content (what it returns when called) | **~60s, automatic** |
+| Ambient context line | **~60s, automatic** |
+| Tool **name**, **description**, **arguments** | only after re-registering the manifest with Omazy |
+| Flow **key**, **trigger phrases** | only after re-registering the manifest with Omazy |
+
+The split follows from where each field is consumed. The worker drives every
+flow turn and renders every tool response, so that content is read fresh on each
+request. But the tool *definition* — name, description, JSON Schema — is what
+Omazy stores at install time and hands to the model; our worker never sees it at
+call time. Editing it here changes what `/agent/manifest` renders, not what the
+model has been told, until the manifest is re-registered.
 
 ---
 
@@ -112,9 +135,13 @@ curl -H "Authorization: Bearer $AGENT_ADMIN_TOKEN" \
   worker is serving the compiled config from `src/data/assessment.ts`. The chat
   still works; it is just not reading your edits.
 
-Paste the output into the Omazy install when you add or rename a tool or flow.
-Copy changes need no manifest update — only the shape does (tool names,
-arguments, trigger phrases, endpoints).
+Paste the output into the Omazy install whenever you change anything in the
+lower half of the table above — a tool's name, **description** or arguments, a
+flow's key or **trigger phrases**, or any endpoint or scope. Note that a tool
+description is *copy*, but it still lives in the manifest, so it is not exempt.
+
+Everything in the upper half of that table is served by the worker and needs no
+manifest update.
 
 ---
 
