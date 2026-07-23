@@ -1,0 +1,551 @@
+---
+import Base from '../layouts/Base.astro';
+import { QUESTIONS, ARCHETYPES } from '../data/assessment';
+import { fallbackConfig } from '../../workers/api/src/lib/agentConfig';
+
+// Landing page for Kai, the CWK chat agent. The chat itself is the product —
+// this page's only job is to get someone to open it and say something.
+//
+// Every word in the transcript below comes from the flow's own source, so the
+// page cannot drift from what Kai actually says: the reads and archetypes from
+// src/data/assessment.ts, and the intro card from the worker's compiled agent
+// config. Build-time only — the imports never reach the client bundle.
+//
+// Caveat worth knowing: the worker serves the Studio's copy at runtime and only
+// falls back to this compiled config, so editing the intro in Sanity changes
+// the live chat but not this preview until the next deploy. The reads and
+// archetypes have the same property. Structure is faithful; wording is a build
+// behind an unpublished Studio edit.
+const pageTitle = 'Kai — AI Agent for Founders | CWK. Experience';
+const pageDescription =
+  'Kai is the CWK AI agent. Ask about building your business, or take the Player X-Ray to find out which player you are — five reads, under two minutes.';
+
+const firstRead = QUESTIONS[0];
+const result = ARCHETYPES.builder;
+const intro = fallbackConfig().flows[0].intro;
+
+// Starter phrases. Each one matches a trigger the agent already recognises, so
+// the button lands the visitor mid-conversation rather than at a blank prompt.
+const starters = [
+  { text: 'player x-ray', label: 'Take the Player X-Ray', hint: 'Five reads. Under two minutes.' },
+  { text: 'what does CWK actually do', label: 'What is CWK?', hint: 'The short version.' },
+  { text: 'how do I book an Experience Tour', label: 'Book a tour', hint: 'See the place in person.' },
+  { text: 'I want to work with you', label: 'Start a project', hint: 'Tell Kai what you are building.' },
+];
+---
+
+<Base title={pageTitle} description={pageDescription} canonical="https://cwkexperience.com/kai">
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <section class="kai-hero">
+    <div class="kai-wrap">
+      <p class="kai-eyebrow fade-up">
+        <span class="kai-pulse" aria-hidden="true"></span>
+        CWK · AI Agent
+      </p>
+
+      <h1 class="kai-h1 fade-up fade-up-delay-1">Kai</h1>
+
+      <p class="kai-lede fade-up fade-up-delay-2">
+        Ask a question about your business and get a straight answer.
+        Kai knows the CWK world — the Lab, the Sandbox, the Power Ups — and it
+        will tell you which of them you actually need.
+      </p>
+
+      <div class="kai-ctas fade-up fade-up-delay-3">
+        <button type="button" class="kai-btn kai-btn--primary" data-open-chat>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          Talk to Kai
+        </button>
+        <button type="button" class="kai-btn kai-btn--ghost" data-chat-start="player x-ray">
+          Take the Player X-Ray
+        </button>
+      </div>
+
+      <p class="kai-fineprint fade-up fade-up-delay-4">
+        No sign-up to start. Kai only asks for your email if you want your result sent to you.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── The transcript (signature) ──────────────────────────── -->
+  <section class="kai-demo">
+    <div class="kai-wrap">
+      <h2 class="kai-h2 reveal-up">This is the Player X-Ray, mid-conversation.</h2>
+      <p class="kai-sub reveal-up">
+        Not a screenshot. Tap any answer to start it for real.
+      </p>
+
+      <div class="kai-thread reveal-card" role="group" aria-label="Player X-Ray preview">
+        <div class="kai-thread-bar">
+          <span class="kai-mark" aria-hidden="true">K</span>
+          <span class="kai-thread-name">Kai</span>
+          <span class="kai-thread-state"><span class="kai-pulse" aria-hidden="true"></span>Online</span>
+        </div>
+
+        <div class="kai-thread-body">
+          <p class="kai-said">You</p>
+          <div class="kai-bubble kai-bubble--you">player x-ray</div>
+
+          <p class="kai-said">Kai</p>
+          <div class="kai-card">
+            <span class="kai-card-title">{intro.title}</span>
+            <span class="kai-card-body">{intro.body}</span>
+          </div>
+
+          <div class="kai-card kai-card--read">
+            <span class="kai-card-eyebrow">Read 1/5 · {firstRead.pillarLabel}</span>
+            <span class="kai-card-body">{firstRead.prompt}</span>
+          </div>
+
+          <div class="kai-options">
+            {firstRead.options.map((opt) => (
+              <button
+                type="button"
+                class="kai-option"
+                data-chat-start="player x-ray"
+                aria-label={`Start the Player X-Ray — answer ${opt.letter}`}
+              >
+                <span class="kai-option-letter">{opt.letter}</span>
+                <span class="kai-option-text">{opt.text}</span>
+              </button>
+            ))}
+          </div>
+
+          <p class="kai-elision"><span>four more reads</span></p>
+
+          <p class="kai-said">Kai</p>
+          <div class="kai-card kai-card--result">
+            <span class="kai-card-eyebrow">{result.eyebrow}</span>
+            <span class="kai-card-title">You are {result.name}</span>
+            <span class="kai-card-body">{result.tagline}</span>
+            <span class="kai-result-move">
+              <span class="kai-result-key">Your one move this week</span>
+              {result.oneMove}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Starters ────────────────────────────────────────────── -->
+  <section class="kai-asks">
+    <div class="kai-wrap">
+      <h2 class="kai-h2 reveal-up">Or just start here.</h2>
+      <ul class="kai-ask-list">
+        {starters.map((s) => (
+          <li class="reveal-card">
+            <button type="button" class="kai-ask" data-chat-start={s.text}>
+              <span class="kai-ask-label">{s.label}</span>
+              <span class="kai-ask-hint">{s.hint}</span>
+              <span class="kai-ask-go" aria-hidden="true">→</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Close ───────────────────────────────────────────────── -->
+  <section class="kai-close">
+    <div class="kai-wrap">
+      <p class="kai-close-line reveal-up">Kai is open now.</p>
+      <button type="button" class="kai-btn kai-btn--primary reveal-up" data-open-chat>
+        Start a conversation
+      </button>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Open the chat with a starter message. Two paths, because the widget's chat
+  // UI lazy-loads in an iframe on first open and the SDK's postToApp() has no
+  // queue — a startChat sent before that iframe boots is dropped silently.
+  //   - already ready  → send straight away
+  //   - not yet ready  → subscribe first, then open, and send from the callback
+  // getState's callback is synchronous once the SDK has loaded, and queues
+  // safely before that.
+  (() => {
+    type Widget = (cmd: string, a?: unknown, b?: unknown) => void;
+    const w = window as unknown as { ouWidget?: Widget };
+
+    function startChat(message: string) {
+      const ouWidget = w.ouWidget;
+      if (!ouWidget || !message) return;
+      ouWidget('getState', (s: { ready?: boolean } | undefined) => {
+        if (s && s.ready) {
+          ouWidget('startChat', { message });
+          ouWidget('open');
+        } else {
+          ouWidget('on', 'ready', () => ouWidget('startChat', { message }));
+          ouWidget('open');
+        }
+      });
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-chat-start]').forEach((el) => {
+      el.addEventListener('click', () => startChat(el.dataset.chatStart || ''));
+    });
+  })();
+</script>
+
+<style>
+  /* Scoped to .kai-* so nothing here can collide with the global system. */
+  .kai-wrap {
+    width: min(100% - 40px, 900px);
+    margin-inline: auto;
+  }
+
+  /* ── Hero ─────────────────────────────────────────────────── */
+  .kai-hero {
+    padding: 168px 0 72px;
+    position: relative;
+  }
+  /* A single soft field behind the name — the page's only ambient flourish. */
+  .kai-hero::before {
+    content: '';
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    width: min(680px, 90vw);
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(123, 97, 255, 0.16), transparent 62%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .kai-eyebrow {
+    /* flex + fit-content, not inline-flex: the h1 below is inline-block for its
+       gradient, so an inline-level eyebrow would share its line and collide. */
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .kai-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #00E396;
+    box-shadow: 0 0 0 0 rgba(0, 227, 150, 0.55);
+    animation: kaiPulse 2.4s infinite;
+  }
+  @keyframes kaiPulse {
+    70%  { box-shadow: 0 0 0 7px rgba(0, 227, 150, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 227, 150, 0); }
+  }
+
+  .kai-h1 {
+    /* inline-block so the gradient box is the width of the word, not of the
+       full-width block — otherwise a three-letter name sits entirely inside
+       the first colour stop and renders flat white. */
+    display: inline-block;
+    font-size: clamp(4.5rem, 16vw, 9rem);
+    font-weight: 800;
+    line-height: 0.86;
+    letter-spacing: -0.05em;
+    margin-bottom: 24px;
+    background: linear-gradient(100deg, var(--text) 8%, var(--purple) 58%, var(--pink) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .kai-lede {
+    font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    line-height: 1.62;
+    color: var(--muted);
+    max-width: 46ch;
+    margin-bottom: 36px;
+  }
+
+  .kai-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .kai-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 14px 26px;
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+  }
+  .kai-btn:hover { transform: translateY(-2px); }
+  .kai-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+  .kai-btn--primary { background: var(--pink); color: #fff; }
+  .kai-btn--primary:hover { background: #ff4a8b; }
+
+  .kai-btn--ghost {
+    background: var(--glass);
+    border-color: var(--gb2);
+    color: var(--text);
+  }
+  .kai-btn--ghost:hover { border-color: var(--purple); }
+
+  .kai-fineprint { font-size: 0.85rem; color: var(--dim); }
+
+  /* ── Section headings ─────────────────────────────────────── */
+  .kai-h2 {
+    font-size: clamp(1.5rem, 3.6vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .kai-sub {
+    color: var(--muted);
+    font-size: 0.98rem;
+    margin-bottom: 28px;
+  }
+
+  /* ── Transcript ───────────────────────────────────────────── */
+  .kai-demo { padding: 56px 0; }
+
+  .kai-thread {
+    border: 1px solid var(--gb);
+    border-radius: var(--radius-card);
+    background: linear-gradient(180deg, var(--bg2), var(--bg));
+    overflow: hidden;
+  }
+
+  .kai-thread-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--gb);
+    background: var(--glass);
+  }
+  .kai-mark {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .kai-thread-name { font-weight: 600; font-size: 0.92rem; }
+  .kai-thread-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-size: 0.76rem;
+    color: var(--dim);
+  }
+
+  .kai-thread-body { padding: 22px 18px 26px; }
+
+  .kai-said {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 18px 0 7px;
+  }
+  .kai-said:first-child { margin-top: 0; }
+
+  .kai-bubble {
+    display: inline-block;
+    padding: 11px 16px;
+    border-radius: var(--radius-component);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+  .kai-bubble--you {
+    background: rgba(123, 97, 255, 0.14);
+    border: 1px solid rgba(123, 97, 255, 0.28);
+  }
+
+  .kai-card {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 16px 18px;
+    border: 1px solid var(--gb);
+    border-radius: var(--radius-component);
+    background: var(--glass);
+    margin-bottom: 10px;
+  }
+  .kai-card--read { border-left: 2px solid var(--cyan); }
+  .kai-card--result { border-left: 2px solid var(--pink); }
+
+  .kai-card-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .kai-card-title { font-size: 1.05rem; font-weight: 700; }
+  .kai-card-body { font-size: 0.93rem; line-height: 1.6; color: var(--muted); }
+
+  .kai-result-move {
+    display: block;
+    margin-top: 6px;
+    padding-top: 12px;
+    border-top: 1px solid var(--gb);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .kai-result-key {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 5px;
+  }
+
+  /* Real option buttons — the preview is a door, not a picture. */
+  .kai-options {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 4px;
+  }
+  .kai-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    width: 100%;
+    padding: 12px 14px;
+    text-align: left;
+    font-family: inherit;
+    font-size: 0.89rem;
+    line-height: 1.5;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--gb);
+    border-radius: var(--radius-component);
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+  }
+  .kai-option:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.05);
+    color: var(--text);
+  }
+  .kai-option:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .kai-option-letter {
+    flex: none;
+    width: 21px;
+    height: 21px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    background: var(--gb);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .kai-option:hover .kai-option-letter { background: var(--cyan); color: var(--bg); }
+
+  /* Marks the four reads the preview skips, so the excerpt reads honestly. */
+  .kai-elision {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .kai-elision::before,
+  .kai-elision::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gb);
+  }
+
+  /* ── Starters ─────────────────────────────────────────────── */
+  .kai-asks { padding: 56px 0; }
+  /* Fixed 2×2: four starters in an auto-fit grid leave an orphan on row two. */
+  .kai-ask-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    list-style: none;
+  }
+  .kai-ask {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+    height: 100%;
+    padding: 18px 20px;
+    text-align: left;
+    font-family: inherit;
+    background: var(--glass);
+    border: 1px solid var(--gb);
+    border-radius: var(--radius-card);
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .kai-ask:hover { border-color: var(--purple); transform: translateY(-2px); }
+  .kai-ask:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  .kai-ask-label { font-size: 0.98rem; font-weight: 600; color: var(--text); }
+  .kai-ask-hint { font-size: 0.84rem; color: var(--dim); }
+  .kai-ask-go {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    color: var(--dim);
+    transition: transform 0.18s ease, color 0.18s ease;
+  }
+  .kai-ask:hover .kai-ask-go { color: var(--purple); transform: translateX(3px); }
+
+  /* ── Close ────────────────────────────────────────────────── */
+  .kai-close {
+    padding: 56px 0 120px;
+    text-align: center;
+  }
+  .kai-close-line {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 22px;
+  }
+
+  @media (max-width: 640px) {
+    .kai-hero { padding-top: 132px; }
+    .kai-ctas .kai-btn { width: 100%; justify-content: center; }
+    .kai-ask-list { grid-template-columns: 1fr; }
+    .kai-thread-body { padding: 18px 14px 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kai-pulse { animation: none; }
+    .kai-btn:hover,
+    .kai-ask:hover { transform: none; }
+  }
+</style>

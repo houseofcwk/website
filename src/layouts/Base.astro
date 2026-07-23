@@ -211,7 +211,19 @@ const extraBlocks = extraJsonLd
       (function(w,d,s){w.ouWidget=w.ouWidget||function(){(w.ouWidget.q=w.ouWidget.q||[]).push(arguments)};
        var j=d.createElement(s);j.async=1;j.src="https://ou.chat/widget.js";
        d.head.appendChild(j);})(window,document,"script");
-      ouWidget("init", { deploymentId: "wgt_5193c6d751d35b7bd3" });
+      // One init for the whole site. Do NOT paste the embed snippet into a page
+      // as well: the loader appends a fresh <script> each time it runs, and a
+      // second copy of widget.js gets its own closure — so it mounts a second
+      // launcher rather than no-oping.
+      //
+      // position and size below match the SDK's own defaults; they are written
+      // out so the config is explicit rather than inherited.
+      ouWidget("init", {
+        deploymentId: "wgt_5193c6d751d35b7bd3",
+        primaryColor: "#07090F",
+        position: "bottom-right",
+        size: "medium",
+      });
 
       // ?chat=<text> — open the chat and send <text> as the visitor's first
       // message. Powers printed QR codes ("scan to take the Player X-Ray").
