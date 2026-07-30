@@ -1,0 +1,191 @@
+---
+import GapDiagram from './GapDiagram.astro';
+import { hero, heroProof, DEPOSIT_HREF, TOUR_HREF } from '../../data/frontDesk';
+---
+
+<section class="hero" id="top" data-section-view="front_desk_hero">
+  <div class="hero-orbs" aria-hidden="true">
+    <span class="hero-orb hero-orb--1"></span>
+    <span class="hero-orb hero-orb--2"></span>
+  </div>
+
+  <div class="fd-container hero-inner fade-up">
+    <span class="fd-badge fd-badge--success">
+      <span class="fd-dot-pulse" aria-hidden="true"></span>
+      {hero.badge}
+    </span>
+
+    <h1 class="hero-title">
+      {hero.titleTop}
+      <span class="hero-shine">{hero.titleShine}</span>
+    </h1>
+
+    <p class="hero-sub">
+      The front desk and receptionist your business never had. People book and buy on their
+      own time, and every new lead gets met and pointed the right way. <b>Day or night.</b>
+    </p>
+
+    <GapDiagram />
+
+    <div class="hero-ctas">
+      <span class="hero-glow">
+        <a
+          href={DEPOSIT_HREF}
+          class="btn btn-primary btn-lg"
+          data-track-event="front_desk_cta_clicked"
+          data-evt-cta="deposit"
+          data-evt-position="hero"
+        >{hero.ctaPrimary}</a>
+      </span>
+      <a
+        href={TOUR_HREF}
+        target="_blank"
+        rel="noopener"
+        class="hero-textlink"
+        data-track-event="front_desk_cta_clicked"
+        data-evt-cta="experience_tour"
+        data-evt-position="hero"
+      >{hero.ctaSecondary}</a>
+      <span class="fd-note">{hero.note}</span>
+    </div>
+
+    <div class="hero-proof">
+      {heroProof.map((s) => (
+        <div class="hero-proofcell">
+          <span class:list={['hero-proofvalue', { 'is-cyan': s.cyan }]}>{s.value}</span>
+          <span class="hero-prooflabel">{s.label}</span>
+        </div>
+      ))}
+    </div>
+    <p class="fd-disclaimer">{hero.disclaimer}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: clamp(56px, 7vw, 96px) 0 clamp(48px, 5vw, 72px);
+    background:
+      radial-gradient(90% 70% at 12% -10%, rgba(0, 229, 255, 0.13), transparent 62%),
+      radial-gradient(70% 60% at 92% 8%, rgba(123, 97, 255, 0.16), transparent 60%),
+      linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px) 0 0 / 72px 72px,
+      linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px) 0 0 / 72px 72px;
+  }
+
+  .hero-orbs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .hero-orb { position: absolute; border-radius: 50%; filter: blur(150px); }
+  .hero-orb--1 {
+    width: 620px;
+    height: 620px;
+    top: -190px;
+    left: -200px;
+    background: rgba(0, 229, 255, 0.06);
+    animation: heroDrift 14s ease-in-out infinite;
+  }
+  .hero-orb--2 {
+    width: 540px;
+    height: 540px;
+    bottom: -220px;
+    right: -170px;
+    background: rgba(123, 97, 255, 0.08);
+    animation: heroDrift 18s ease-in-out infinite reverse;
+  }
+  @keyframes heroDrift {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(30px, -24px); }
+  }
+
+  .hero-inner { position: relative; max-width: 1000px; text-align: center; }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(38px, 5.6vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+    margin: 20px 0 0;
+  }
+  .hero-shine {
+    display: block;
+    background: linear-gradient(120deg, #00E5FF, #7B61FF, #00E5FF);
+    background-size: 220% 220%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: heroShine 6s ease-in-out infinite;
+  }
+  @keyframes heroShine {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.62;
+    color: var(--muted);
+    max-width: 58ch;
+    margin: 20px auto 0;
+    text-wrap: pretty;
+  }
+  .hero-sub b { color: var(--text); font-weight: 600; }
+
+  .hero-ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 32px;
+  }
+  .hero-glow {
+    display: inline-block;
+    border-radius: var(--radius-component);
+    animation: heroGlow 2.8s ease-in-out infinite;
+  }
+  @keyframes heroGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+    50%      { box-shadow: 0 0 26px 2px rgba(0, 229, 255, 0.35); }
+  }
+  .hero-textlink {
+    font-size: 15px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--gb2);
+    padding-bottom: 3px;
+  }
+  .hero-textlink:hover { color: var(--text); opacity: 1; }
+
+  /* 1px grid gaps let the border colour show through as hairlines. */
+  .hero-proof {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--gb);
+    border: 1px solid var(--gb);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 40px;
+    text-align: left;
+  }
+  .hero-proofcell { background: var(--bg2); padding: 16px 18px; }
+  .hero-proofvalue {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .hero-proofvalue.is-cyan { color: var(--cyan); }
+  .hero-prooflabel { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .hero-proof { grid-template-columns: 1fr; }
+    .hero-ctas .btn { width: 100%; justify-content: center; }
+    .hero-glow { display: block; width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-orb, .hero-glow, .hero-shine { animation: none; }
+    .hero-shine { background-position: 0% 50%; }
+  }
+</style>

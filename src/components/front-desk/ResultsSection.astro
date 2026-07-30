@@ -1,0 +1,19 @@
+---
+import StatGrid from './StatGrid.astro';
+import { results } from '../../data/frontDesk';
+---
+
+<section class="results fd-section--alt fd-hair-y">
+  <div class="fd-container">
+    <div class="fd-head fd-head--split fd-head--baseline">
+      <h2 class="fd-h2 fd-h2--sm reveal-up">What it gives back</h2>
+      <p class="fd-disclaimer fd-disclaimer--right">Placeholder averages across placeholder desks</p>
+    </div>
+    <StatGrid items={results} cols={4} class="results-grid" />
+  </div>
+</section>
+
+<style>
+  .results { padding-block: clamp(56px, 6vw, 84px); }
+  .results :global(.results-grid) { margin-top: 32px; }
+</style>

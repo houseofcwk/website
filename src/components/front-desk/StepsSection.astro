@@ -1,0 +1,73 @@
+---
+import { steps } from '../../data/frontDesk';
+---
+
+<section class="fd-section fd-section--alt fd-hair-y">
+  <div class="fd-container">
+    <div class="fd-head fd-head--split fd-head--baseline">
+      <div>
+        <span class="fd-eyebrow reveal-up">From deposit to live</span>
+        <h2 class="fd-h2 fd-h2--lg reveal-up reveal-delay-1">Four steps. That is it.</h2>
+      </div>
+      <p class="steps-note">Roughly seven days from your deposit to an open desk.</p>
+    </div>
+
+    <div class="steps">
+      {steps.map((s, i) => (
+        <article class="fd-card fd-card--lg reveal-card" style={`--reveal-i:${i}`}>
+          <div class="steps-top">
+            <span class:list={['steps-n', { 'is-live': s.milestone === 'launched' }]}>{s.n}</span>
+            <span class={`steps-badge steps-badge--${s.milestone}`}>{s.milestone}</span>
+          </div>
+          <h3 class="steps-title">{s.title}</h3>
+          <p class="steps-body">{s.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps-note { font-size: 15px; color: var(--muted); margin: 0; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .steps-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .steps-n {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--gb2);
+  }
+  .steps-n.is-live { color: var(--cyan); }
+
+  /* MilestoneBadge equivalents, one per step state. */
+  .steps-badge {
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .steps-badge--proposed { background: var(--glass); border: 1px solid var(--gb); color: var(--muted); }
+  .steps-badge--met      { background: rgba(0, 227, 150, 0.12); border: 1px solid rgba(0, 227, 150, 0.32); color: var(--cwk-success); }
+  .steps-badge--mapped   { background: rgba(0, 229, 255, 0.12); border: 1px solid rgba(0, 229, 255, 0.3); color: var(--cyan); }
+  .steps-badge--launched { background: rgba(123, 97, 255, 0.14); border: 1px solid rgba(123, 97, 255, 0.32); color: var(--purple); }
+
+  .steps-title { margin: 16px 0 0; font-size: 18px; font-weight: 700; color: var(--text); }
+  .steps-body { margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+  @media (max-width: 1024px) {
+    .steps { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .steps { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+import MockBooking from './MockBooking.astro';
+import MockReceptionist from './MockReceptionist.astro';
+import MockInsights from './MockInsights.astro';
+import { parts } from '../../data/frontDesk';
+
+// The three product parts. Rows use the global .feature-grid (with .reverse for
+// the middle row) and only override the column ratio the handoff specifies.
+const rows = [
+  { key: 'desk', part: parts.desk, tick: 'cyan', reverse: false },
+  { key: 'reception', part: parts.reception, tick: 'purple', reverse: true },
+  { key: 'insights', part: parts.insights, tick: 'green', reverse: false },
+] as const;
+---
+
+<section class="fd-section fd-hair-t" id="what-you-get">
+  <div class="fd-container">
+    <div class="fd-head fd-head--center">
+      <span class="fd-eyebrow reveal-up">What you get</span>
+      <h2 class="fd-h2 reveal-up reveal-delay-1">A front desk and a receptionist, in one.</h2>
+      <p class="fd-lede reveal-up reveal-delay-2">
+        Three parts, installed for you. You do nothing but talk to us once.
+      </p>
+    </div>
+
+    {rows.map((row) => (
+      <div class:list={['wyg-row', 'feature-grid', { reverse: row.reverse }]}>
+        <div class="feature-text wyg-copy reveal-up">
+          <div class="wyg-rule">
+            <span>{row.part.eyebrow}</span>
+            <i aria-hidden="true"></i>
+          </div>
+          <h3 class="fd-h3 wyg-title">{row.part.title}</h3>
+          <p class="wyg-body">{row.part.body}</p>
+          <ul class={`fd-ticks fd-ticks--${row.tick}`}>
+            {row.part.checks.map((c) => (
+              <li><span aria-hidden="true">✓</span>{c}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="feature-mock reveal-card">
+          {row.key === 'desk' && <MockBooking />}
+          {row.key === 'reception' && <MockReceptionist />}
+          {row.key === 'insights' && <MockInsights />}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .wyg-row {
+    gap: clamp(28px, 4vw, 64px);
+    margin-top: 64px;
+    /* Handoff ratio: copy column slightly narrower than the mockup. */
+    grid-template-columns: 1fr 1.05fr;
+  }
+  .wyg-row.reverse { grid-template-columns: 1.05fr 1fr; }
+  .wyg-row + .wyg-row { margin-top: clamp(56px, 6vw, 96px); }
+
+  .wyg-copy { display: block; }
+
+  .wyg-rule { display: flex; align-items: center; gap: 14px; }
+  .wyg-rule span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .wyg-rule i { flex: 1; height: 1px; background: var(--gb); }
+
+  .wyg-title { margin-top: 16px; }
+  .wyg-body {
+    margin: 16px 0 0;
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--muted);
+    max-width: 46ch;
+  }
+
+  /* Below 820px both rows stack copy first, mockup second. The global
+     .feature-grid.reverse rule already flips the order at 768px; this moves
+     the same behaviour to the handoff's breakpoint. */
+  @media (max-width: 820px) {
+    .wyg-row, .wyg-row.reverse { grid-template-columns: 1fr; gap: 24px; }
+    .wyg-row.reverse .feature-text { order: 1; }
+    .wyg-row.reverse .feature-mock { order: 2; }
+  }
+</style>

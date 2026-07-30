@@ -1,0 +1,71 @@
+---
+import { finalCta, DEPOSIT_HREF, TOUR_HREF } from '../../data/frontDesk';
+---
+
+<section class="final" data-section-view="front_desk_final_cta">
+  <div class="fd-container final-inner">
+    <span class="fd-badge fd-badge--cyan reveal-up">{finalCta.eyebrow}</span>
+    <h2 class="final-title reveal-up reveal-delay-1">{finalCta.title}</h2>
+    <p class="final-sub reveal-up reveal-delay-2">{finalCta.sub}</p>
+
+    <div class="final-ctas">
+      <a
+        href={DEPOSIT_HREF}
+        class="btn btn-primary btn-lg"
+        data-track-event="front_desk_cta_clicked"
+        data-evt-cta="deposit"
+        data-evt-position="final"
+      >{finalCta.primary}</a>
+      <a
+        href={TOUR_HREF}
+        target="_blank"
+        rel="noopener"
+        class="btn btn-secondary btn-lg"
+        data-track-event="front_desk_cta_clicked"
+        data-evt-cta="experience_tour"
+        data-evt-position="final"
+      >{finalCta.secondary}</a>
+    </div>
+
+    <p class="final-foot">{finalCta.foot}</p>
+  </div>
+</section>
+
+<style>
+  .final {
+    padding-block: clamp(80px, 9vw, 130px);
+    border-top: 1px solid var(--gb);
+    background:
+      radial-gradient(80% 80% at 50% 0%, rgba(0, 229, 255, 0.14), transparent 62%),
+      radial-gradient(60% 60% at 15% 90%, rgba(123, 97, 255, 0.14), transparent 60%);
+  }
+  .final-inner { max-width: 860px; text-align: center; }
+
+  .final-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4.6vw, 66px);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    margin: 20px 0 0;
+  }
+  .final-sub {
+    font-size: 18px;
+    line-height: 1.62;
+    color: var(--muted);
+    max-width: 52ch;
+    margin: 18px auto 0;
+  }
+  .final-ctas {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .final-foot { margin: 18px 0 0; font-size: 13px; color: var(--dim); }
+
+  @media (max-width: 640px) {
+    .final-ctas .btn { width: 100%; justify-content: center; }
+  }
+</style>

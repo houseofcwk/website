@@ -1,0 +1,168 @@
+---
+import VideoFrame from './VideoFrame.astro';
+import {
+  flags,
+  featuredTestimonial,
+  resultCards,
+  gridTestimonials,
+  compactQuotes,
+} from '../../data/frontDesk';
+
+// Every name is "Client Name" and every figure is a placeholder. The disclaimer
+// in the header says so. Do not ship publicly until these are replaced with
+// consented, real quotes, and drop the star rows unless ratings are collected.
+const tagClass = { green: 'tag-green', cyan: 'tag' } as const;
+---
+
+<section class="fd-section fd-hair-t" id="testimonials">
+  <div class="fd-container">
+    <div class="fd-head fd-head--split fd-head--baseline">
+      <div>
+        <span class="fd-eyebrow reveal-up">In their words</span>
+        <h2 class="fd-h2 reveal-up reveal-delay-1">The people who stopped answering the phone.</h2>
+      </div>
+      <p class="fd-disclaimer fd-disclaimer--right">Placeholder testimonials. Swap in real clients.</p>
+    </div>
+
+    {flags.testimonialLayout === 'featured' ? (
+      <div class="ts-grid">
+        <figure class="ts-video reveal-card">
+          <div class="ts-video-top">
+            <span class="tag tag-pink">{featuredTestimonial.tag}</span>
+            <span class="fd-timechip">{featuredTestimonial.duration}</span>
+          </div>
+
+          <span class="fd-play fd-play--md ts-play" aria-hidden="true"></span>
+
+          <figcaption class="ts-video-foot">
+            <blockquote class="ts-pullquote">“{featuredTestimonial.quote}”</blockquote>
+            <span class="fd-attrib">
+              <span class="fd-avatar fd-avatar--md" aria-hidden="true">CN</span>
+              <span>
+                <b>{featuredTestimonial.name}</b>
+                <em>{featuredTestimonial.role}</em>
+              </span>
+            </span>
+            <span class="ts-video-note">{featuredTestimonial.caption}</span>
+          </figcaption>
+        </figure>
+
+        <div class="ts-cards">
+          {resultCards.map((t, i) => (
+            <div class="fd-card fd-card--lg reveal-card" style={`--reveal-i:${i + 1}`}>
+              <div class="ts-card-top">
+                <span class="ts-stars" aria-label="Five out of five">★★★★★</span>
+                <span class:list={['tag', tagClass[t.tag]]}>{t.tagText}</span>
+              </div>
+              <blockquote class="ts-quote">“{t.quote}”</blockquote>
+              <span class="fd-attrib">
+                <span class="fd-avatar" aria-hidden="true">CN</span>
+                <span>
+                  <b>{t.name}</b>
+                  <em>{t.role}</em>
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <div class="ts-grid3">
+        {gridTestimonials.map((t, i) => (
+          <div class="fd-card fd-card--lg reveal-card" style={`--reveal-i:${i}`}>
+            <span class="ts-stars" aria-label="Five out of five">★★★★★</span>
+            <blockquote class="ts-quote">“{t.quote}”</blockquote>
+            <span class="ts-attrib">{t.name} · {t.role}</span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="ts-quoterow">
+      {compactQuotes.map((q, i) => (
+        <blockquote class="ts-cquote reveal-card" style={`--reveal-i:${i}`}>
+          <p>“{q.quote}”</p>
+          <cite>{q.who}</cite>
+        </blockquote>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ts-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 18px;
+    margin-top: 36px;
+  }
+
+  .ts-video {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    min-height: 380px;
+    margin: 0;
+    padding: 26px;
+    border: 1px solid var(--gb2);
+    border-radius: 16px;
+    background:
+      radial-gradient(90% 90% at 20% 15%, rgba(0, 229, 255, 0.16), transparent 60%),
+      radial-gradient(80% 80% at 85% 85%, rgba(251, 48, 121, 0.16), transparent 62%),
+      linear-gradient(180deg, var(--bg3), var(--bg2));
+  }
+  .ts-video-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+  }
+  .ts-play { align-self: center; }
+  .ts-video-foot { display: grid; gap: 16px; }
+  .ts-pullquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(20px, 1.9vw, 27px);
+    font-weight: 700;
+    line-height: 1.28;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .ts-video-note { font-size: 12px; color: var(--dim); }
+
+  .ts-cards { display: grid; gap: 18px; align-content: start; }
+  .ts-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .ts-stars { font-size: 13px; color: var(--cwk-warning); letter-spacing: 0.06em; }
+  .ts-quote { margin: 16px 0; font-size: 16px; line-height: 1.55; color: var(--text); }
+  .ts-attrib { font-size: 12px; color: var(--muted); }
+
+  .ts-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+
+  .ts-quoterow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; }
+  .ts-cquote {
+    margin: 0;
+    padding: 20px;
+    border: 1px solid var(--gb);
+    border-radius: 14px;
+    background: var(--bg2);
+  }
+  .ts-cquote p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted); }
+  .ts-cquote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  @media (max-width: 820px) {
+    .ts-grid, .ts-grid3, .ts-quoterow { grid-template-columns: 1fr; }
+    .ts-video { min-height: 0; }
+  }
+  @media (max-width: 640px) {
+    .ts-video { padding: 20px; }
+  }
+</style>

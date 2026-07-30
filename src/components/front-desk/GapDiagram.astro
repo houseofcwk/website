@@ -1,0 +1,163 @@
+---
+// "The gap" diagram. Geometry is reproduced verbatim from the handoff.
+//
+// Under ~520px the 820-wide viewBox shrinks the labels to ~7px, so below that
+// the SVG is swapped for a legible vertical stack of the same four states.
+---
+
+<div class="gap">
+  <span class="gap-wash" aria-hidden="true"></span>
+
+  <svg
+    class="gap-svg"
+    viewBox="0 0 820 300"
+    role="img"
+    aria-label="A visitor asks. At the gap they either leave when no one answers, or they buy when the Front Desk answers."
+  >
+    <defs>
+      <marker id="fdArrowRed" markerWidth="10" markerHeight="10" refX="7.5" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#FF4444" />
+      </marker>
+      <marker id="fdArrowGreen" markerWidth="10" markerHeight="10" refX="7.5" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#00E396" />
+      </marker>
+      <filter id="fdPulseGlow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="4.5" result="b" />
+        <feMerge>
+          <feMergeNode in="b" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <radialGradient id="fdGapGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(251,48,121,0.35)" />
+        <stop offset="100%" stop-color="rgba(251,48,121,0)" />
+      </radialGradient>
+    </defs>
+
+    <!-- Visitor -->
+    <rect x="14" y="112" width="182" height="76" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.16)" />
+    <text x="105" y="156" text-anchor="middle" fill="#EEF0FF" font-family="DM Sans, sans-serif" font-size="18" font-weight="700">Visitor asks</text>
+    <line x1="196" y1="150" x2="272" y2="150" stroke="rgba(238,240,255,0.28)" stroke-width="2" />
+
+    <!-- The gap -->
+    <ellipse class="gap-glow" cx="338" cy="150" rx="70" ry="70" fill="url(#fdGapGlow)" />
+    <polygon points="338,102 414,150 338,198 262,150" fill="rgba(251,48,121,0.1)" stroke="#FB3079" stroke-width="2" />
+    <text x="338" y="156" text-anchor="middle" fill="#EEF0FF" font-family="DM Sans, sans-serif" font-size="15" font-weight="600">The gap</text>
+
+    <!-- Loss branch -->
+    <path d="M414,150 C505,150 525,72 612,72" fill="none" stroke="rgba(255,68,68,0.5)" stroke-width="2" marker-end="url(#fdArrowRed)" />
+    <text x="505" y="58" text-anchor="middle" fill="rgba(238,240,255,0.55)" font-family="DM Sans, sans-serif" font-size="13" font-weight="500">No answer</text>
+    <rect x="628" y="40" width="178" height="66" rx="14" fill="rgba(255,68,68,0.08)" stroke="#FF4444" />
+    <text x="717" y="79" text-anchor="middle" fill="#EEF0FF" font-family="DM Sans, sans-serif" font-size="16" font-weight="700">They leave</text>
+
+    <!-- Win branch. Label sits below its curve so the dashes never cross it. -->
+    <path class="gap-buy" d="M414,150 C505,150 525,228 612,228" fill="none" stroke="#00E396" stroke-width="2.5" marker-end="url(#fdArrowGreen)" />
+    <text x="505" y="248" text-anchor="middle" fill="#00E5FF" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Front Desk answers</text>
+    <rect x="628" y="196" width="178" height="66" rx="14" fill="rgba(0,227,150,0.12)" stroke="#00E396" />
+    <text x="717" y="235" text-anchor="middle" fill="#EEF0FF" font-family="DM Sans, sans-serif" font-size="16" font-weight="700">They buy</text>
+
+    <circle class="gap-pulse" r="4.5" fill="#7DF9FF" filter="url(#fdPulseGlow)" />
+    <circle class="gap-pulse gap-pulse--2" r="3" fill="#00E5FF" filter="url(#fdPulseGlow)" />
+  </svg>
+
+  <div class="gap-stack" aria-hidden="true">
+    <span class="gap-node">Visitor asks</span>
+    <span class="gap-arrow">↓</span>
+    <span class="gap-node gap-node--gap">The gap</span>
+    <div class="gap-ends">
+      <span class="gap-end gap-end--bad"><em>No answer</em>They leave</span>
+      <span class="gap-end gap-end--good"><em>Front Desk answers</em>They buy</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gap {
+    position: relative;
+    margin: 34px auto 0;
+    padding: 16px clamp(10px, 2vw, 20px);
+    border: 1px solid var(--gb);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+    overflow: hidden;
+  }
+  .gap-wash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(0, 229, 255, 0.07), transparent 70%);
+  }
+  .gap-svg { position: relative; display: block; width: 100%; height: auto; }
+
+  .gap-glow { animation: gapGlow 2.4s ease-in-out infinite; }
+  @keyframes gapGlow {
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 1; }
+  }
+
+  .gap-buy { stroke-dasharray: 5 9; animation: gapDash 0.8s linear infinite; }
+  @keyframes gapDash { to { stroke-dashoffset: -14; } }
+
+  /* Travelling pulses. CSS motion path rather than SMIL animateMotion, so
+     prefers-reduced-motion can switch them off. Same path, same visual. */
+  .gap-pulse {
+    offset-path: path("M105,150 L272,150 L338,150 C505,150 525,228 612,228");
+    offset-rotate: 0deg;
+    animation: gapTravel 2.2s linear infinite;
+  }
+  .gap-pulse--2 { animation-delay: 1.1s; }
+  @keyframes gapTravel {
+    from { offset-distance: 0%; }
+    to   { offset-distance: 100%; }
+  }
+  @supports not (offset-path: path("M0,0 L1,1")) {
+    .gap-pulse { display: none; }
+  }
+
+  .gap-stack { display: none; }
+
+  @media (max-width: 520px) {
+    .gap { padding: 14px; }
+    .gap-svg { display: none; }
+    .gap-stack { display: grid; justify-items: center; gap: 8px; position: relative; }
+    .gap-node {
+      width: 100%;
+      max-width: 260px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+    }
+    .gap-node--gap { border-color: var(--pink); background: rgba(251, 48, 121, 0.1); }
+    .gap-arrow { color: var(--dim); line-height: 1; }
+    .gap-ends { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 6px; }
+    .gap-end {
+      display: grid;
+      gap: 4px;
+      padding: 14px 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+    }
+    .gap-end em {
+      font-style: normal;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .gap-end--bad  { border: 1px solid var(--cwk-danger);  background: rgba(255, 68, 68, 0.08); }
+    .gap-end--good { border: 1px solid var(--cwk-success); background: rgba(0, 227, 150, 0.12); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gap-glow, .gap-buy { animation: none; }
+    .gap-pulse { display: none; }
+  }
+</style>

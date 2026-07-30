@@ -1,0 +1,167 @@
+---
+import {
+  inclusions,
+  promise,
+  priceCard,
+  DEPOSIT_AMOUNT,
+  DEPOSIT_HREF,
+  TOUR_HREF,
+} from '../../data/frontDesk';
+---
+
+<section class="fd-section" id="offer">
+  <div class="fd-container offer">
+    <div class="offer-copy">
+      <span class="fd-eyebrow reveal-up">What the {DEPOSIT_AMOUNT} holds</span>
+      <h2 class="fd-h2 reveal-up reveal-delay-1">Everything in the desk, installed for you.</h2>
+
+      <ul class="offer-list">
+        {inclusions.map((i) => (
+          <li><span aria-hidden="true">✓</span>{i}</li>
+        ))}
+      </ul>
+
+      <div class="offer-promise reveal-card">
+        <span class="offer-promise-icon" aria-hidden="true">🛡</span>
+        <div>
+          <b>{promise.title}</b>
+          <p>{promise.body} <span class="fd-dim">{promise.caveat}</span></p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="offer-price">
+      <div class="offer-price-top">
+        <span class="tag tag-purple">{priceCard.bonusTag}</span>
+        <span class="offer-spots">{priceCard.spots}</span>
+      </div>
+
+      <p class="offer-amount">
+        <b>{priceCard.amount}</b>
+        <span>{priceCard.unit}</span>
+      </p>
+      <p class="offer-price-body">
+        {priceCard.body} <span class="fd-dim">{priceCard.caveat}</span>
+      </p>
+
+      <hr class="offer-rule" />
+
+      <dl class="offer-rows">
+        {priceCard.rows.map((r) => (
+          <div class="offer-row">
+            <dt>{r.label}</dt>
+            <dd class:list={[{ 'is-green': r.green }]}>{r.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="offer-ctas">
+        <a
+          href={DEPOSIT_HREF}
+          class="btn btn-primary btn-lg btn-block"
+          data-track-event="front_desk_cta_clicked"
+          data-evt-cta="deposit"
+          data-evt-position="offer_card"
+        >Pay {DEPOSIT_AMOUNT} and skip the line</a>
+        <a
+          href={TOUR_HREF}
+          target="_blank"
+          rel="noopener"
+          class="btn btn-ghost btn-block"
+          data-track-event="front_desk_cta_clicked"
+          data-evt-cta="experience_tour"
+          data-evt-position="offer_card"
+        >Book a free 20-minute tour</a>
+      </div>
+      <p class="offer-price-foot">{priceCard.foot}</p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .offer {
+    display: grid;
+    grid-template-columns: 1fr 0.85fr;
+    gap: clamp(24px, 3vw, 40px);
+    align-items: start;
+  }
+
+  .offer-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+    margin-top: 28px;
+  }
+  .offer-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .offer-list span { color: var(--cwk-success); font-weight: 700; }
+
+  .offer-promise {
+    display: flex;
+    gap: 16px;
+    margin-top: 28px;
+    padding: 20px;
+    border: 1px solid var(--gb);
+    border-radius: 14px;
+    background: var(--bg2);
+  }
+  .offer-promise-icon { font-size: 20px; line-height: 1.2; }
+  .offer-promise b { font-size: 16px; font-weight: 700; color: var(--text); }
+  .offer-promise p { margin: 6px 0 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+  .offer-price {
+    position: sticky;
+    /* Clears the 64px fixed site header. */
+    top: 92px;
+    padding: 28px;
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    border-radius: 16px;
+    background:
+      radial-gradient(100% 70% at 50% 0%, rgba(0, 229, 255, 0.12), transparent 65%),
+      linear-gradient(180deg, var(--bg2), var(--bg));
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  }
+  .offer-price-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .offer-spots { font-size: 12px; color: var(--dim); }
+
+  .offer-amount { display: flex; align-items: baseline; gap: 8px; margin: 18px 0 0; }
+  .offer-amount b {
+    font-family: var(--font-display);
+    font-size: 54px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--text);
+  }
+  .offer-amount span { font-size: 14px; color: var(--muted); }
+  .offer-price-body { margin: 12px 0 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+  .offer-rule { margin: 22px 0; border: none; border-top: 1px solid var(--gb); }
+  .offer-rows { display: grid; gap: 12px; margin: 0; }
+  .offer-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+  .offer-row dt { color: var(--muted); }
+  .offer-row dd { margin: 0; color: var(--text); font-weight: 600; }
+  .offer-row dd.is-green { color: var(--cwk-success); }
+
+  .offer-ctas { display: grid; gap: 10px; margin-top: 24px; }
+  .offer-price-foot { margin: 14px 0 0; text-align: center; font-size: 12px; color: var(--dim); }
+
+  /* Single column: the price card moves above the checklist and stops sticking. */
+  @media (max-width: 1024px) {
+    .offer { grid-template-columns: 1fr; }
+    .offer-price { position: static; order: -1; }
+  }
+  @media (max-width: 820px) {
+    .offer-list { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .offer-price { padding: 20px; }
+  }
+</style>

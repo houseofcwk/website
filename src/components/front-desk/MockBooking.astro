@@ -1,0 +1,107 @@
+---
+// Static booking mockup. Nothing here is interactive: the "button" is a span so
+// keyboards and screen readers never land on a control that does nothing.
+---
+
+<div class="fd-card fd-card--flush mb">
+  <div class="mb-head">
+    <span class="mb-id">
+      <b>Front Desk for Teachers</b>
+      <em>Book a lesson</em>
+    </span>
+    <span class="tag">Open</span>
+  </div>
+
+  <div class="mb-body">
+    <span class="mb-label">Pick a time</span>
+
+    <div class="mb-slots">
+      <span class="mb-slot"><em>Sat</em><b>8:00</b></span>
+      <span class="mb-slot is-selected"><em>Sun</em><b>6:30</b></span>
+      <span class="mb-slot"><em>Sun</em><b>9:00</b></span>
+    </div>
+
+    <div class="mb-pack">
+      <span class="mb-pack-info">
+        <b>10-Lesson Pack</b>
+        <span class="tag tag-purple">Best value · save 20%</span>
+      </span>
+      <span class="mb-price">$450</span>
+    </div>
+
+    <span class="btn btn-primary btn-lg btn-block mb-fakebtn">Pay and book my spot</span>
+    <span class="mb-foot">Secure checkout. Your spot is held while you pay.</span>
+  </div>
+</div>
+
+<style>
+  .mb { max-width: 480px; margin-inline: auto; }
+
+  .mb-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gb);
+  }
+  .mb-id { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .mb-id b { font-size: 14px; font-weight: 700; color: var(--text); }
+  .mb-id em { font-style: normal; font-size: 12px; color: var(--dim); }
+
+  .mb-body { padding: 20px; display: grid; gap: 16px; }
+  .mb-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .mb-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .mb-slot {
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--gb2);
+    background: var(--bg3);
+  }
+  .mb-slot em {
+    font-style: normal;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .mb-slot b { font-size: 18px; font-weight: 700; color: var(--text); }
+  .mb-slot.is-selected {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.1);
+    box-shadow: var(--fd-glow-ring);
+  }
+  .mb-slot.is-selected em { color: var(--cyan); }
+
+  .mb-pack {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid var(--gb);
+    border-radius: 12px;
+    background: var(--bg3);
+  }
+  .mb-pack-info { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .mb-pack-info b { font-size: 15px; font-weight: 700; color: var(--text); }
+  .mb-price {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .mb-fakebtn { cursor: default; }
+  .mb-foot { font-size: 12px; color: var(--dim); text-align: center; }
+</style>

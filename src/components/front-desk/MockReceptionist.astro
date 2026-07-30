@@ -1,0 +1,124 @@
+---
+// Static chat mockup of the receptionist answering after hours.
+---
+
+<div class="fd-card fd-card--flush mr">
+  <div class="mr-head">
+    <span class="fd-avatar" aria-hidden="true">RD</span>
+    <span class="mr-id">
+      <b>The Receptionist</b>
+      <em><span class="fd-dot fd-dot--green" aria-hidden="true"></span>Always answers</em>
+    </span>
+    <span class="mr-time">11:40pm</span>
+  </div>
+
+  <div class="mr-thread">
+    <span class="mr-bubble mr-bubble--in">
+      Hi, thanks for reaching out to Front Desk for Teachers! How can I help you today?
+    </span>
+
+    <span class="mr-replies">
+      <span class="mr-reply">Book a lesson</span>
+      <span class="mr-reply">Buy a pack</span>
+      <span class="mr-reply">Ask a question</span>
+      <span class="mr-reply mr-reply--muted">Talk to a human</span>
+    </span>
+
+    <span class="mr-bubble mr-bubble--out">Do you have weekend lessons for beginners?</span>
+
+    <span class="mr-bubble mr-bubble--in mr-bubble--wide">
+      Yes. Saturdays and Sundays at 8am are perfect for first timers. Want me to book you
+      in? I can take payment right here.
+    </span>
+
+    <span class="mr-foot">
+      <span class="mr-typing" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="btn btn-secondary btn-sm mr-fakebtn">Yes, book me in →</span>
+    </span>
+  </div>
+</div>
+
+<style>
+  .mr { max-width: 480px; margin-inline: auto; }
+
+  .mr-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--gb);
+  }
+  .mr-id { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .mr-id b { font-size: 14px; font-weight: 700; color: var(--text); }
+  .mr-id em {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-style: normal;
+    font-size: 12px;
+    color: var(--cwk-success);
+  }
+  .mr-time { font-size: 12px; color: var(--dim); }
+
+  .mr-thread {
+    padding: 18px;
+    display: grid;
+    gap: 12px;
+    background: linear-gradient(180deg, rgba(123, 97, 255, 0.05), transparent);
+  }
+
+  .mr-bubble { max-width: 84%; padding: 12px 14px; font-size: 14px; line-height: 1.5; }
+  .mr-bubble--in {
+    border-radius: 14px 14px 14px 4px;
+    border: 1px solid var(--gb);
+    background: var(--bg3);
+    color: var(--text);
+  }
+  .mr-bubble--wide { max-width: 88%; }
+  .mr-bubble--out {
+    max-width: 78%;
+    margin-left: auto;
+    border-radius: 14px 14px 4px 14px;
+    background: var(--purple);
+    color: #fff;
+  }
+
+  .mr-replies { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mr-reply {
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    font-size: 12px;
+    color: var(--cyan);
+  }
+  .mr-reply--muted { border-color: var(--gb); color: var(--muted); }
+
+  .mr-foot { display: flex; align-items: center; gap: 10px; }
+  .mr-fakebtn { cursor: default; }
+
+  .mr-typing {
+    display: inline-flex;
+    gap: 4px;
+    padding: 9px 12px;
+    border: 1px solid var(--gb);
+    border-radius: var(--radius-pill);
+    background: var(--bg3);
+  }
+  .mr-typing i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: mrType 1.2s ease-in-out infinite;
+  }
+  .mr-typing i:nth-child(2) { animation-delay: 0.15s; }
+  .mr-typing i:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes mrType {
+    0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+    40%           { opacity: 1; transform: translateY(-3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mr-typing i { animation: none; }
+  }
+</style>

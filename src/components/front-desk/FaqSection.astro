@@ -1,0 +1,94 @@
+---
+import { faqs } from '../../data/frontDesk';
+
+// Single-open accordion, first row open. Built on native <details>/<summary>
+// for the free a11y semantics: the handoff's prototype only used state because
+// its own renderer would not collapse closed content.
+---
+
+<section class="fd-section fd-section--alt fd-hair-y" id="faq">
+  <div class="fd-container faq-wrap">
+    <div class="fd-head">
+      <span class="fd-eyebrow reveal-up">Before you ask</span>
+      <h2 class="fd-h2 reveal-up reveal-delay-1">Questions we get every week.</h2>
+    </div>
+
+    <div class="faq" data-faq>
+      {faqs.map((f, i) => (
+        <details class="faq-row" open={i === 0} name="front-desk-faq">
+          <summary class="faq-q">
+            <span>{f.q}</span>
+            <span class="faq-mark" aria-hidden="true"></span>
+          </summary>
+          <p class="faq-a">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Native <details name> already enforces one-open-at-a-time where it is
+     supported. This covers the browsers that ignore the grouping attribute. */
+  (() => {
+    const rows = Array.from(
+      document.querySelectorAll<HTMLDetailsElement>('[data-faq] details'),
+    );
+    if (rows.length < 2) return;
+    for (const row of rows) {
+      row.addEventListener('toggle', () => {
+        if (!row.open) return;
+        for (const other of rows) {
+          if (other !== row) other.open = false;
+        }
+      });
+    }
+  })();
+</script>
+
+<style>
+  .faq-wrap { max-width: 900px; }
+  .faq { display: grid; gap: 10px; margin-top: 36px; }
+
+  .faq-row {
+    border: 1px solid var(--gb);
+    border-radius: 12px;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    list-style: none;
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q:focus-visible { outline: none; box-shadow: var(--fd-glow-ring); }
+
+  /* Plus that becomes a minus when the row opens. */
+  .faq-mark { position: relative; width: 16px; height: 16px; flex-shrink: 0; }
+  .faq-mark::before,
+  .faq-mark::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 2px;
+    background: var(--cyan);
+    transition: transform var(--fd-motion) var(--fd-ease);
+  }
+  .faq-mark::after { transform: rotate(90deg); }
+  .faq-row[open] .faq-mark::after { transform: rotate(0deg); }
+
+  .faq-a { margin: 0; padding: 0 20px 20px; font-size: 15px; line-height: 1.62; color: var(--muted); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-mark::before, .faq-mark::after { transition: none; }
+  }
+</style>

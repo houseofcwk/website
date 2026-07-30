@@ -51,7 +51,7 @@ const analyticsCfg = {
   linkedinPartnerId: sanityAnalytics?.linkedinPartnerId ?? '',
 };
 // The GTM container is loaded by an inline <head> script (below), so resolve
-// its ID here too — Sanity first, then env.
+// its ID here too: Sanity first, then env.
 const resolvedGtmId = analyticsCfg.gtmId || gtmId;
 
 const twitterHandle = settings?.twitterHandle ?? TWITTER_HANDLE;
@@ -213,7 +213,7 @@ const extraBlocks = extraJsonLd
        d.head.appendChild(j);})(window,document,"script");
       // One init for the whole site. Do NOT paste the embed snippet into a page
       // as well: the loader appends a fresh <script> each time it runs, and a
-      // second copy of widget.js gets its own closure — so it mounts a second
+      // second copy of widget.js gets its own closure, so it mounts a second
       // launcher rather than no-oping.
       //
       // position and size below match the SDK's own defaults; they are written
@@ -225,7 +225,7 @@ const extraBlocks = extraJsonLd
         size: "medium",
       });
 
-      // ?chat=<text> — open the chat and send <text> as the visitor's first
+      // ?chat=<text>: open the chat and send <text> as the visitor's first
       // message. Powers printed QR codes ("scan to take the Player X-Ray").
       //
       // The widget SDK reads only ?model= from the URL, so this deep link is
@@ -251,7 +251,7 @@ const extraBlocks = extraJsonLd
           text = text.replace(/\s+/g, " ").trim().slice(0, 120);
           if (!text) return;
 
-          // Drop the param so a refresh — or the URL being shared onward —
+          // Drop the param so a refresh, or the URL being shared onward,
           // does not re-fire the message.
           params.delete("chat");
           var qs = params.toString();
@@ -266,7 +266,7 @@ const extraBlocks = extraJsonLd
       //
       // Bound once here by delegation rather than per-element in a component.
       // This binding used to live inside the homepage hero, which meant the
-      // attribute rendered fine but did nothing anywhere else — a dead button
+      // attribute rendered fine but did nothing anywhere else: a dead button
       // with no error to notice. Delegation also covers markup added later.
       document.addEventListener("click", function (e) {
         var t = e.target;

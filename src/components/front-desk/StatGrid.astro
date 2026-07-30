@@ -1,0 +1,22 @@
+---
+import type { Stat } from '../../data/frontDesk';
+
+interface Props {
+  items: Stat[];
+  /** Column count. 4 for the proof and results bands, 3 inside the insights mock. */
+  cols?: 3 | 4;
+  class?: string;
+}
+
+const { items, cols = 4, class: className = '' } = Astro.props;
+---
+
+<div class:list={['fd-statgrid', `fd-statgrid--${cols}`, className]}>
+  {items.map((s) => (
+    <div class="fd-stat">
+      <span class="fd-stat-label">{s.label}</span>
+      <span class="fd-stat-value">{s.value}</span>
+      <span class="fd-stat-hint">{s.hint}</span>
+    </div>
+  ))}
+</div>

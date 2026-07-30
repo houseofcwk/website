@@ -1,0 +1,90 @@
+---
+import StatGrid from './StatGrid.astro';
+import { insightStats } from '../../data/frontDesk';
+
+// Figures are illustrative. The "Example view" tag on the card says so, so
+// nobody reads them as a real client result.
+const capacity = 78;
+---
+
+<div class="fd-card mi">
+  <div class="mi-head">
+    <b>This week</b>
+    <span class="tag tag-neutral">Example view</span>
+  </div>
+
+  <StatGrid items={insightStats} cols={3} />
+
+  <div class="mi-progress">
+    <span class="mi-progress-top">
+      <span>Weekend capacity filled</span>
+      <b>{capacity}%</b>
+    </span>
+    <span
+      class="mi-track"
+      role="img"
+      aria-label={`Weekend capacity filled: ${capacity} percent`}
+    >
+      <span class="mi-fill" style={`width:${capacity}%`}></span>
+    </span>
+  </div>
+
+  <div class="mi-callout">
+    <span class="mi-callout-label">What it noticed</span>
+    <p>
+      Sunday evenings are your busiest hour. Two of the three packs sold started in a
+      message after 9pm.
+    </p>
+  </div>
+</div>
+
+<style>
+  .mi { max-width: 480px; margin-inline: auto; padding: 26px; }
+
+  .mi-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .mi-head b { font-size: 14px; font-weight: 700; color: var(--text); }
+
+  .mi-progress { display: grid; gap: 8px; margin-top: 14px; }
+  .mi-progress-top { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+  .mi-progress-top b { color: var(--text); }
+  .mi-track {
+    height: 8px;
+    border-radius: var(--radius-pill);
+    background: var(--bg3);
+    border: 1px solid var(--gb);
+    overflow: hidden;
+  }
+  .mi-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+  }
+
+  .mi-callout {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid rgba(0, 229, 255, 0.24);
+    border-radius: 12px;
+    background: rgba(0, 229, 255, 0.06);
+  }
+  .mi-callout-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+  .mi-callout p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--text); }
+
+  @media (max-width: 640px) {
+    .mi { padding: 20px; }
+  }
+</style>

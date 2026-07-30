@@ -1,0 +1,56 @@
+---
+import { ticker } from '../../data/frontDesk';
+
+// Standing offer bar. The item list is rendered exactly twice so the track's
+// -50% translate wraps seamlessly.
+const passes = [0, 1];
+---
+
+<div class="ot" role="marquee" aria-label="Current offer">
+  <div class="fd-marquee-track">
+    {passes.map(() => (
+      <>
+        {ticker.map((item) => (
+          <>
+            <span class:list={['ot-item', { 'is-bonus': item.bonus }]}>
+              {item.bonus && <span class="fd-dot-pulse" aria-hidden="true"></span>}
+              {item.text}
+            </span>
+            <span class="ot-sep" aria-hidden="true">•</span>
+          </>
+        ))}
+      </>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ot {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--gb);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 229, 255, 0.1),
+      rgba(123, 97, 255, 0.1) 55%,
+      rgba(251, 48, 121, 0.1)
+    );
+  }
+
+  .ot-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 22px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .ot-item.is-bonus { color: var(--text); }
+  .ot-item.is-bonus :global(.fd-dot-pulse) { width: 7px; height: 7px; }
+
+  .ot-sep { font-size: 12px; color: var(--dim); }
+</style>

@@ -1,0 +1,306 @@
+/* ============================================================
+   /front-desk — shared primitives
+   Authority: docs/DESIGN.md + the "Front Desk Landing" handoff.
+
+   Only the pieces used by more than one front-desk component live
+   here. Section layout stays scoped inside each component.
+
+   Global elements are reused where they already exist in
+   global.css: .btn / .btn-primary / .btn-secondary / .btn-ghost /
+   .btn-lg / .btn-sm / .btn-block, .tag / .tag-purple / .tag-pink /
+   .tag-green / .tag-neutral, .feature-grid, .fade-up, .reveal-up,
+   .reveal-card, and the :root token set.
+   ============================================================ */
+
+.fd {
+  /* Page rhythm from the handoff's design canvas. */
+  --fd-pad-x: clamp(20px, 4vw, 40px);
+  --fd-sec-y: clamp(72px, 8vw, 110px);
+  --fd-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --fd-motion: 180ms;
+  --fd-glow-ring: 0 0 0 3px rgba(0, 229, 255, 0.4);
+
+  display: block;
+  overflow-x: hidden;
+
+  /* Clears the fixed 64px site header so the offer ticker sits directly under
+     it. The handoff puts its ticker above its own sticky nav; here the site
+     header is always fixed at the top, so the ticker goes below it. Everything
+     after that keeps the handoff's own spacing. */
+  padding-top: 64px;
+}
+
+.fd-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-inline: var(--fd-pad-x);
+}
+
+.fd-section { padding-block: var(--fd-sec-y); }
+.fd-section--alt { background: var(--bg2); }
+.fd-hair-t { border-top: 1px solid var(--gb); }
+.fd-hair-b { border-bottom: 1px solid var(--gb); }
+.fd-hair-y { border-block: 1px solid var(--gb); }
+
+/* ── Type ─────────────────────────────────────────────────── */
+.fd-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 14px;
+}
+.fd-eyebrow--cyan { color: var(--cyan); }
+
+.fd-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.4vw, 46px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  margin: 0;
+}
+.fd-h2--lg { font-size: clamp(30px, 3.6vw, 50px); }
+.fd-h2--sm { font-size: clamp(24px, 2.4vw, 32px); }
+.fd-h2--pretty { line-height: 1.08; text-wrap: pretty; }
+
+.fd-h3 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.fd-lede {
+  font-size: 17px;
+  line-height: 1.62;
+  color: var(--muted);
+  margin: 16px 0 0;
+  text-wrap: pretty;
+}
+.fd-lede--strong { color: var(--text); }
+
+.fd-head { max-width: 800px; }
+.fd-head--center { max-width: 720px; margin-inline: auto; text-align: center; }
+.fd-head--split {
+  max-width: none;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: end;
+}
+.fd-head--baseline { align-items: baseline; }
+.fd-head--split .fd-lede { margin-top: 0; }
+
+.fd-note { font-size: 13px; color: var(--dim); }
+.fd-footnote { margin-top: 24px; font-size: 13px; color: var(--dim); }
+/* --dim fails AA for body copy, so it is kept to disclaimers only. */
+.fd-disclaimer { margin-top: 14px; font-size: 11px; color: var(--dim); }
+.fd-disclaimer--right { text-align: right; margin-top: 0; }
+.fd-dim { color: var(--dim); }
+
+/* ── Surfaces ─────────────────────────────────────────────── */
+.fd-card {
+  background: var(--bg2);
+  border: 1px solid var(--gb);
+  border-radius: var(--radius-card);
+  padding: 22px;
+  transition: border-color var(--fd-motion) var(--fd-ease);
+}
+.fd-card:hover { border-color: var(--gb2); }
+.fd-card--flush { padding: 0; overflow: hidden; }
+.fd-card--lg { padding: 26px; }
+
+/* ── Badges, chips, dots ──────────────────────────────────── */
+.fd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.fd-badge--success {
+  color: var(--cwk-success);
+  background: rgba(0, 227, 150, 0.08);
+  border: 1px solid rgba(0, 227, 150, 0.28);
+}
+.fd-badge--cyan {
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.07);
+  border: 1px solid rgba(0, 229, 255, 0.28);
+}
+
+.fd-timechip {
+  display: inline-flex;
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 9, 15, 0.72);
+  border: 1px solid var(--gb);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.fd-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.fd-dot--pink { background: var(--pink); }
+.fd-dot--green { width: 6px; height: 6px; background: var(--cwk-success); }
+
+.fd-dot-pulse {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--cwk-success);
+  animation: fdPulse 1.8s var(--fd-ease) infinite;
+}
+@keyframes fdPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.85); }
+}
+
+/* ── Stat tiles ───────────────────────────────────────────── */
+.fd-statgrid { display: grid; gap: 14px; }
+.fd-statgrid--4 { grid-template-columns: repeat(4, 1fr); }
+.fd-statgrid--3 { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.fd-stat {
+  background: var(--bg3);
+  border: 1px solid var(--gb);
+  border-radius: 12px;
+  padding: 18px;
+}
+.fd-statgrid--3 .fd-stat { padding: 14px; }
+.fd-stat-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.fd-stat-value {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.fd-statgrid--3 .fd-stat-value { font-size: 24px; }
+.fd-stat-hint { display: block; margin-top: 4px; font-size: 12px; color: var(--dim); }
+
+/* ── Check / cross lists ──────────────────────────────────── */
+.fd-ticks { list-style: none; display: grid; gap: 12px; margin-top: 24px; }
+.fd-ticks li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--text); }
+.fd-ticks > li > span { font-weight: 700; }
+.fd-ticks--cyan   > li > span { color: var(--cyan); }
+.fd-ticks--purple > li > span { color: var(--purple); }
+.fd-ticks--green  > li > span { color: var(--cwk-success); }
+
+/* ── Video placeholder frame ──────────────────────────────── */
+.fd-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--cyan);
+  display: grid;
+  place-items: center;
+}
+.fd-play::before {
+  content: '';
+  border-style: solid;
+  border-color: transparent transparent transparent var(--bg);
+}
+.fd-play--lg {
+  width: 88px;
+  height: 88px;
+  box-shadow: 0 0 0 14px rgba(0, 229, 255, 0.12), 0 20px 50px rgba(0, 229, 255, 0.35);
+}
+.fd-play--lg::before { border-width: 13px 0 13px 22px; margin-left: 7px; }
+.fd-play--md {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: 68px;
+  height: 68px;
+  box-shadow: 0 0 0 10px rgba(0, 229, 255, 0.12);
+}
+.fd-play--md::before { border-width: 10px 0 10px 17px; margin-left: 5px; }
+.fd-play--sm {
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 229, 255, 0.16);
+  border: 1px solid var(--cyan);
+}
+.fd-play--sm::before { border-width: 6px 0 6px 10px; border-left-color: var(--cyan); margin-left: 3px; }
+
+.fd-play--purple { background: rgba(123, 97, 255, 0.18); border-color: var(--purple); }
+.fd-play--purple::before { border-left-color: var(--purple); }
+.fd-play--green { background: rgba(0, 227, 150, 0.18); border-color: var(--cwk-success); }
+.fd-play--green::before { border-left-color: var(--cwk-success); }
+
+/* ── Avatar (initials fallback) ───────────────────────────── */
+.fd-avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7B61FF, #FB3079);
+  color: #EEF0FF;
+  font-size: 12px;
+  font-weight: 800;
+}
+.fd-avatar--md { width: 42px; height: 42px; font-size: 14px; }
+
+.fd-attrib { display: flex; align-items: center; gap: 12px; }
+.fd-attrib b { display: block; font-size: 14px; font-weight: 700; color: var(--text); }
+.fd-attrib em { display: block; font-style: normal; font-size: 13px; color: var(--muted); }
+
+/* ── Marquee (offer ticker + logo strip) ──────────────────── */
+.fd-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  width: max-content;
+  animation: fdMarquee 34s linear infinite;
+}
+@keyframes fdMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Shared responsive steps ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .fd-statgrid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 820px) {
+  .fd-head--split { grid-template-columns: 1fr; align-items: start; gap: 18px; }
+  .fd-disclaimer--right { text-align: left; }
+}
+@media (max-width: 640px) {
+  .fd { --fd-sec-y: 56px; }
+  .fd-statgrid--4 { grid-template-columns: 1fr; }
+  .fd-card--lg { padding: 20px; }
+  .fd-statgrid--3 { gap: 8px; }
+  .fd-statgrid--3 .fd-stat { padding: 12px 10px; }
+  .fd-statgrid--3 .fd-stat-value { font-size: 20px; }
+  .fd-statgrid--3 .fd-stat-label { font-size: 10px; letter-spacing: 0.1em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-marquee-track,
+  .fd-dot-pulse { animation: none; }
+}

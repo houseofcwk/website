@@ -1,0 +1,90 @@
+---
+import { withoutItems, withItems } from '../../data/frontDesk';
+---
+
+<section class="fd-section fd-section--alt fd-hair-t">
+  <div class="fd-container">
+    <div class="fd-head">
+      <span class="fd-eyebrow reveal-up">One simple question</span>
+      <h2 class="fd-h2 fd-h2--pretty reveal-up reveal-delay-1">
+        When someone wants to book you or buy from you, can they do it on their own time,
+        or do they have to <span class="q-pink">wait to talk to you?</span>
+      </h2>
+    </div>
+
+    <div class="q-compare">
+      <div class="q-panel q-panel--without reveal-card">
+        <div class="q-panel-head">
+          <span class="fd-dot fd-dot--pink" aria-hidden="true"></span>
+          <span class="q-label q-label--pink">Without a front desk</span>
+        </div>
+        <ul class="q-list">
+          {withoutItems.map((item) => (
+            <li><span class="q-x" aria-hidden="true">✕</span><span>{item}</span></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="q-panel q-panel--with reveal-card" style="--reveal-i:1">
+        <div class="q-panel-head">
+          <span class="q-label q-label--cyan">With the front desk</span>
+          <span class="tag tag-green">24/7</span>
+        </div>
+        <ul class="q-list q-list--strong">
+          {withItems.map((item) => (
+            <li><span class="q-check" aria-hidden="true">✓</span><span>{item}</span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .q-pink { color: var(--pink); }
+
+  .q-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 44px;
+  }
+
+  .q-panel { border-radius: 14px; padding: 26px 28px; }
+  .q-panel--without { border: 1px solid var(--gb); background: var(--bg); }
+  .q-panel--with {
+    border: 1px solid rgba(0, 229, 255, 0.28);
+    background: linear-gradient(180deg, rgba(0, 229, 255, 0.07), var(--bg));
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .q-panel-head { display: flex; align-items: center; gap: 10px; }
+  .q-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .q-label--pink { color: var(--pink); }
+  .q-label--cyan { color: var(--cyan); flex: 1; }
+
+  .q-list { list-style: none; display: grid; gap: 14px; margin-top: 22px; }
+  .q-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .q-list--strong li { color: var(--text); }
+  .q-x { color: var(--pink); font-weight: 700; }
+  .q-check { color: var(--cwk-success); font-weight: 700; }
+
+  @media (max-width: 820px) {
+    .q-compare { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .q-panel { padding: 22px 20px; }
+  }
+</style>

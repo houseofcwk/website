@@ -31,6 +31,12 @@
   --stage-5: #7B61FF;
   --stage-6: #00E396;
 
+  /* Status aliases. Same values as the stage colors, under the names the
+     @houseofcwk/ui token block uses, so design handoffs port directly. */
+  --cwk-success: #00E396;
+  --cwk-warning: #FFB830;
+  --cwk-danger:  #FF4444;
+
   /* Spacing */
   --gap-tile:    2px;
   --pad-lg:      36px 40px;
@@ -46,6 +52,10 @@
 
   /* Typography */
   --font-primary: 'DM Sans', sans-serif;
+  /* Display face for marketing headlines and numerals. Agrandir is the
+     intended face per docs/DESIGN.md; DM Sans is its documented fallback and
+     the only face this site loads today. */
+  --font-display: 'Agrandir', 'DM Sans', sans-serif;
 }
 
 /* ── Reset ─────────────────────────────────────────────────── */
@@ -163,6 +173,11 @@ a:hover {
 
 .btn:active { transform: scale(0.98); }
 
+/* Size + width modifiers */
+.btn-lg { padding: 15px 30px; font-size: 16px; }
+.btn-sm { padding: 8px 14px; font-size: 13px; }
+.btn-block { width: 100%; justify-content: center; }
+
 .btn-primary {
   background: var(--cyan);
   color: var(--bg);
@@ -220,6 +235,18 @@ a:hover {
   background: rgba(255, 184, 48, 0.1);
   border-color: rgba(255, 184, 48, 0.25);
   color: #FFB830;
+}
+
+.tag-green {
+  background: rgba(0, 227, 150, 0.12);
+  border-color: rgba(0, 227, 150, 0.32);
+  color: var(--cwk-success);
+}
+
+.tag-neutral {
+  background: var(--glass);
+  border-color: var(--gb);
+  color: var(--muted);
 }
 
 /* ── Divider ───────────────────────────────────────────────── */

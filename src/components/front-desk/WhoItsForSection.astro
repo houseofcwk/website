@@ -1,0 +1,58 @@
+---
+import { audiences, audienceFootnote } from '../../data/frontDesk';
+---
+
+<section class="fd-section">
+  <div class="fd-container">
+    <div class="fd-head fd-head--split">
+      <div>
+        <span class="fd-eyebrow reveal-up">This is for you</span>
+        <h2 class="fd-h2 fd-h2--lg reveal-up reveal-delay-1">
+          For the teacher. The maker. The corner shop.
+        </h2>
+      </div>
+      <p class="fd-lede reveal-up reveal-delay-2">
+        No enterprise budget needed. This was built at your size. If people book you, buy
+        from you, or sign up with you, you need a front desk.
+      </p>
+    </div>
+
+    <div class="aud">
+      {audiences.map((a, i) => (
+        <article class={`fd-card aud-card aud-card--${a.accent} reveal-card`} style={`--reveal-i:${i}`}>
+          <span class="aud-n">{a.n}</span>
+          <h3 class="aud-title">{a.title}</h3>
+          <p class="aud-body">{a.body}</p>
+        </article>
+      ))}
+    </div>
+
+    <p class="fd-footnote reveal-up">{audienceFootnote}</p>
+  </div>
+</section>
+
+<style>
+  .aud {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-top: 40px;
+  }
+
+  .aud-n { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; }
+  .aud-card--cyan   .aud-n { color: var(--cyan); }
+  .aud-card--purple .aud-n { color: var(--purple); }
+  .aud-card--green  .aud-n { color: var(--cwk-success); }
+  .aud-card--pink   .aud-n { color: var(--pink); }
+  .aud-card--amber  .aud-n { color: var(--cwk-warning); }
+
+  .aud-title { margin: 20px 0 0; font-size: 17px; font-weight: 700; color: var(--text); }
+  .aud-body { margin: 6px 0 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
+
+  @media (max-width: 1024px) {
+    .aud { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .aud { grid-template-columns: 1fr; }
+  }
+</style>
