@@ -1,4 +1,22 @@
 ---
+/*
+  ARCHIVED — "The 3 Levels" section. Pulled off the homepage on 2026-08-03.
+
+  Was rendered in src/pages/index.astro between <MissionSection /> and
+  <PillarsSection />. Self-contained: no props, scoped styles, copy lives in
+  the `levels` array below.
+
+  To restore, move this file back to src/components/home/ and re-add:
+    import ThreeLevelsSection from '../components/home/ThreeLevelsSection.astro';
+    <ThreeLevelsSection />
+
+  Depends on globals it does not ship itself:
+    - CSS vars from src/styles/global.css: --bg --text --muted --cyan --glass
+      --gb --font-primary
+    - .section, .reveal-up, .reveal-delay-N (global.css) plus the
+      IntersectionObserver in src/layouts/Base.astro that adds .is-visible
+    - [data-open-waitlist] click handler from the global waitlist modal
+*/
 const levels = [
   {
     n: '01',
