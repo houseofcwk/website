@@ -7,6 +7,13 @@
 //
 // Every figure and testimonial below is a placeholder and is labelled as one in
 // the UI. They must be replaced or removed before the page goes public.
+//
+// ARCHIVE-ONLY EXPORTS (#237): tour, chapters, proof, featuredTestimonial,
+// resultCards, gridTestimonials, compactQuotes, results, truth, beliefs,
+// parts.insights and insightStats are no longer read by any live page. They
+// feed the components in front-desk/archive/ and stay here so those sections
+// can be restored once the real content exists. Do not delete them without
+// deleting the archived components too.
 
 // FLAG FOR KRIS: deposit CTAs point at /contact until the payment link exists.
 // Swap this one constant for the Stripe (or equivalent) checkout URL.
@@ -114,27 +121,51 @@ export const withItems = [
   'Your time goes back to the work you love.',
 ];
 
+// The desk introduces itself in first person, ahead of the two parts below it.
+// `craftToken` and the mock's `Your Business` render as highlighted slots so an
+// owner reads them as "your name goes here" rather than as our copy.
+export const deskIntro = {
+  eyebrow: '24 / 7 Front Desk',
+  title: "I'm your Front Desk",
+  craftToken: 'your craft',
+  tagline: 'running it all alone.',
+  body: 'I am trained on your business. Your services, your prices, your calendar. I answer every lead the second it lands, sort each person to the right room and book them in. About two minutes, start to finish.',
+  bodyStrong: 'Built on your world. Never a generic bot with your logo on it.',
+  ctaPrimary: 'Step inside',
+  ctaSecondary: 'See how it works',
+};
+
+/** Placeholder identity shown inside the mock UIs. */
+export const mockBrand = {
+  name: 'Your Business',
+  service: 'service',
+  tagline: 'Your tagline, one line',
+  poweredBy: 'Powered by CWK.',
+};
+
 export const parts = {
   desk: {
     eyebrow: 'Part one',
     title: 'The Front Desk',
-    body: 'Your storefront that is always open. People pick a time, choose a service or a pack, and pay, all on their own, in under a minute. No phone tag. No invoices. The money lands before the first appointment.',
+    body: 'Your storefront, always open. People pick a time, choose a service or a pack, and pay on their own in under a minute. The money lands before the first appointment, so the work starts already paid for.',
     checks: [
       'Pick a time and book in seconds',
-      'Pay up front, or buy a multi-pack',
-      'Rebook with one tap, come back again',
+      'Pay up front, or grab a multi-pack',
+      'Rebook in one tap and come back',
     ],
   },
   reception: {
     eyebrow: 'Part two',
     title: 'The Receptionist',
-    body: 'The friendly front door of your business. Like a five star hotel, it greets every call, text and message, then points each person to the right place, answers the easy questions, and books them in, so nothing slips through.',
+    body: 'The front door of your business, run like a five star hotel. It greets every call, text, and message the second it lands, points each person to the right place, answers the easy questions, and books them in. Nothing slips through while you sleep.',
     checks: [
       'Greets every new lead in seconds',
-      'Routes them to the right service or answer',
+      'Routes each person to the right room',
       'Hands you only the people who need you',
     ],
   },
+  // ARCHIVED (#237): part three came off the page when three parts became two.
+  // Read by front-desk/archive/MockInsights.astro only.
   insights: {
     eyebrow: 'Part three',
     title: 'The Insights',

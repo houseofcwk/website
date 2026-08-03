@@ -4,14 +4,9 @@ import '../styles/front-desk.css';
 
 import OfferTicker from '../components/front-desk/OfferTicker.astro';
 import HeroSection from '../components/front-desk/HeroSection.astro';
-import VideoPromoSection from '../components/front-desk/VideoPromoSection.astro';
-import SocialProofSection from '../components/front-desk/SocialProofSection.astro';
 import WhoItsForSection from '../components/front-desk/WhoItsForSection.astro';
 import SimpleQuestionSection from '../components/front-desk/SimpleQuestionSection.astro';
 import WhatYouGetSection from '../components/front-desk/WhatYouGetSection.astro';
-import TestimonialsSection from '../components/front-desk/TestimonialsSection.astro';
-import ResultsSection from '../components/front-desk/ResultsSection.astro';
-import TruthSection from '../components/front-desk/TruthSection.astro';
 import StepsSection from '../components/front-desk/StepsSection.astro';
 import OfferSection from '../components/front-desk/OfferSection.astro';
 import FaqSection from '../components/front-desk/FaqSection.astro';
@@ -29,6 +24,10 @@ import { flags } from '../data/frontDesk';
 // Content lives in src/data/frontDesk.ts. Shared primitives live in
 // src/styles/front-desk.css. Everything else is one component per section
 // under src/components/front-desk/.
+//
+// Five sections from the handoff were pulled in issue #237 (video promo, logo
+// strip, testimonials, results, truth). They live in front-desk/archive/ and
+// come back once there is real footage, real logos and consented quotes.
 const pageTitle = 'The Front Desk | CWK. Experience';
 const pageDescription =
   'The front desk and receptionist your business never had. People book and buy on their own time, 24/7, and every new lead gets met and pointed the right way, day or night.';
@@ -42,14 +41,9 @@ const pageDescription =
   <div class="fd">
     {flags.showUrgencyBar && <OfferTicker />}
     <HeroSection />
-    <VideoPromoSection />
-    <SocialProofSection />
     <WhoItsForSection />
     <SimpleQuestionSection />
     <WhatYouGetSection />
-    <TestimonialsSection />
-    <ResultsSection />
-    <TruthSection />
     <StepsSection />
     <OfferSection />
     <FaqSection />

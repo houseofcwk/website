@@ -1,13 +1,18 @@
 ---
+import { mockBrand } from '../../data/frontDesk';
+
 // Static booking mockup. Nothing here is interactive: the "button" is a span so
 // keyboards and screen readers never land on a control that does nothing.
+//
+// The business name and service are rendered as .fd-slot tokens so an owner
+// reads them as their own details, not as ours (#237).
 ---
 
 <div class="fd-card fd-card--flush mb">
   <div class="mb-head">
     <span class="mb-id">
-      <b>Front Desk for Teachers</b>
-      <em>Book a lesson</em>
+      <b><span class="fd-slot">{mockBrand.name}</span></b>
+      <em>Book a <span class="fd-slot fd-slot--sm">{mockBrand.service}</span></em>
     </span>
     <span class="tag">Open</span>
   </div>
@@ -23,7 +28,7 @@
 
     <div class="mb-pack">
       <span class="mb-pack-info">
-        <b>10-Lesson Pack</b>
+        <b>Multi-Pack</b>
         <span class="tag tag-purple">Best value · save 20%</span>
       </span>
       <span class="mb-price">$450</span>

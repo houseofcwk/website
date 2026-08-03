@@ -1,5 +1,9 @@
 ---
-// Static chat mockup of the receptionist answering after hours.
+import { mockBrand } from '../../data/frontDesk';
+
+// Static chat mockup of the receptionist answering after hours. The business
+// name and service render as .fd-slot tokens, and the exchange stays generic so
+// the mock reads for any trade rather than for teachers (#237).
 ---
 
 <div class="fd-card fd-card--flush mr">
@@ -14,21 +18,24 @@
 
   <div class="mr-thread">
     <span class="mr-bubble mr-bubble--in">
-      Hi, thanks for reaching out to Front Desk for Teachers! How can I help you today?
+      Hi, thanks for reaching out to <span class="fd-slot">{mockBrand.name}</span>. How can
+      I help you today?
     </span>
 
     <span class="mr-replies">
-      <span class="mr-reply">Book a lesson</span>
+      <span class="mr-reply">Book a <span class="fd-slot fd-slot--sm">{mockBrand.service}</span></span>
       <span class="mr-reply">Buy a pack</span>
       <span class="mr-reply">Ask a question</span>
       <span class="mr-reply mr-reply--muted">Talk to a human</span>
     </span>
 
-    <span class="mr-bubble mr-bubble--out">Do you have weekend lessons for beginners?</span>
+    <span class="mr-bubble mr-bubble--out">
+      Do you have something for someone just getting started?
+    </span>
 
     <span class="mr-bubble mr-bubble--in mr-bubble--wide">
-      Yes. Saturdays and Sundays at 8am are perfect for first timers. Want me to book you
-      in? I can take payment right here.
+      Yes, I have the perfect fit for a first timer. Want me to book you in? I can take
+      payment right here.
     </span>
 
     <span class="mr-foot">

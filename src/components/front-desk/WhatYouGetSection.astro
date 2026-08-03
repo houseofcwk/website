@@ -1,25 +1,55 @@
 ---
 import MockBooking from './MockBooking.astro';
 import MockReceptionist from './MockReceptionist.astro';
-import MockInsights from './MockInsights.astro';
-import { parts } from '../../data/frontDesk';
+import { parts, deskIntro, mockBrand, DEPOSIT_HREF } from '../../data/frontDesk';
 
-// The three product parts. Rows use the global .feature-grid (with .reverse for
-// the middle row) and only override the column ratio the handoff specifies.
+// Two product parts, introduced by the desk speaking in first person (#237).
+// Part three (The Insights) came off in the same pass; its copy and mock live
+// in front-desk/archive/.
+//
+// Rows use the global .feature-grid (with .reverse for the second row) and only
+// override the column ratio the handoff specifies.
 const rows = [
   { key: 'desk', part: parts.desk, tick: 'cyan', reverse: false },
   { key: 'reception', part: parts.reception, tick: 'purple', reverse: true },
-  { key: 'insights', part: parts.insights, tick: 'green', reverse: false },
 ] as const;
 ---
 
 <section class="fd-section fd-hair-t" id="what-you-get">
   <div class="fd-container">
-    <div class="fd-head fd-head--center">
-      <span class="fd-eyebrow reveal-up">What you get</span>
+    <div class="wyg-intro">
+      <span class="wyg-bell reveal-up" aria-hidden="true">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+          <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
+        </svg>
+      </span>
+      <span class="fd-eyebrow fd-eyebrow--cyan reveal-up reveal-delay-1">{deskIntro.eyebrow}</span>
+      <h2 class="fd-h2 fd-h2--lg wyg-intro-title reveal-up reveal-delay-1">{deskIntro.title}</h2>
+      <p class="wyg-intro-tagline reveal-up reveal-delay-2">
+        For <span class="fd-slot">{deskIntro.craftToken}</span>, {deskIntro.tagline}
+      </p>
+      <p class="wyg-intro-body reveal-up reveal-delay-2">{deskIntro.body}</p>
+      <p class="wyg-intro-body wyg-intro-body--strong reveal-up reveal-delay-3">
+        {deskIntro.bodyStrong}
+      </p>
+      <div class="wyg-intro-ctas reveal-up reveal-delay-3">
+        <a
+          href={DEPOSIT_HREF}
+          class="btn btn-primary btn-lg"
+          data-track-event="front_desk_cta_clicked"
+          data-evt-cta="deposit"
+          data-evt-position="what_you_get_intro"
+        >{deskIntro.ctaPrimary}</a>
+        <a href="#steps" class="wyg-intro-textlink">{deskIntro.ctaSecondary}</a>
+      </div>
+    </div>
+
+    <div class="fd-head fd-head--center wyg-head">
+      <span class="fd-eyebrow reveal-up">What gets installed</span>
       <h2 class="fd-h2 reveal-up reveal-delay-1">A front desk and a receptionist, in one.</h2>
       <p class="fd-lede reveal-up reveal-delay-2">
-        Three parts, installed for you. You do nothing but talk to us once.
+        Two parts, installed for you. You talk to us once, then it runs.
       </p>
     </div>
 
@@ -42,14 +72,94 @@ const rows = [
         <div class="feature-mock reveal-card">
           {row.key === 'desk' && <MockBooking />}
           {row.key === 'reception' && <MockReceptionist />}
-          {row.key === 'insights' && <MockInsights />}
         </div>
       </div>
     ))}
+
+    <div class="wyg-lockup reveal-up">
+      <span class="fd-slot wyg-lockup-name">{mockBrand.name}</span>
+      <span class="fd-slot fd-slot--sm wyg-lockup-tagline">{mockBrand.tagline}</span>
+      <span class="wyg-lockup-by">{mockBrand.poweredBy}</span>
+    </div>
   </div>
 </section>
 
 <style>
+  /* ── Intro: the desk speaking for itself ─────────────────── */
+  .wyg-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 720px;
+    margin-inline: auto;
+    padding-bottom: clamp(56px, 7vw, 96px);
+  }
+  .wyg-bell {
+    display: block;
+    color: var(--cyan);
+    margin-bottom: 22px;
+    filter: drop-shadow(0 0 18px rgba(0, 229, 255, 0.35));
+  }
+  .wyg-intro-title { margin: 0; }
+  .wyg-intro-tagline {
+    margin: 18px 0 0;
+    font-size: 17px;
+    color: var(--muted);
+  }
+  .wyg-intro-body {
+    margin: 20px 0 0;
+    font-size: 15.5px;
+    line-height: 1.68;
+    color: var(--dim);
+    max-width: 62ch;
+  }
+  .wyg-intro-body--strong { color: var(--muted); font-weight: 600; }
+
+  .wyg-intro-ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 30px;
+  }
+  .wyg-intro-textlink {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--gb2);
+    transition: color 0.2s var(--fd-ease);
+  }
+  .wyg-intro-textlink:hover { color: var(--text); }
+
+  /* The intro carries its own heading, so the "what gets installed" head sits
+     on a hairline instead of stacking two title blocks with no separation. */
+  .wyg-head {
+    padding-top: clamp(48px, 6vw, 72px);
+    border-top: 1px solid var(--gb);
+  }
+
+  /* ── Closing lockup ──────────────────────────────────────── */
+  .wyg-lockup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: clamp(64px, 7vw, 104px);
+  }
+  .wyg-lockup-name { font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .wyg-lockup-tagline { font-size: 12px; letter-spacing: 0.1em; }
+  .wyg-lockup-by {
+    margin-top: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
   .wyg-row {
     gap: clamp(28px, 4vw, 64px);
     margin-top: 64px;
