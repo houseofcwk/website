@@ -2,7 +2,7 @@
 import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import FocusHeader, { type FocusCta } from '../components/FocusHeader.astro';
+import FocusHeader from '../components/FocusHeader.astro';
 import FocusFooter from '../components/FocusFooter.astro';
 import WaitlistModal from '../components/WaitlistModal';
 import '../styles/global.css';
@@ -28,8 +28,6 @@ interface Props {
    * the options they present (see /business-support, issue #240).
    */
   chrome?: 'full' | 'focus';
-  /** Optional single CTA in the focus header. Ignored when chrome is 'full'. */
-  focusCta?: FocusCta | null;
 }
 
 const {
@@ -43,7 +41,6 @@ const {
   robots,
   extraJsonLd,
   chrome = 'full',
-  focusCta = null,
 } = Astro.props;
 
 const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
@@ -172,7 +169,7 @@ const extraBlocks = extraJsonLd
     <!-- Ambient orb: purple -->
     <div class="orb orb-purple" aria-hidden="true"></div>
 
-    {chrome === 'focus' ? <FocusHeader cta={focusCta} /> : <Header />}
+    {chrome === 'focus' ? <FocusHeader /> : <Header />}
     <main>
       <slot />
     </main>

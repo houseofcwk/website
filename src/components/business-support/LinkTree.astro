@@ -119,7 +119,7 @@ const waHref = whatsappHref(whatsappMessage);
     let tourReported = false;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function setOpen(open: boolean, source: string, scroll: boolean) {
+    function setOpen(open: boolean, scroll: boolean) {
       if (!button || !panel) return;
       panel.toggleAttribute('hidden', !open);
       button.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -130,14 +130,13 @@ const waHref = whatsappHref(whatsappMessage);
       }
 
       // Opening the calendar is the conversion on these pages, so it is
-      // reported once per page view no matter which control opened it: the
-      // row itself or the header CTA. Reopening after a close is the same
+      // reported once per page view. Reopening after a close is the same
       // intent, not a second one.
       if (!tourReported) {
         tourReported = true;
-        conversion('bizsup_tour_opened', { stage, source });
+        conversion('bizsup_tour_opened', { stage });
       } else {
-        track('bizsup_tour_reopened', { stage, source });
+        track('bizsup_tour_reopened', { stage });
       }
 
       // Load Calendly on first open only. The panel is visible by now, so
@@ -159,30 +158,7 @@ const waHref = whatsappHref(whatsappMessage);
     }
 
     button.addEventListener('click', () => {
-      setOpen(panel.hasAttribute('hidden'), 'row', true);
-    });
-
-    // The header CTA is a plain link to Calendly, so it still works on pages
-    // without this panel (and with JS off). Where the panel does exist, take
-    // the click and open the calendar in place instead of leaving the page.
-    document.querySelectorAll<HTMLAnchorElement>('[data-open-booking]').forEach((el) => {
-      el.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        // This click never leaves the page, so keep it away from the universal
-        // link binder in analytics/auto-binders. Without this it reports a
-        // nav_link_clicked and an outbound_link_clicked to calendly.com that
-        // did not happen. The conversion below carries source: 'header_cta',
-        // so nothing is lost by suppressing the generic pair.
-        ev.stopPropagation();
-        // Open without its own scroll, then make one move: the row to the top
-        // of the viewport, with the calendar unfolding directly beneath it.
-        // scroll-margin-top on the row keeps it clear of the fixed header.
-        setOpen(true, 'header_cta', false);
-        requestAnimationFrame(() => {
-          button.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-        });
-        button.focus({ preventScroll: true });
-      });
+      setOpen(panel.hasAttribute('hidden'), true);
     });
   }
 
@@ -224,8 +200,6 @@ const waHref = whatsappHref(whatsappMessage);
   }
 
   .lt-row--primary {
-    /* Clears the fixed header when the header CTA scrolls this row to the top. */
-    scroll-margin-top: 84px;
     border-color: rgba(var(--bs-accent-rgb), 0.45);
     background:
       linear-gradient(180deg, rgba(var(--bs-accent-rgb), 0.09), rgba(var(--bs-accent-rgb), 0.03));

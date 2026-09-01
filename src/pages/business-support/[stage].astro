@@ -6,7 +6,7 @@ import JungleBackdrop from '../../components/business-support/JungleBackdrop.ast
 import StageVideo from '../../components/business-support/StageVideo.astro';
 import LinkTree from '../../components/business-support/LinkTree.astro';
 
-import { stages, TOUR_URL, type Stage } from '../../data/businessSupport';
+import { stages, type Stage } from '../../data/businessSupport';
 
 // One page per stage, generated from src/data/businessSupport.ts:
 //   /business-support/stage-one | stage-two | stage-three
@@ -14,7 +14,8 @@ import { stages, TOUR_URL, type Stage } from '../../data/businessSupport';
 // Shape is fixed: where you are, the training, then the three ways to reach
 // a human. chrome="focus" removes the site nav and footer links, so the only
 // ways off a stage page are the CWK. logo, the back link to the chooser, and
-// the three options in the link tree. See #240.
+// the three options in the link tree. The header carries no CTA: booking
+// lives on its own row, where the calendar opens underneath it. See #240.
 export function getStaticPaths() {
   return stages.map((stage) => ({
     params: { stage: stage.key },
@@ -33,12 +34,6 @@ const { stage } = Astro.props;
   description={stage.seoDescription}
   canonical={`https://cwkexperience.com/business-support/${stage.key}`}
   chrome="focus"
-  focusCta={{
-    href: TOUR_URL,
-    label: 'Free, 20 min',
-    // Opens the inline calendar further down this page rather than leaving it.
-    openBooking: true,
-  }}
 >
   <div class={`bs bs-accent--${stage.accent}`} data-bs-stage={stage.key}>
     <JungleBackdrop still />

@@ -1,25 +1,12 @@
 ---
 // Logo-only header for focused landing pages (/business-support and its stage
-// pages), with one optional CTA on the right.
+// pages).
 //
 // Those pages ship no navigation on purpose: the only ways off the page are
-// this logo and the options the page itself puts in front of the visitor. The
-// CTA is one of those options, not a nav link. See issue #240.
-export interface FocusCta {
-  href: string;
-  label: string;
-  /**
-   * Marks the CTA for a page script to intercept. On the stage pages the
-   * booking panel script picks this up and expands the inline calendar
-   * instead of following the link; anywhere else the href still works.
-   */
-  openBooking?: boolean;
-}
-
-interface Props {
-  cta?: FocusCta | null;
-}
-const { cta = null } = Astro.props;
+// this logo and the options the page itself puts in front of the visitor. It
+// carried a booking CTA for a while; that came out because the booking belongs
+// on its own row, where the calendar opens underneath it. See issue #240
+// before adding anything here.
 ---
 
 <header class="focus-header">
@@ -34,17 +21,6 @@ const { cta = null } = Astro.props;
         decoding="async"
       />
     </a>
-
-    {cta && (
-      <a
-        class="focus-cta"
-        href={cta.href}
-        data-open-booking={cta.openBooking ? '' : undefined}
-        data-track-event="focus_header_cta_clicked"
-      >
-        {cta.label}
-      </a>
-    )}
   </div>
 </header>
 
@@ -65,8 +41,6 @@ const { cta = null } = Astro.props;
   .focus-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
     height: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -92,61 +66,11 @@ const { cta = null } = Astro.props;
   }
   .focus-logo img { display: block; }
 
-  /* ── CTA ──────────────────────────────────────────────────
-     Deliberately small: it sits in the header on every page of
-     the flow, so it marks the exit without competing with the
-     page's own primary action. The qualifier ("free, 20 min")
-     lives on the booking row itself, where someone is actually
-     deciding.
-
-     Cyan on every stage rather than the page's own accent: the
-     header is the one element shared across all four pages, so a
-     colour that shifts underneath the visitor would read as a
-     different button. */
-  .focus-cta {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-    /* 36px tall, with the tap area topped up to 44 by the ::after below. */
-    height: 36px;
-    padding: 0 15px;
-    border-radius: var(--radius-pill);
-    background: var(--cyan);
-    color: var(--bg);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    line-height: 1;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: filter 0.2s ease, transform 0.2s ease;
-  }
-  /* Extends the touch target to 44px without making the pill itself taller. */
-  .focus-cta::after {
-    content: '';
-    position: absolute;
-    inset: -4px 0;
-  }
-
-  @media (hover: hover) {
-    .focus-cta:hover { filter: brightness(1.08); color: var(--bg); }
-  }
-  .focus-cta:active { transform: scale(0.98); }
-  .focus-cta:focus-visible {
-    outline: 2px solid var(--text);
-    outline-offset: 3px;
-  }
-
   @media (max-width: 640px) {
     .focus-inner { padding: 0 16px; }
-    .focus-cta { height: 34px; padding: 0 13px; font-size: 12.5px; }
-    /* Pill is 2px shorter here, so the tap area stretches 1px further to
-       stay at 44. */
-    .focus-cta::after { inset: -5px 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .focus-cta, .focus-logo { transition: none; }
+    .focus-logo { transition: none; }
   }
 </style>
