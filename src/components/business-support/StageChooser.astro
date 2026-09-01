@@ -1,0 +1,185 @@
+---
+import { stages, landing } from '../../data/businessSupport';
+---
+
+<section class="bs-section bs-section--last">
+  <div class="bs-container bs-container--wide">
+    <div class="ch-head reveal-up">
+      <span class="bs-label">{landing.chooseLabel}</span>
+      <span class="ch-rule" aria-hidden="true"></span>
+    </div>
+
+    <div class="ch-grid">
+      {stages.map((stage, i) => (
+        <a
+          href={`/business-support/${stage.key}`}
+          class={`ch-card bs-accent--${stage.accent} reveal-card`}
+          style={`--reveal-i:${i}`}
+          data-track-event="business_support_stage_selected"
+          data-evt-stage={stage.key}
+        >
+          <span class="ch-bar" aria-hidden="true"></span>
+
+          <span class="ch-top">
+            <span class="ch-stage">Stage {stage.ordinal}</span>
+            <span class="ch-num" aria-hidden="true">0{stage.index}</span>
+          </span>
+
+          <span class="ch-where">{stage.where}</span>
+          <span class="ch-body">{stage.chooserBody}</span>
+
+          <span class="ch-cta">
+            <svg class="ch-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {stage.chooserCta}
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <p class="bs-note ch-note reveal-up">{landing.note}</p>
+  </div>
+</section>
+
+<style>
+  .ch-head {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  .ch-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gb2), transparent);
+  }
+
+  .ch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .ch-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px 24px 24px;
+    overflow: hidden;
+    border: 1px solid var(--gb);
+    border-radius: var(--radius-card);
+    background: var(--bg2);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      border-color 0.25s var(--bs-ease),
+      transform 0.25s var(--bs-ease),
+      background 0.25s var(--bs-ease);
+  }
+
+  /* Accent rail across the top, lit on hover. */
+  .ch-bar {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: var(--bs-accent);
+    opacity: 0.42;
+    transition: opacity 0.25s var(--bs-ease);
+  }
+
+  .ch-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .ch-stage {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bs-accent);
+  }
+  .ch-num {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: rgba(238, 240, 255, 0.10);
+    transition: color 0.25s var(--bs-ease);
+  }
+
+  .ch-where {
+    font-size: clamp(17px, 1.9vw, 19px);
+    font-weight: 700;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+
+  .ch-body {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .ch-cta {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    /* Two lines of label, plus the padding and rule above it, so the divider
+       lands at the same height on all three cards whether the label wraps or
+       not. Border-box, so the padding has to be counted here. */
+    min-height: calc(2 * 1.45em + 19px);
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid var(--gb);
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--bs-accent);
+  }
+  .ch-arrow {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: transform 0.25s var(--bs-ease);
+  }
+
+  @media (hover: hover) {
+    .ch-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(var(--bs-accent-rgb), 0.5);
+      background: var(--bg3);
+    }
+    .ch-card:hover .ch-bar { opacity: 1; }
+    .ch-card:hover .ch-num { color: rgba(var(--bs-accent-rgb), 0.34); }
+    .ch-card:hover .ch-arrow { transform: translateX(4px); }
+  }
+
+  .ch-card:focus-visible {
+    outline: 2px solid var(--bs-accent);
+    outline-offset: 3px;
+  }
+
+  .ch-note {
+    max-width: 60ch;
+    margin-top: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .ch-grid { grid-template-columns: 1fr; gap: 12px; }
+    .ch-card { padding: 22px 20px 20px; }
+    .ch-cta { padding-top: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ch-card, .ch-arrow, .ch-bar, .ch-num { transition: none; }
+    .ch-card:hover { transform: none; }
+  }
+</style>

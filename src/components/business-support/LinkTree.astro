@@ -1,0 +1,328 @@
+---
+import {
+  EMAIL,
+  TOUR_URL,
+  TOUR_EMBED_URL,
+  WHATSAPP_DISPLAY,
+  whatsappHref,
+} from '../../data/businessSupport';
+
+// The only three things a visitor can do from a stage page: book, message,
+// or email. No other links by design (issue #240).
+interface Props {
+  stageKey: string;
+  tourSub: string;
+  whatsappMessage: string;
+}
+const { stageKey, tourSub, whatsappMessage } = Astro.props;
+const waHref = whatsappHref(whatsappMessage);
+---
+
+<div class="lt">
+  <!-- Book: toggles the inline Calendly embed below rather than sending
+       anyone off to calendly.com. -->
+  <button
+    type="button"
+    class="lt-row lt-row--primary"
+    id="lt-book"
+    aria-expanded="false"
+    aria-controls="lt-panel"
+    data-lt-book
+    data-track-event="business_support_tour_toggled"
+    data-evt-stage={stageKey}
+  >
+    <span class="lt-ic" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <rect x="3" y="5" width="18" height="16" rx="2.5" />
+        <path d="M3 10h18M8 3v4M16 3v4" stroke-linecap="round" />
+      </svg>
+    </span>
+    <span class="lt-text">
+      <span class="lt-title">Book an Experience Tour</span>
+      <span class="lt-sub">{tourSub}</span>
+    </span>
+    <span class="lt-pill lt-pill--open">
+      <span class="lt-pill-label">Free, 20 min</span>
+      <svg class="lt-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+        <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+  </button>
+
+  <div class="lt-panel" id="lt-panel" role="region" aria-labelledby="lt-book" hidden data-lt-panel>
+    <div class="lt-panel-inner">
+      <!-- Calendly mounts here. widget.js is only fetched the first time the
+           panel opens, so the third party never loads for people who don't
+           ask for it. -->
+      <div
+        class="calendly-inline-widget lt-cal"
+        data-url={TOUR_EMBED_URL}
+        data-lt-cal
+      ></div>
+      <p class="lt-panel-note">
+        Pick any slot that suits you. If the calendar does not load,
+        <a href={TOUR_URL} target="_blank" rel="noopener">open it in a new tab</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- WhatsApp: the number block is itself the deep link, and it opens a
+       chat with the stage already written into the first message. -->
+  <a
+    class="lt-row lt-row--whatsapp"
+    href={waHref}
+    target="_blank"
+    rel="noopener"
+    data-track-event="business_support_whatsapp_clicked"
+    data-evt-stage={stageKey}
+  >
+    <span class="lt-ic lt-ic--wa" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23a8.2 8.2 0 0 1 8.24 8.24c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.19-.54.06a6.7 6.7 0 0 1-1.98-1.22 7.44 7.44 0 0 1-1.37-1.71c-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.09-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.84-.2-.49-.4-.42-.56-.43h-.47c-.16 0-.43.06-.65.31-.23.25-.86.84-.86 2.05s.88 2.38 1 2.54c.13.17 1.74 2.65 4.21 3.72.59.25 1.05.4 1.4.52.59.19 1.13.16 1.55.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29Z" />
+      </svg>
+    </span>
+    <span class="lt-text">
+      <span class="lt-title">WhatsApp us</span>
+      <span class="lt-sub">{WHATSAPP_DISPLAY}</span>
+    </span>
+    <span class="lt-pill lt-pill--wa">Open WhatsApp</span>
+  </a>
+
+  <a
+    class="lt-row"
+    href={`mailto:${EMAIL}`}
+    data-track-event="business_support_email_clicked"
+    data-evt-stage={stageKey}
+  >
+    <span class="lt-ic" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <rect x="3" y="5" width="18" height="14" rx="2.5" />
+        <path d="m3.5 7.5 8.5 6 8.5-6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    <span class="lt-text">
+      <span class="lt-title">Email us</span>
+      <span class="lt-sub">{EMAIL}</span>
+    </span>
+    <span class="lt-pill">Write to us</span>
+  </a>
+</div>
+
+<script>
+  const CALENDLY_SRC = 'https://assets.calendly.com/assets/external/widget.js';
+
+  const button = document.querySelector<HTMLButtonElement>('[data-lt-book]');
+  const panel = document.querySelector<HTMLElement>('[data-lt-panel]');
+
+  if (button && panel) {
+    let calendlyRequested = false;
+
+    button.addEventListener('click', () => {
+      const open = panel.hasAttribute('hidden');
+
+      if (open) {
+        panel.removeAttribute('hidden');
+        button.setAttribute('aria-expanded', 'true');
+
+        // Load Calendly on first open only. The panel is visible by now, so
+        // widget.js sizes its iframe against a laid-out container rather than
+        // a display:none one.
+        if (!calendlyRequested) {
+          calendlyRequested = true;
+          const script = document.createElement('script');
+          script.src = CALENDLY_SRC;
+          script.async = true;
+          document.head.appendChild(script);
+        }
+
+        // Bring the calendar into view without yanking the page on people who
+        // asked for reduced motion.
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        requestAnimationFrame(() => {
+          panel.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
+        });
+      } else {
+        panel.setAttribute('hidden', '');
+        button.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+</script>
+
+<style>
+  .lt {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── Row ─────────────────────────────────────────────────── */
+  .lt-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding: 17px 18px;
+    border: 1px solid var(--gb);
+    border-radius: var(--radius-card);
+    background: var(--bg2);
+    color: inherit;
+    font-family: var(--font-primary);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      border-color 0.22s var(--bs-ease),
+      background 0.22s var(--bs-ease),
+      transform 0.22s var(--bs-ease);
+  }
+
+  .lt-row--primary {
+    border-color: rgba(var(--bs-accent-rgb), 0.45);
+    background:
+      linear-gradient(180deg, rgba(var(--bs-accent-rgb), 0.09), rgba(var(--bs-accent-rgb), 0.03));
+  }
+
+  @media (hover: hover) {
+    .lt-row:hover {
+      transform: translateY(-2px);
+      border-color: var(--gb2);
+      background: var(--bg3);
+    }
+    .lt-row--primary:hover { border-color: rgba(var(--bs-accent-rgb), 0.75); }
+    .lt-row--whatsapp:hover { border-color: rgba(37, 211, 102, 0.55); }
+  }
+  .lt-row:focus-visible {
+    outline: 2px solid var(--bs-accent);
+    outline-offset: 3px;
+  }
+
+  /* ── Icon tile ───────────────────────────────────────────── */
+  .lt-ic {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: rgba(var(--bs-accent-rgb), 0.12);
+    color: var(--bs-accent);
+  }
+  .lt-ic svg { width: 20px; height: 20px; }
+  .lt-ic--wa {
+    background: rgba(37, 211, 102, 0.13);
+    color: #25D366;
+  }
+  .lt-ic--wa svg { width: 22px; height: 22px; }
+
+  /* ── Text ────────────────────────────────────────────────── */
+  .lt-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+  }
+  .lt-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .lt-sub {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  /* ── Right-hand pill ─────────────────────────────────────── */
+  .lt-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 7px 13px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--gb);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+  .lt-pill--open {
+    border-color: rgba(var(--bs-accent-rgb), 0.4);
+    background: rgba(var(--bs-accent-rgb), 0.1);
+    color: var(--bs-accent);
+  }
+  .lt-pill--wa {
+    border-color: rgba(37, 211, 102, 0.4);
+    background: rgba(37, 211, 102, 0.1);
+    color: #25D366;
+  }
+  .lt-chev {
+    width: 13px;
+    height: 13px;
+    transition: transform 0.25s var(--bs-ease);
+  }
+  .lt-row[aria-expanded='true'] .lt-chev { transform: rotate(180deg); }
+
+  /* ── Calendly panel ──────────────────────────────────────── */
+  .lt-panel {
+    margin-top: -2px;
+    border: 1px solid rgba(var(--bs-accent-rgb), 0.32);
+    border-radius: var(--radius-card);
+    background: var(--bg2);
+    overflow: hidden;
+    animation: ltPanelIn 0.32s var(--bs-ease) both;
+  }
+  @keyframes ltPanelIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .lt-panel-inner { padding: 14px 14px 6px; }
+
+  /* Height is set here rather than inline (Calendly's docs use an inline
+     style) so the mobile step below can change it. Calendly scrolls inside
+     its own iframe, so this is about how much of the calendar is reachable
+     without that inner scroll: 760 clears the event details and lands on the
+     date picker. Mobile stacks the two, so it needs more. */
+  .lt-cal {
+    min-width: 280px;
+    height: 760px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .lt-panel-note {
+    margin: 0;
+    padding: 10px 4px 12px;
+    font-size: 12.5px;
+    color: var(--dim);
+  }
+  .lt-panel-note a { color: var(--bs-accent); text-decoration: underline; }
+
+  /* ── Responsive ──────────────────────────────────────────── */
+  @media (max-width: 620px) {
+    .lt-row {
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 15px 16px;
+    }
+    .lt-text { flex-basis: calc(100% - 54px); }
+    .lt-pill {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      padding: 10px 13px;
+    }
+    .lt-panel-inner { padding: 10px 10px 4px; }
+    .lt-cal { height: 940px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lt-row, .lt-chev { transition: none; }
+    .lt-row:hover { transform: none; }
+    .lt-panel { animation: none; }
+  }
+</style>

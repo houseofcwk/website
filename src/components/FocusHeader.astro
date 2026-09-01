@@ -1,0 +1,62 @@
+---
+// Logo-only header for focused landing pages (/business-support and its stage
+// pages). Those pages ship no navigation on purpose: the only ways off the
+// page are this logo and the options the page itself puts in front of the
+// visitor. See issue #240 before adding a link here.
+---
+
+<header class="focus-header">
+  <div class="focus-inner">
+    <a href="/" class="focus-logo" aria-label="CWK. Experience: Home">
+      <img
+        src="/logos/logo-main-negative-CWK.svg"
+        alt="CWK."
+        width="74"
+        height="28"
+        loading="eager"
+        decoding="async"
+      />
+    </a>
+  </div>
+</header>
+
+<style>
+  .focus-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    height: 64px;
+    background: rgba(7, 9, 15, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--gb);
+  }
+
+  .focus-inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .focus-logo {
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.2s ease;
+  }
+  .focus-logo:hover { opacity: 0.75; }
+  .focus-logo:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 6px;
+    border-radius: 4px;
+  }
+  .focus-logo img { display: block; }
+
+  @media (max-width: 640px) {
+    .focus-inner { padding: 0 18px; }
+  }
+</style>

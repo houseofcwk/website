@@ -2,6 +2,8 @@
 import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FocusHeader from '../components/FocusHeader.astro';
+import FocusFooter from '../components/FocusFooter.astro';
 import WaitlistModal from '../components/WaitlistModal';
 import '../styles/global.css';
 import { getSiteSettings } from '../lib/sanity';
@@ -18,6 +20,14 @@ interface Props {
   robots?: string | null;
   /** Optional extra JSON-LD blocks injected per page (FAQPage, Article, etc.). */
   extraJsonLd?: object | object[] | null;
+  /**
+   * Page chrome. 'full' is the site header + footer.
+   *
+   * 'focus' swaps both for a logo-only header and a link-free footer, for
+   * campaign landing pages that must not offer a way off the page other than
+   * the options they present (see /business-support, issue #240).
+   */
+  chrome?: 'full' | 'focus';
 }
 
 const {
@@ -30,6 +40,7 @@ const {
   twitterCard,
   robots,
   extraJsonLd,
+  chrome = 'full',
 } = Astro.props;
 
 const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
@@ -158,11 +169,11 @@ const extraBlocks = extraJsonLd
     <!-- Ambient orb: purple -->
     <div class="orb orb-purple" aria-hidden="true"></div>
 
-    <Header />
+    {chrome === 'focus' ? <FocusHeader /> : <Header />}
     <main>
       <slot />
     </main>
-    <Footer />
+    {chrome === 'focus' ? <FocusFooter /> : <Footer />}
     <WaitlistModal client:load />
 
     <script is:inline define:vars={{ analyticsCfg }}>

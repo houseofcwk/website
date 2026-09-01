@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/business-support.css';
+
+import JungleBackdrop from '../../components/business-support/JungleBackdrop.astro';
+import StageChooser from '../../components/business-support/StageChooser.astro';
+
+import { landing } from '../../data/businessSupport';
+
+// The business-support entry point, and the destination of the printed QR
+// code (which encodes /businesssupport, redirected in public/_redirects).
+//
+// chrome="focus" strips the site nav and footer links: from here a visitor
+// picks one of three stages, or leaves via the logo. Nothing else. See #240.
+---
+
+<Base
+  title={landing.seoTitle}
+  description={landing.seoDescription}
+  canonical="https://cwkexperience.com/business-support"
+  chrome="focus"
+>
+  <div class="bs bs-accent--cyan">
+    <JungleBackdrop />
+
+    <section class="bs-hero">
+      <div class="bs-container bs-container--wide">
+        <span class="bs-eyebrow reveal-up">
+          <span class="bs-eyebrow-dot" aria-hidden="true"></span>
+          {landing.eyebrow}
+        </span>
+        <h1 class="bs-h1 reveal-up reveal-delay-1">{landing.headline}</h1>
+        <p class="bs-lede bs-lede--hero reveal-up reveal-delay-2">{landing.lede}</p>
+      </div>
+    </section>
+
+    <StageChooser />
+  </div>
+</Base>
+
+<style>
+  .bs-lede--hero { max-width: 56ch; }
+</style>

@@ -1,0 +1,146 @@
+// Content for /business-support and its three stage pages.
+//
+// These pages are the destination of a printed QR code
+// (resources/design/qr/cwk-qr-business-support.png, which encodes
+// /businesssupport and is redirected in public/_redirects).
+//
+// They are deliberately closed rooms: no site nav, no footer links, no
+// cross-links back into the marketing site. The only ways out are the CWK.
+// logo and the options the page itself puts in front of the visitor. Keep it
+// that way when editing (issue #240).
+
+export const WHATSAPP_NUMBER = '15124872555';
+export const WHATSAPP_DISPLAY = '(512) 487-2555';
+export const EMAIL = 'hello@cwkexperience.com';
+
+// Calendly event used everywhere else on the site for the Experience Tour.
+// The stage pages embed it inline rather than sending people off-site.
+export const TOUR_URL = 'https://calendly.com/cwkexperience/experience-tour';
+
+// Brand-matched inline embed: CWK ink background, off-white text, cyan accent.
+// hide_gdpr_banner keeps Calendly's own banner from stacking on ours.
+export const TOUR_EMBED_URL =
+  `${TOUR_URL}?hide_gdpr_banner=1&background_color=0b0e18&text_color=eef0ff&primary_color=00e5ff`;
+
+/** WhatsApp deep link carrying a stage-aware first message. */
+export function whatsappHref(message: string): string {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+export type StageKey = 'stage-one' | 'stage-two' | 'stage-three';
+export type StageAccent = 'cyan' | 'purple' | 'green';
+
+export interface Stage {
+  key: StageKey;
+  /** 1-based. Drives the "one of three" progress dots. */
+  index: number;
+  ordinal: string;
+  accent: StageAccent;
+  /** The sentence a visitor picks on the chooser. */
+  where: string;
+  chooserBody: string;
+  chooserCta: string;
+  headline: string;
+  lede: string;
+  videoId: string;
+  /** The video's real title on the CWK. Experience channel, kept for the record. */
+  videoTitle: string;
+  cover: string;
+  caption: string;
+  tourSub: string;
+  whatsappMessage: string;
+  seoTitle: string;
+  seoDescription: string;
+}
+
+export const landing = {
+  eyebrow: 'Business Support',
+  headline: 'Business support for small businesses.',
+  lede:
+    'There is no one size fits all in business. Pick the line below that sounds like your week, and we will point you at the right place to start.',
+  chooseLabel: 'Choose your support level',
+  note:
+    'Every track opens with a free training. Nothing to pay, nothing to sit through, and a real person on the other end whenever you want one.',
+  seoTitle: 'Business Support for Small Businesses | CWK. Experience',
+  seoDescription:
+    'Three ways in, depending on where your business is today. Start with a free training, then talk to a real person at CWK.',
+};
+
+export const stages: Stage[] = [
+  {
+    key: 'stage-one',
+    index: 1,
+    ordinal: 'One',
+    accent: 'cyan',
+    where: "I don't have a business yet.",
+    chooserBody:
+      'You have the idea, maybe the skill, and no honest answer yet on what the first step actually costs you.',
+    chooserCta: 'Free training: what starting actually takes',
+    headline: "Whatever you decide after this, you'll know what it actually takes.",
+    lede:
+      'The real picture from someone who has been through it, before you quit anything or spend a dollar.',
+    videoId: 'c6uYEegkBfA',
+    videoTitle: 'Starting or Thinking About A Business',
+    cover: '/images/business-support/stage-one-cover.webp',
+    caption:
+      'Starting or thinking about a business. Kris on the first moves that matter, and the ones that cost you a year.',
+    tourSub: 'Talk it through with a person before you commit to anything',
+    whatsappMessage:
+      "Hi CWK. I watched the Stage One training. I'm thinking about starting a business.",
+    seoTitle: 'Stage One: Thinking About Starting a Business | CWK.',
+    seoDescription:
+      'Free training on what starting a business actually takes, before you quit anything or spend a dollar. Then book a free Experience Tour with CWK.',
+  },
+  {
+    key: 'stage-two',
+    index: 2,
+    ordinal: 'Two',
+    accent: 'purple',
+    where: "I have a business. It's not making enough yet.",
+    chooserBody:
+      "Money comes in. It just doesn't come in often enough, or evenly enough, to let you breathe.",
+    chooserCta: 'Free training: how to get unstuck',
+    headline: "You have a business. It's just not where you want it to be yet.",
+    lede:
+      "That's fixable, and it's more common than anyone admits. This training shows you what is actually in the way.",
+    videoId: 'mVQomEthEQQ',
+    videoTitle: 'Making Some Money But Want More',
+    cover: '/images/business-support/stage-two-cover.webp',
+    caption:
+      'Making some money but want more. Where the money leaks, and what to fix first.',
+    tourSub: "Bring your numbers and we'll build a plan around where you actually are",
+    whatsappMessage:
+      'Hi CWK. I watched the Stage Two training. I have a business and I want it earning more.',
+    seoTitle: 'Stage Two: Make Your Business Earn More | CWK.',
+    seoDescription:
+      "Free training on why your business isn't earning enough yet and what to fix first. Then book a free Experience Tour with CWK.",
+  },
+  {
+    key: 'stage-three',
+    index: 3,
+    ordinal: 'Three',
+    accent: 'green',
+    where: "I have a business that's ready to scale.",
+    chooserBody:
+      "It works. You're the bottleneck now, and the next level needs more hands than yours.",
+    chooserCta: 'Free training: what done-for-you support looks like',
+    headline: "You're already doing this. Now you need a partner who can carry the next level.",
+    lede:
+      'More money and less stress, without putting more on your plate. See how the partnership runs, then book a tour.',
+    videoId: 't0JwVqQsAAo',
+    videoTitle: 'Growing and want DFY support',
+    cover: '/images/business-support/stage-three-cover.webp',
+    caption:
+      'Growing and want done-for-you support. What CWK. takes off your plate, and how the partnership works.',
+    tourSub: "See if we're the right fit for your next stage",
+    whatsappMessage:
+      'Hi CWK. I watched the Stage Three training. I want to talk about done-for-you support.',
+    seoTitle: 'Stage Three: Done-For-You Business Support | CWK.',
+    seoDescription:
+      'Free training on what done-for-you support looks like when your business is ready to scale. Then book a free Experience Tour with CWK.',
+  },
+];
+
+export const stageByKey: Record<StageKey, Stage> = Object.fromEntries(
+  stages.map((s) => [s.key, s]),
+) as Record<StageKey, Stage>;

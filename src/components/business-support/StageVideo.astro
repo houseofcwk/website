@@ -1,0 +1,188 @@
+---
+// The stage training video.
+//
+// Same click-to-play facade as FeaturedVideoSection: a local WebP cover
+// stands in until someone presses play, so no YouTube thumbnail, script or
+// cookie loads on arrival. The iframe is only created on activation.
+// Kept separate from the shared component because these pages supply their
+// own heading above the frame.
+interface Props {
+  videoId: string;
+  cover: string;
+  caption: string;
+  label: string;
+}
+const { videoId, cover, caption, label } = Astro.props;
+const src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
+---
+
+<figure class="sv-figure reveal-card">
+  <div class="sv-frame" data-bs-frame data-bs-src={src} data-bs-title={label}>
+    <img
+      src={cover}
+      alt=""
+      aria-hidden="true"
+      class="sv-cover"
+      width="1280"
+      height="720"
+      loading="lazy"
+      decoding="async"
+    />
+    <button type="button" class="sv-play" aria-label={`Play: ${label}`}>
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true">
+        <path d="M8 5.14v13.72a1 1 0 0 0 1.55.83l10.79-6.86a1 1 0 0 0 0-1.66L9.55 4.31A1 1 0 0 0 8 5.14Z" />
+      </svg>
+    </button>
+    <span class="sv-badge">Free training</span>
+  </div>
+  <figcaption class="sv-caption">{caption}</figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-bs-frame]').forEach((frame) => {
+    const button = frame.querySelector<HTMLButtonElement>('.sv-play');
+    const src = frame.dataset.bsSrc;
+    if (!button || !src) return;
+
+    button.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.title = frame.dataset.bsTitle ?? 'CWK. training video';
+      iframe.allow =
+        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      // Sized inline: Astro's scoped selectors don't match an element created
+      // at runtime (no data-astro-cid-* attribute on it).
+      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;display:block;';
+      frame.replaceChildren(iframe);
+      frame.classList.add('is-playing');
+    }, { once: true });
+  });
+</script>
+
+<style>
+  .sv-figure {
+    width: 100%;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--gb);
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(var(--bs-accent-rgb), 0.14);
+    transition: box-shadow 0.5s ease, transform 0.5s var(--bs-ease);
+  }
+
+  .sv-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  /* Darkens the middle of the cover so the play button reads as a layer on
+     top of the artwork instead of colliding with the title burned into it. */
+  .sv-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle 185px at 50% 50%, rgba(7, 9, 15, 0.80), rgba(7, 9, 15, 0.35) 55%, transparent 78%),
+      linear-gradient(180deg, rgba(7, 9, 15, 0.30), rgba(7, 9, 15, 0.10) 40%, rgba(7, 9, 15, 0.30));
+    transition: opacity 0.25s var(--bs-ease);
+  }
+  /* Dropped the moment the iframe replaces the facade. Driven by a class
+     rather than :has(iframe) so an older engine can't leave a permanent
+     shade sitting over a playing video. */
+  .sv-frame.is-playing::after { display: none; }
+
+  .sv-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .sv-play {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    margin: auto;
+    width: 84px;
+    height: 84px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0 0 5px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--bs-accent);
+    color: var(--bg);
+    cursor: pointer;
+    box-shadow:
+      0 0 0 12px rgba(var(--bs-accent-rgb), 0.14),
+      0 16px 44px rgba(var(--bs-accent-rgb), 0.34);
+    transition: transform 0.25s var(--bs-ease), filter 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (hover: hover) {
+    .sv-play:hover { transform: scale(1.06); filter: brightness(1.08); }
+  }
+  .sv-play:active { transform: scale(0.97); }
+  .sv-play:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 5px;
+  }
+
+  .sv-badge {
+    position: absolute;
+    z-index: 2;
+    top: 14px;
+    left: 14px;
+    padding: 5px 11px;
+    border-radius: var(--radius-pill);
+    background: rgba(7, 9, 15, 0.74);
+    border: 1px solid rgba(var(--bs-accent-rgb), 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bs-accent);
+  }
+
+  .sv-caption {
+    padding: 14px 18px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--muted);
+    border-top: 1px solid var(--gb);
+    background: var(--bg2);
+  }
+
+  @media (hover: hover) {
+    .sv-figure:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.58),
+        0 0 0 1px rgba(var(--bs-accent-rgb), 0.26);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sv-figure { border-radius: 12px; }
+    .sv-play { width: 66px; height: 66px; }
+    .sv-caption { padding: 12px 14px; font-size: 12.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sv-figure, .sv-play { transition: none; }
+    .sv-figure:hover { transform: none; }
+  }
+</style>

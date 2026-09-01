@@ -26,3 +26,8 @@
 /lifestapestryarticle       /case-studies/lifes-tapestry  301
 /brandmirrorlobby           /assessment                   301
 /brandmirror                /assessment                   301
+
+# Printed QR code (resources/design/qr/cwk-qr-business-support.png) encodes
+# the unhyphenated path. Keep this: the codes are already out in the world.
+/businesssupport            /business-support             301
+/businesssupport/*          /business-support             301

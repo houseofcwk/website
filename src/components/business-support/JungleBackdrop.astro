@@ -1,0 +1,35 @@
+---
+// The home hero's jungle clip, reused at the top of the business-support
+// pages so they read as the same place rather than a detached funnel page.
+//
+// The chooser gets the moving clip. Stage pages pass `still` so the only
+// thing moving on the page is the training video itself.
+interface Props {
+  still?: boolean;
+}
+const { still = false } = Astro.props;
+---
+
+<div class="bs-jungle" aria-hidden="true">
+  {still ? (
+    <img class="bs-jungle-media" src="/videos/home-hero/hero-bg-poster.jpg" alt="" decoding="async" />
+  ) : (
+    <>
+      <video
+        class="bs-jungle-media bs-jungle-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="/videos/home-hero/hero-bg-poster.jpg"
+      >
+        <source src="/videos/home-hero/hero-bg.mp4" type="video/mp4" />
+        <source src="/videos/home-hero/hero-bg.webm" type="video/webm" />
+      </video>
+      <!-- Shown instead of the clip when the visitor prefers reduced motion. -->
+      <img class="bs-jungle-media bs-jungle-poster" src="/videos/home-hero/hero-bg-poster.jpg" alt="" decoding="async" />
+    </>
+  )}
+  <span class="bs-jungle-scrim"></span>
+</div>

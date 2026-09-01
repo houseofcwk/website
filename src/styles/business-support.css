@@ -1,0 +1,176 @@
+/* ============================================================
+   /business-support — shared primitives
+   Authority: docs/DESIGN.md + src/styles/global.css tokens.
+
+   Used by the stage chooser and the three stage pages. Section
+   layout stays scoped inside each component; only what more than
+   one of them needs lives here.
+
+   Reused from global.css: .btn family, .reveal-up / .reveal-card,
+   and the :root token set.
+   ============================================================ */
+
+.bs {
+  position: relative;
+  display: block;
+  overflow-x: hidden;
+  /* Clears the fixed 64px focus header. */
+  padding-top: 64px;
+
+  --bs-pad-x: clamp(20px, 4vw, 40px);
+  --bs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bs-container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-inline: var(--bs-pad-x);
+}
+.bs-container--wide { max-width: 1120px; }
+
+/* ── Stage accents ────────────────────────────────────────────
+   Each stage carries one accent from the brand palette. Setting
+   the pair here means components style against --bs-accent and
+   never hardcode a stage colour. */
+.bs-accent--cyan   { --bs-accent: var(--cyan);        --bs-accent-rgb: 0, 229, 255; }
+.bs-accent--purple { --bs-accent: var(--purple);      --bs-accent-rgb: 123, 97, 255; }
+.bs-accent--green  { --bs-accent: var(--cwk-success); --bs-accent-rgb: 0, 227, 150; }
+
+/* ── Jungle backdrop ──────────────────────────────────────────
+   The home hero's jungle clip, reused so these pages read as the
+   same place rather than a detached funnel page.
+
+   The clip is near-black with foliage only in the lower corners,
+   so it is left close to full strength: dimming it any further
+   erases the leaves entirely. The scrim is a bottom fade into the
+   page background plus the site's cyan top glow, which is all the
+   contrast the headline needs against a frame this dark. */
+.bs-jungle {
+  position: absolute;
+  inset: 0 0 auto;
+  height: clamp(460px, 72vh, 780px);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bs-jungle-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.bs-jungle-poster { display: none; }
+
+.bs-jungle-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 900px 460px at 50% -8%, rgba(0, 229, 255, 0.11), transparent 62%),
+    linear-gradient(
+      180deg,
+      rgba(7, 9, 15, 0.30) 0%,
+      rgba(7, 9, 15, 0.38) 52%,
+      rgba(7, 9, 15, 0.86) 86%,
+      var(--bg) 100%
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bs-jungle-video { display: none; }
+  .bs-jungle-poster { display: block; }
+}
+
+/* ── Type ─────────────────────────────────────────────────── */
+.bs-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 229, 255, 0.07);
+  border: 1px solid rgba(0, 229, 255, 0.26);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.bs-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+.bs-h1 {
+  margin: 22px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 5.2vw, 54px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  text-wrap: balance;
+}
+.bs-h1--sm { font-size: clamp(27px, 4vw, 42px); }
+
+.bs-lede {
+  margin: 18px 0 0;
+  font-size: clamp(15px, 1.7vw, 17.5px);
+  line-height: 1.62;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.bs-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+
+.bs-note {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  /* --muted, not --dim: this is real copy and --dim fails AA for body text.
+     See the same note in front-desk.css. */
+  color: var(--muted);
+}
+
+/* ── Progress dots (indicator only, never a link) ─────────── */
+.bs-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.bs-progress-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(238, 240, 255, 0.22);
+}
+.bs-progress-dot.is-current {
+  width: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--bs-accent, var(--cyan));
+  box-shadow: 0 0 10px rgba(var(--bs-accent-rgb, 0, 229, 255), 0.55);
+}
+
+/* ── Section rhythm ───────────────────────────────────────── */
+.bs-hero { padding-block: clamp(48px, 8vw, 84px) clamp(28px, 4vw, 44px); }
+.bs-section { padding-block: clamp(28px, 4vw, 44px); }
+.bs-section--last { padding-bottom: clamp(56px, 8vw, 88px); }
+
+@media (max-width: 640px) {
+  .bs-jungle { height: 420px; }
+}

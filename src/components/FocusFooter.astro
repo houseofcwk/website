@@ -1,0 +1,22 @@
+---
+// Minimal footer for focused landing pages. Carries the copyright line and
+// nothing else: no nav columns, no legal links, no social. Pairs with
+// FocusHeader.astro. See issue #240.
+---
+
+<footer class="focus-footer">
+  <span>&copy; 2026 CWK. LLC &middot; Build. Learn. Earn. Play.</span>
+</footer>
+
+<style>
+  .focus-footer {
+    position: relative;
+    z-index: 1;
+    padding: 28px 24px 36px;
+    border-top: 1px solid var(--gb);
+    text-align: center;
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    color: var(--dim);
+  }
+</style>
