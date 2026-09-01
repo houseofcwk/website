@@ -38,15 +38,21 @@ export interface Stage {
   accent: StageAccent;
   /** The sentence a visitor picks on the chooser. */
   where: string;
-  chooserBody: string;
   chooserCta: string;
   headline: string;
   lede: string;
   videoId: string;
   /** The video's real title on the CWK. Experience channel, kept for the record. */
   videoTitle: string;
+  /** Badge in the corner of the video frame. Rendered uppercase. */
+  badge: string;
   cover: string;
-  caption: string;
+  /**
+   * Line under the video frame. Null renders no caption bar at all, which is
+   * where all three stages sit: the caption repeated the title burned into
+   * the thumbnail and the headline directly above it.
+   */
+  caption: string | null;
   tourSub: string;
   whatsappMessage: string;
   seoTitle: string;
@@ -56,11 +62,8 @@ export interface Stage {
 export const landing = {
   eyebrow: 'Business Support',
   headline: 'Business support for small businesses.',
-  lede:
-    'There is no one size fits all in business. Pick the line below that sounds like your week, and we will point you at the right place to start.',
+  lede: 'There is no one size fits all in business.',
   chooseLabel: 'Choose your support level',
-  note:
-    'Every track opens with a free training. Nothing to pay, nothing to sit through, and a real person on the other end whenever you want one.',
   seoTitle: 'Business Support for Small Businesses | CWK. Experience',
   seoDescription:
     'Three ways in, depending on where your business is today. Start with a free training, then talk to a real person at CWK.',
@@ -73,17 +76,15 @@ export const stages: Stage[] = [
     ordinal: 'One',
     accent: 'cyan',
     where: "I don't have a business yet.",
-    chooserBody:
-      'You have the idea, maybe the skill, and no honest answer yet on what the first step actually costs you.',
     chooserCta: 'Free training: what starting actually takes',
     headline: "Whatever you decide after this, you'll know what it actually takes.",
     lede:
       'The real picture from someone who has been through it, before you quit anything or spend a dollar.',
     videoId: 'c6uYEegkBfA',
     videoTitle: 'Starting or Thinking About A Business',
+    badge: 'Free training',
     cover: '/images/business-support/stage-one-cover.webp',
-    caption:
-      'Starting or thinking about a business. Kris on the first moves that matter, and the ones that cost you a year.',
+    caption: null,
     tourSub: 'Talk it through with a person before you commit to anything',
     whatsappMessage:
       "Hi CWK. I watched the Stage One training. I'm thinking about starting a business.",
@@ -97,17 +98,15 @@ export const stages: Stage[] = [
     ordinal: 'Two',
     accent: 'purple',
     where: "I have a business. It's not making enough yet.",
-    chooserBody:
-      "Money comes in. It just doesn't come in often enough, or evenly enough, to let you breathe.",
-    chooserCta: 'Free training: how to get unstuck',
+    chooserCta: 'Free training: see exactly what is in the way',
     headline: "You have a business. It's just not where you want it to be yet.",
     lede:
       "That's fixable, and it's more common than anyone admits. This training shows you what is actually in the way.",
     videoId: 'mVQomEthEQQ',
     videoTitle: 'Making Some Money But Want More',
+    badge: 'Free training',
     cover: '/images/business-support/stage-two-cover.webp',
-    caption:
-      'Making some money but want more. Where the money leaks, and what to fix first.',
+    caption: null,
     tourSub: "Bring your numbers and we'll build a plan around where you actually are",
     whatsappMessage:
       'Hi CWK. I watched the Stage Two training. I have a business and I want it earning more.',
@@ -121,17 +120,17 @@ export const stages: Stage[] = [
     ordinal: 'Three',
     accent: 'green',
     where: "I have a business that's ready to scale.",
-    chooserBody:
-      "It works. You're the bottleneck now, and the next level needs more hands than yours.",
-    chooserCta: 'Free training: what done-for-you support looks like',
+    // Labelled as the booking, though the card still routes to the stage page:
+    // the training plays first and the calendar sits under it. Kris's call.
+    chooserCta: 'Book a Free Experience Tour',
     headline: "You're already doing this. Now you need a partner who can carry the next level.",
     lede:
       'More money and less stress, without putting more on your plate. See how the partnership runs, then book a tour.',
     videoId: 't0JwVqQsAAo',
     videoTitle: 'Growing and want DFY support',
+    badge: 'Done for you support',
     cover: '/images/business-support/stage-three-cover.webp',
-    caption:
-      'Growing and want done-for-you support. What CWK. takes off your plate, and how the partnership works.',
+    caption: null,
     tourSub: "See if we're the right fit for your next stage",
     whatsappMessage:
       'Hi CWK. I watched the Stage Three training. I want to talk about done-for-you support.',

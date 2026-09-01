@@ -9,10 +9,13 @@
 interface Props {
   videoId: string;
   cover: string;
-  caption: string;
+  /** Null renders the frame with no caption bar under it. */
+  caption: string | null;
+  /** Corner badge on the frame. Rendered uppercase by the stylesheet. */
+  badge: string;
   label: string;
 }
-const { videoId, cover, caption, label } = Astro.props;
+const { videoId, cover, caption, badge, label } = Astro.props;
 const src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
 ---
 
@@ -33,9 +36,9 @@ const src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbrand
         <path d="M8 5.14v13.72a1 1 0 0 0 1.55.83l10.79-6.86a1 1 0 0 0 0-1.66L9.55 4.31A1 1 0 0 0 8 5.14Z" />
       </svg>
     </button>
-    <span class="sv-badge">Free training</span>
+    <span class="sv-badge">{badge}</span>
   </div>
-  <figcaption class="sv-caption">{caption}</figcaption>
+  {caption && <figcaption class="sv-caption">{caption}</figcaption>}
 </figure>
 
 <script>

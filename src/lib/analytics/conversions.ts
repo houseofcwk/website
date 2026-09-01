@@ -52,26 +52,26 @@ export const CONVERSIONS: Record<string, ConversionMap> = {
     linkedin: 'Lead',
     mixpanelLabel: 'assessment_waitlist_clicked',
   },
-  business_support_tour_opened: {
-    ga4: 'business_support_book_call',
+  bizsup_tour_opened: {
+    ga4: 'bizsup_book_call',
     meta: 'Schedule',
     tiktok: 'Contact',
     linkedin: 'RequestForQuote',
-    mixpanelLabel: 'business_support_tour_opened',
+    mixpanelLabel: 'bizsup_tour_opened',
   },
-  business_support_whatsapp_clicked: {
-    ga4: 'business_support_whatsapp',
+  bizsup_whatsapp_clicked: {
+    ga4: 'bizsup_whatsapp',
     meta: 'Contact',
     tiktok: 'Contact',
     linkedin: 'Lead',
-    mixpanelLabel: 'business_support_whatsapp_clicked',
+    mixpanelLabel: 'bizsup_whatsapp_clicked',
   },
-  business_support_email_clicked: {
-    ga4: 'business_support_email',
+  bizsup_email_clicked: {
+    ga4: 'bizsup_email',
     meta: 'Contact',
     tiktok: 'Contact',
     linkedin: 'Lead',
-    mixpanelLabel: 'business_support_email_clicked',
+    mixpanelLabel: 'bizsup_email_clicked',
   },
   powerups_checkout_clicked: {
     ga4: 'powerups_checkout_started',

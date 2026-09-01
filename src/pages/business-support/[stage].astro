@@ -35,7 +35,7 @@ const { stage } = Astro.props;
   chrome="focus"
   focusCta={{
     href: TOUR_URL,
-    label: 'Book a Tour',
+    label: 'Free, 20 min',
     // Opens the inline calendar further down this page rather than leaving it.
     openBooking: true,
   }}
@@ -72,6 +72,7 @@ const { stage } = Astro.props;
           videoId={stage.videoId}
           cover={stage.cover}
           caption={stage.caption}
+          badge={stage.badge}
           label={stage.videoTitle}
         />
       </div>
@@ -110,7 +111,7 @@ const { stage } = Astro.props;
       : false;
   } catch { /* opaque or malformed referrer */ }
 
-  track('business_support_stage_viewed', { stage, from_chooser: fromChooser });
+  track('bizsup_stage_viewed', { stage, from_chooser: fromChooser });
 </script>
 
 <style>

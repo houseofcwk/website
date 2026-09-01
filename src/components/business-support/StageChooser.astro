@@ -15,7 +15,7 @@ import { stages, landing } from '../../data/businessSupport';
           href={`/business-support/${stage.key}`}
           class={`ch-card bs-accent--${stage.accent} reveal-card`}
           style={`--reveal-i:${i}`}
-          data-track-event="business_support_stage_selected"
+          data-track-event="bizsup_stage_selected"
           data-evt-stage={stage.key}
         >
           <span class="ch-bar" aria-hidden="true"></span>
@@ -26,7 +26,6 @@ import { stages, landing } from '../../data/businessSupport';
           </span>
 
           <span class="ch-where">{stage.where}</span>
-          <span class="ch-body">{stage.chooserBody}</span>
 
           <span class="ch-cta">
             <svg class="ch-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -37,8 +36,6 @@ import { stages, landing } from '../../data/businessSupport';
         </a>
       ))}
     </div>
-
-    <p class="bs-note ch-note reveal-up">{landing.note}</p>
   </div>
 </section>
 
@@ -121,12 +118,6 @@ import { stages, landing } from '../../data/businessSupport';
     text-wrap: pretty;
   }
 
-  .ch-body {
-    font-size: 14.5px;
-    line-height: 1.55;
-    color: var(--muted);
-  }
-
   .ch-cta {
     display: flex;
     align-items: flex-start;
@@ -165,11 +156,6 @@ import { stages, landing } from '../../data/businessSupport';
   .ch-card:focus-visible {
     outline: 2px solid var(--bs-accent);
     outline-offset: 3px;
-  }
-
-  .ch-note {
-    max-width: 60ch;
-    margin-top: 28px;
   }
 
   @media (max-width: 900px) {

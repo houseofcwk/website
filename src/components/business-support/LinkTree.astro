@@ -125,7 +125,7 @@ const waHref = whatsappHref(whatsappMessage);
       button.setAttribute('aria-expanded', open ? 'true' : 'false');
 
       if (!open) {
-        track('business_support_tour_closed', { stage });
+        track('bizsup_tour_closed', { stage });
         return;
       }
 
@@ -135,9 +135,9 @@ const waHref = whatsappHref(whatsappMessage);
       // intent, not a second one.
       if (!tourReported) {
         tourReported = true;
-        conversion('business_support_tour_opened', { stage, source });
+        conversion('bizsup_tour_opened', { stage, source });
       } else {
-        track('business_support_tour_reopened', { stage, source });
+        track('bizsup_tour_reopened', { stage, source });
       }
 
       // Load Calendly on first open only. The panel is visible by now, so
@@ -187,11 +187,11 @@ const waHref = whatsappHref(whatsappMessage);
   }
 
   document.querySelector<HTMLAnchorElement>('[data-lt-whatsapp]')?.addEventListener('click', () => {
-    conversion('business_support_whatsapp_clicked', { stage });
+    conversion('bizsup_whatsapp_clicked', { stage });
   });
 
   document.querySelector<HTMLAnchorElement>('[data-lt-email]')?.addEventListener('click', () => {
-    conversion('business_support_email_clicked', { stage });
+    conversion('bizsup_email_clicked', { stage });
   });
 </script>
 
