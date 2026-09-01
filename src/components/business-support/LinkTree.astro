@@ -18,7 +18,7 @@ const { stageKey, tourSub, whatsappMessage } = Astro.props;
 const waHref = whatsappHref(whatsappMessage);
 ---
 
-<div class="lt">
+<div class="lt" data-lt-stage={stageKey}>
   <!-- Book: toggles the inline Calendly embed below rather than sending
        anyone off to calendly.com. -->
   <button
@@ -28,8 +28,6 @@ const waHref = whatsappHref(whatsappMessage);
     aria-expanded="false"
     aria-controls="lt-panel"
     data-lt-book
-    data-track-event="business_support_tour_toggled"
-    data-evt-stage={stageKey}
   >
     <span class="lt-ic" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -73,8 +71,7 @@ const waHref = whatsappHref(whatsappMessage);
     href={waHref}
     target="_blank"
     rel="noopener"
-    data-track-event="business_support_whatsapp_clicked"
-    data-evt-stage={stageKey}
+    data-lt-whatsapp
   >
     <span class="lt-ic lt-ic--wa" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="currentColor">
@@ -91,8 +88,7 @@ const waHref = whatsappHref(whatsappMessage);
   <a
     class="lt-row"
     href={`mailto:${EMAIL}`}
-    data-track-event="business_support_email_clicked"
-    data-evt-stage={stageKey}
+    data-lt-email
   >
     <span class="lt-ic" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -109,20 +105,40 @@ const waHref = whatsappHref(whatsappMessage);
 </div>
 
 <script>
+  import { track, conversion } from '../../lib/analytics';
+
   const CALENDLY_SRC = 'https://assets.calendly.com/assets/external/widget.js';
 
+  const root = document.querySelector<HTMLElement>('[data-lt-stage]');
   const button = document.querySelector<HTMLButtonElement>('[data-lt-book]');
   const panel = document.querySelector<HTMLElement>('[data-lt-panel]');
+  const stage = root?.dataset.ltStage ?? '';
 
   if (button && panel) {
     let calendlyRequested = false;
+    let tourReported = false;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function setOpen(open: boolean, scroll: boolean) {
+    function setOpen(open: boolean, source: string, scroll: boolean) {
       if (!button || !panel) return;
       panel.toggleAttribute('hidden', !open);
       button.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (!open) return;
+
+      if (!open) {
+        track('business_support_tour_closed', { stage });
+        return;
+      }
+
+      // Opening the calendar is the conversion on these pages, so it is
+      // reported once per page view no matter which control opened it: the
+      // row itself or the header CTA. Reopening after a close is the same
+      // intent, not a second one.
+      if (!tourReported) {
+        tourReported = true;
+        conversion('business_support_tour_opened', { stage, source });
+      } else {
+        track('business_support_tour_reopened', { stage, source });
+      }
 
       // Load Calendly on first open only. The panel is visible by now, so
       // widget.js sizes its iframe against a laid-out container rather than
@@ -143,7 +159,7 @@ const waHref = whatsappHref(whatsappMessage);
     }
 
     button.addEventListener('click', () => {
-      setOpen(panel.hasAttribute('hidden'), true);
+      setOpen(panel.hasAttribute('hidden'), 'row', true);
     });
 
     // The header CTA is a plain link to Calendly, so it still works on pages
@@ -152,10 +168,16 @@ const waHref = whatsappHref(whatsappMessage);
     document.querySelectorAll<HTMLAnchorElement>('[data-open-booking]').forEach((el) => {
       el.addEventListener('click', (ev) => {
         ev.preventDefault();
+        // This click never leaves the page, so keep it away from the universal
+        // link binder in analytics/auto-binders. Without this it reports a
+        // nav_link_clicked and an outbound_link_clicked to calendly.com that
+        // did not happen. The conversion below carries source: 'header_cta',
+        // so nothing is lost by suppressing the generic pair.
+        ev.stopPropagation();
         // Open without its own scroll, then make one move: the row to the top
         // of the viewport, with the calendar unfolding directly beneath it.
         // scroll-margin-top on the row keeps it clear of the fixed header.
-        setOpen(true, false);
+        setOpen(true, 'header_cta', false);
         requestAnimationFrame(() => {
           button.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
         });
@@ -163,6 +185,14 @@ const waHref = whatsappHref(whatsappMessage);
       });
     });
   }
+
+  document.querySelector<HTMLAnchorElement>('[data-lt-whatsapp]')?.addEventListener('click', () => {
+    conversion('business_support_whatsapp_clicked', { stage });
+  });
+
+  document.querySelector<HTMLAnchorElement>('[data-lt-email]')?.addEventListener('click', () => {
+    conversion('business_support_email_clicked', { stage });
+  });
 </script>
 
 <style>

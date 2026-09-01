@@ -35,14 +35,12 @@ const { stage } = Astro.props;
   chrome="focus"
   focusCta={{
     href: TOUR_URL,
-    label: 'Book an Experience Tour',
-    shortLabel: 'Book a Tour',
-    note: 'Free, 20 min',
+    label: 'Book a Tour',
     // Opens the inline calendar further down this page rather than leaving it.
     openBooking: true,
   }}
 >
-  <div class={`bs bs-accent--${stage.accent}`}>
+  <div class={`bs bs-accent--${stage.accent}`} data-bs-stage={stage.key}>
     <JungleBackdrop still />
 
     <section class="bs-hero">
@@ -96,6 +94,25 @@ const { stage } = Astro.props;
   </div>
 </Base>
 
+<script>
+  import { track } from '../../lib/analytics';
+
+  // The stage choice is recorded here rather than on the chooser's card click.
+  // A click that navigates away is a race the page usually loses: the handler
+  // fires, then the document is torn down before anything can be sent. Arrival
+  // cannot be lost, and `from_chooser` reconstructs the same funnel step.
+  const stage = document.querySelector<HTMLElement>('[data-bs-stage]')?.dataset.bsStage ?? '';
+  let fromChooser = false;
+  try {
+    fromChooser = document.referrer
+      ? new URL(document.referrer).pathname.replace(/index\.html$/, '').replace(/\/$/, '') ===
+        '/business-support'
+      : false;
+  } catch { /* opaque or malformed referrer */ }
+
+  track('business_support_stage_viewed', { stage, from_chooser: fromChooser });
+</script>
+
 <style>
   .st-back {
     display: inline-flex;
@@ -103,8 +120,8 @@ const { stage } = Astro.props;
     gap: 8px;
     /* 44px tall including the negative inset, so it stays a comfortable tap
        target without pushing the stage marker down the page. */
-    margin: -11px 0 17px -11px;
-    padding: 11px;
+    margin: -12px 0 16px -12px;
+    padding: 12px;
     font-size: 13.5px;
     font-weight: 600;
     color: var(--muted);

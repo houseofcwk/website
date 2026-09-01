@@ -66,6 +66,11 @@ function resolveConversionId(event: string): string | null {
     assessment_calendly_clicked: import.meta.env.PUBLIC_LINKEDIN_CONVERSION_ASSESSMENT_CALL,
     assessment_waitlist_clicked: import.meta.env.PUBLIC_LINKEDIN_CONVERSION_ASSESSMENT_WAITLIST,
     powerups_checkout_clicked: import.meta.env.PUBLIC_LINKEDIN_CONVERSION_POWERUPS_CHECKOUT,
+    // No dedicated LinkedIn conversion IDs for these yet; they fall through to
+    // the generic name in CONVERSIONS until the IDs exist.
+    business_support_tour_opened: import.meta.env.PUBLIC_LINKEDIN_CONVERSION_BS_TOUR,
+    business_support_whatsapp_clicked: import.meta.env.PUBLIC_LINKEDIN_CONVERSION_BS_WHATSAPP,
+    business_support_email_clicked: import.meta.env.PUBLIC_LINKEDIN_CONVERSION_BS_EMAIL,
   };
   return map[event] ?? null;
 }
