@@ -116,35 +116,51 @@ const waHref = whatsappHref(whatsappMessage);
 
   if (button && panel) {
     let calendlyRequested = false;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    button.addEventListener('click', () => {
-      const open = panel.hasAttribute('hidden');
+    function setOpen(open: boolean, scroll: boolean) {
+      if (!button || !panel) return;
+      panel.toggleAttribute('hidden', !open);
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (!open) return;
 
-      if (open) {
-        panel.removeAttribute('hidden');
-        button.setAttribute('aria-expanded', 'true');
+      // Load Calendly on first open only. The panel is visible by now, so
+      // widget.js sizes its iframe against a laid-out container rather than
+      // a display:none one.
+      if (!calendlyRequested) {
+        calendlyRequested = true;
+        const script = document.createElement('script');
+        script.src = CALENDLY_SRC;
+        script.async = true;
+        document.head.appendChild(script);
+      }
 
-        // Load Calendly on first open only. The panel is visible by now, so
-        // widget.js sizes its iframe against a laid-out container rather than
-        // a display:none one.
-        if (!calendlyRequested) {
-          calendlyRequested = true;
-          const script = document.createElement('script');
-          script.src = CALENDLY_SRC;
-          script.async = true;
-          document.head.appendChild(script);
-        }
-
-        // Bring the calendar into view without yanking the page on people who
-        // asked for reduced motion.
-        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (scroll) {
         requestAnimationFrame(() => {
           panel.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
         });
-      } else {
-        panel.setAttribute('hidden', '');
-        button.setAttribute('aria-expanded', 'false');
       }
+    }
+
+    button.addEventListener('click', () => {
+      setOpen(panel.hasAttribute('hidden'), true);
+    });
+
+    // The header CTA is a plain link to Calendly, so it still works on pages
+    // without this panel (and with JS off). Where the panel does exist, take
+    // the click and open the calendar in place instead of leaving the page.
+    document.querySelectorAll<HTMLAnchorElement>('[data-open-booking]').forEach((el) => {
+      el.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        // Open without its own scroll, then make one move: the row to the top
+        // of the viewport, with the calendar unfolding directly beneath it.
+        // scroll-margin-top on the row keeps it clear of the fixed header.
+        setOpen(true, false);
+        requestAnimationFrame(() => {
+          button.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+        });
+        button.focus({ preventScroll: true });
+      });
     });
   }
 </script>
@@ -178,6 +194,8 @@ const waHref = whatsappHref(whatsappMessage);
   }
 
   .lt-row--primary {
+    /* Clears the fixed header when the header CTA scrolls this row to the top. */
+    scroll-margin-top: 84px;
     border-color: rgba(var(--bs-accent-rgb), 0.45);
     background:
       linear-gradient(180deg, rgba(var(--bs-accent-rgb), 0.09), rgba(var(--bs-accent-rgb), 0.03));

@@ -6,15 +6,15 @@ import JungleBackdrop from '../../components/business-support/JungleBackdrop.ast
 import StageVideo from '../../components/business-support/StageVideo.astro';
 import LinkTree from '../../components/business-support/LinkTree.astro';
 
-import { stages, type Stage } from '../../data/businessSupport';
+import { stages, TOUR_URL, type Stage } from '../../data/businessSupport';
 
 // One page per stage, generated from src/data/businessSupport.ts:
 //   /business-support/stage-one | stage-two | stage-three
 //
 // Shape is fixed: where you are, the training, then the three ways to reach
-// a human. chrome="focus" removes the site nav and footer links, and there
-// are deliberately no cross-links to the other stages or back to the
-// chooser. The browser's back button covers a wrong pick. See #240.
+// a human. chrome="focus" removes the site nav and footer links, so the only
+// ways off a stage page are the CWK. logo, the back link to the chooser, and
+// the three options in the link tree. See #240.
 export function getStaticPaths() {
   return stages.map((stage) => ({
     params: { stage: stage.key },
@@ -33,12 +33,27 @@ const { stage } = Astro.props;
   description={stage.seoDescription}
   canonical={`https://cwkexperience.com/business-support/${stage.key}`}
   chrome="focus"
+  focusCta={{
+    href: TOUR_URL,
+    label: 'Book an Experience Tour',
+    shortLabel: 'Book a Tour',
+    note: 'Free, 20 min',
+    // Opens the inline calendar further down this page rather than leaving it.
+    openBooking: true,
+  }}
 >
   <div class={`bs bs-accent--${stage.accent}`}>
     <JungleBackdrop still />
 
     <section class="bs-hero">
       <div class="bs-container">
+        <a class="st-back" href="/business-support">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M19 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          All three stages
+        </a>
+
         <div class="st-mark reveal-up">
           <span class="st-stage">Stage {stage.ordinal}</span>
           <span class="bs-progress" role="img" aria-label={`Stage ${stage.index} of ${stages.length}`}>
@@ -82,6 +97,35 @@ const { stage } = Astro.props;
 </Base>
 
 <style>
+  .st-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    /* 44px tall including the negative inset, so it stays a comfortable tap
+       target without pushing the stage marker down the page. */
+    margin: -11px 0 17px -11px;
+    padding: 11px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s var(--bs-ease);
+  }
+  .st-back svg {
+    width: 15px;
+    height: 15px;
+    transition: transform 0.2s var(--bs-ease);
+  }
+  @media (hover: hover) {
+    .st-back:hover { color: var(--text); opacity: 1; }
+    .st-back:hover svg { transform: translateX(-3px); }
+  }
+  .st-back:focus-visible {
+    outline: 2px solid var(--bs-accent);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
   .st-mark {
     display: flex;
     align-items: center;
@@ -105,5 +149,10 @@ const { stage } = Astro.props;
     flex: 1;
     height: 1px;
     background: linear-gradient(90deg, var(--gb2), transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .st-back, .st-back svg { transition: none; }
+    .st-back:hover svg { transform: none; }
   }
 </style>

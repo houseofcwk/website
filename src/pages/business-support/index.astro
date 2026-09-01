@@ -5,7 +5,7 @@ import '../../styles/business-support.css';
 import JungleBackdrop from '../../components/business-support/JungleBackdrop.astro';
 import StageChooser from '../../components/business-support/StageChooser.astro';
 
-import { landing } from '../../data/businessSupport';
+import { landing, TOUR_URL } from '../../data/businessSupport';
 
 // The business-support entry point, and the destination of the printed QR
 // code (which encodes /businesssupport, redirected in public/_redirects).
@@ -19,6 +19,13 @@ import { landing } from '../../data/businessSupport';
   description={landing.seoDescription}
   canonical="https://cwkexperience.com/business-support"
   chrome="focus"
+  focusCta={{
+    href: TOUR_URL,
+    label: 'Book an Experience Tour',
+    shortLabel: 'Book a Tour',
+    note: 'Free, 20 min',
+    // No inline calendar on the chooser, so this one follows the link.
+  }}
 >
   <div class="bs bs-accent--cyan">
     <JungleBackdrop />
