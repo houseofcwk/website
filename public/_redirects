@@ -27,7 +27,16 @@
 /brandmirrorlobby           /assessment                   301
 /brandmirror                /assessment                   301
 
-# Printed QR code (resources/design/qr/cwk-qr-business-support.png) encodes
-# the unhyphenated path. Keep this: the codes are already out in the world.
+# Aliases for /business-support, which stays the canonical path: the pages
+# carry canonical tags pointing at it and these are 301s, so the aliases never
+# compete with it in search.
+#
+# /businesssupport is the one the printed QR codes encode
+# (resources/design/qr/cwk-qr-business-support.png), so it has to keep working.
+#
+# The splat rules mirror the real structure, so /business/stage-two lands on
+# that stage rather than dumping everyone back on the chooser.
 /businesssupport            /business-support             301
-/businesssupport/*          /business-support             301
+/businesssupport/*          /business-support/:splat      301
+/business                   /business-support             301
+/business/*                 /business-support/:splat      301
